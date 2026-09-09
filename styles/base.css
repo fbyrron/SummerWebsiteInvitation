@@ -1,0 +1,657 @@
+/*
+  base.css
+  Mobile-first base styles, baselined at 320px viewport width (Requirement 4.1, 4.3).
+  Breakpoint scaling (768px+) is layered on with min-width media queries so the
+  320px styles always apply first (Requirement 4.2 is handled in later tasks/components,
+  this file only lays the foundation).
+*/
+
+:root {
+  /*
+    Font stack (Luma-style visual restyle). Luma uses ONE clean modern
+    sans-serif throughout - no serif/display font at all - and
+    distinguishes headings from body text with bold WEIGHT, not a
+    different family. --font-heading previously pointed at a Google
+    Fonts serif webfont (Playfair Display) and --font-body at a separate
+    webfont (Poppins); both variable names are kept for backward
+    compatibility (every other stylesheet still references
+    var(--font-heading)/var(--font-body)), but their VALUES are now the
+    same OS-native sans-serif stack, with no serif fallback tail. No
+    webfont `<link>` is loaded anymore (see index.html), so this stack is
+    entirely system fonts.
+  */
+  --font-heading: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-body: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+
+  /* Base font size: 16px minimum body text per Requirement 9.4 */
+  --font-size-base: 16px;
+
+  /*
+    Luma-style palette (visual restyle pass), replacing the prior
+    "Enchanted Fairy Garden Princess" pink/lavender/gold palette. Luma's
+    product UI is a light, airy background, white cards with a thin
+    hairline border, near-black body text, and exactly ONE blue accent
+    color used sparingly for links/buttons/highlights - no decorative
+    color set, no gold. Chosen hex values (documented per redesign
+    dispatch):
+      --color-bg:      #F7F9FC  very light blue-white page background
+      --color-card-bg: #FFFFFF  pure white card/content surfaces
+      --color-border:  #E3E8EF  thin light-gray hairline border
+      --color-text:    #1F2937  dark charcoal-gray body/heading text
+      --color-accent:  #2563EB  single blue accent - used sparingly
+    --color-blush-pink/--color-lavender/--color-soft-rose/--color-ivory/
+    --color-gold are removed entirely - nothing in this file or
+    scripts/heroSection.js references them anymore.
+  */
+  --color-bg: #F7F9FC;
+  --color-card-bg: #FFFFFF;
+  --color-border: #E3E8EF;
+  --color-text: #1F2937;
+  --color-accent: #2563EB;
+
+  /*
+    Single page-wide background (design.md Model 5's structure kept,
+    palette restyled): a very subtle light-blue-to-white wash, applied
+    once on <body> so every scene sits on the same continuous background
+    rather than per-section fills. Deliberately much subtler than the
+    prior pink/lavender/cream wash - Luma's background reads as close to
+    flat white with only a faint tint.
+  */
+  --bg-gradient: linear-gradient(180deg, #F7F9FC 0%, #FFFFFF 60%);
+
+  /*
+    Mobile-first typography scale (Requirement 4.2). All values are in rem, relative
+    to the 16px root, so they scale with user font-size preferences and never depend
+    on viewport width directly (headings already wrap via overflow-wrap below), which
+    is what keeps this scale from ever causing horizontal overflow. The 768px+ media
+    query further down overrides these to modestly larger values for tablet/desktop.
+    Body text never drops below 1rem (16px) at any breakpoint, per Requirement 4.4.
+  */
+  --font-size-h1: 1.75rem;   /* 28px */
+  --font-size-h2: 1.375rem;  /* 22px */
+  --font-size-h3: 1.125rem;  /* 18px */
+  --font-size-body: 1rem;    /* 16px, the enforced minimum */
+
+  /*
+    Decorative asset sizing (Requirement 4.2, 4.3). Expressed as a max-width cap that
+    later components (fairy sprite, sparkle motifs) can rely on. It is always combined
+    with min(100%, ...) at the rule site so a larger cap on tablet/desktop can never
+    push an asset wider than its container on any viewport in between.
+  */
+  --decorative-max-width: 11.25rem; /* 180px */
+}
+
+html {
+  font-size: var(--font-size-base);
+}
+
+body {
+  width: 100%;
+  overflow-x: hidden; /* belt-and-suspenders against horizontal overflow, Requirement 9.1 */
+  font-family: var(--font-body);
+  font-size: 1rem; /* 16px, never below per Requirement 9.4 */
+  color: var(--color-text);
+  background-color: var(--color-bg);
+  /* Single continuous page-wide wash (design.md Model 5), so every scene
+     sits on the same gradient rather than per-section backgrounds - this
+     is what keeps the redesign reading as one continuous scroll instead
+     of separate "pages". Previously declared as a temporary inline
+     <style> block in index.html's <head>; that block has been removed
+     now that --bg-gradient/this rule live here permanently. */
+  background-image: var(--bg-gradient);
+}
+
+#app {
+  width: 100%;
+  max-width: 100vw;
+  /* Explicit stacking guarantee for #sparkle-bg (scripts/sparkleBackground.js):
+     the canvas is inserted as the first child of <body>, which already
+     paints behind #app under plain DOM-order stacking - but making #app a
+     stacking context with z-index: 1 here means that guarantee no longer
+     depends on DOM order at all, so it can't be broken by a later change
+     that reorders body's children. */
+  position: relative;
+  z-index: 1;
+}
+
+/*
+  Ambient sparkle background canvas (scripts/sparkleBackground.js,
+  initSparkleBackground()). Fixed to the viewport so it forms a full-page
+  backdrop behind every section, and never intercepts pointer events so it
+  can't block clicks/taps on the CTA button or any other content.
+*/
+#sparkle-bg {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.section {
+  width: 100%;
+  max-width: 100%;
+  padding: 1.5rem 1rem;
+  overflow: hidden; /* contains decorative assets so they can't force page-level overflow */
+}
+
+/*
+  Redesign pass: quiet, editorial numbered section label ("01", "02", "03"),
+  rendered as the first child of #event-details/#entourage/#closing's
+  content wrapper, above that section's heading - matches the numbered
+  section pattern from the portfolio-style reference (small, muted,
+  letter-spaced marker rather than a loud badge).
+
+  Font-size is deliberately left unset here so it keeps inheriting
+  `var(--font-size-body)` (16px minimum, Requirement 4.4) from the shared
+  `p, li, a, button, ...` selector above - only color/letter-spacing/weight/
+  case are styled, so the "quiet marker" feel comes from restraint, not
+  from shrinking below the enforced minimum body text size.
+*/
+.section-number {
+  margin: 0 0 0.25rem;
+  font-family: var(--font-body);
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  /* Luma restyle: quiet numbered label now uses the single blue accent
+     instead of the old gold, dimmed via opacity so it still reads as a
+     restrained marker rather than a loud blue badge. */
+  color: var(--color-accent);
+  opacity: 0.8;
+}
+
+/* Any decorative fairy-theme asset (sprites, sparkles) must never exceed its container
+   width, at any viewport from 320px to 1920px (Requirement 4.3). Later components can
+   add more specific selectors, but this general rule is the safety net. Capped again
+   at --decorative-max-width so the 768px+ scale-up below can't cause overflow.
+
+   Task 5.3 audit note: this guarantee holds by construction, not just by the current
+   --decorative-max-width numbers. min(100%, X) can never resolve larger than 100% of
+   the containing block, no matter what X (--decorative-max-width) evaluates to at any
+   breakpoint. Confirmed against the clamp() values from Task 5.1 anyway:
+     <768px:  --decorative-max-width = 180px (fixed)
+     768px:   clamp(180px, 128px + 8vw, 320px) -> 128px + 61.44px  = 189.44px
+     1024px:  clamp(180px, 128px + 8vw, 320px) -> 128px + 81.92px  = 209.92px
+     1440px:  clamp(180px, 128px + 8vw, 320px) -> 128px + 115.2px  = 243.2px
+     1920px:  clamp(180px, 128px + 8vw, 320px) -> 128px + 153.6px  = 281.6px (still < 320px ceiling)
+   At every one of those widths the computed value is far smaller than the section's own
+   content-box width (viewport minus .section padding), so the "100%" branch is never the
+   binding constraint here either way - there is no combination of these two terms that
+   can produce a max-width greater than the element's container. Audit: PASS. */
+.decorative-asset,
+.section img,
+.section svg {
+  max-width: min(100%, var(--decorative-max-width));
+  height: auto;
+}
+
+/*
+  Task 18.1/18.2 audit note (final cross-cutting responsive sweep,
+  Requirements 9.1, 9.2, 9.3, 9.4): this task's job was to catch anything
+  the five prior per-scene audits (Task 5.3 above, Task 11.5 in the
+  .hero-copy rule, Task 13.4/14.3/17.3 in eventDetails.css/entourage.css)
+  might have missed, not to redo those checks. Scope of this sweep and
+  findings below.
+
+  1. (18.1) 320px-safe baseline on the three stylesheets that never got a
+  dedicated per-scene audit note (gallery.css, countdown.css, rsvp.css -
+  eventDetails.css/entourage.css/base.css/photoFrame.css were already
+  covered): checked every rule in all three for the Task 11.5 bug class
+  (a flex/grid child that can shrink-wrap past its container under
+  align-items: center because of the default `min-width: auto` content
+  floor). gallery.css/countdown.css's flex/grid children all either carry
+  no config/variable-length text (countdown numbers/labels are static
+  field labels or zero-padded integers, gallery has no text at all) or
+  already had min-width: 0 (.countdown__unit) - clean. rsvp.css's
+  `.rsvp__contact-card` (a flex item of `.rsvp__content`, `align-items:
+  center`) holds `config.rsvpContact`, a variable-length config value, and
+  was missing that guard - found and fixed (see that rule in
+  styles/rsvp.css for the full explanation, same fix pattern as
+  .hero-copy).
+
+  2. (18.1) 16px body-text floor on gallery.css/countdown.css/rsvp.css:
+  every font-size declaration in all three files is `1rem` (16px) or
+  larger (`1.125rem`/`1.75rem`/`2.25rem` at their 768px+ scale-ups) -
+  gallery.css declares no font-size at all (no text content in that
+  scene). No rule anywhere in styles/ sets a font-size below 1rem. PASS.
+
+  3. (18.1) Unrestricted pinch-zoom: grepped the whole styles/ directory
+  and index.html's <meta name="viewport"> tag for `user-scalable`/
+  `maximum-scale` - zero matches anywhere. index.html's viewport tag reads
+  exactly `width=device-width, initial-scale=1.0`, with no scale
+  restriction. reset.css's `text-size-adjust: 100%` only prevents mobile
+  browsers' automatic font-boosting on text columns, which is unrelated to
+  and does not affect pinch-zoom. PASS.
+
+  4. (18.2) Decorative/parallax asset containment at every breakpoint:
+  the shared `.decorative-asset`/`.section img`/`.section svg` rule right
+  above this note already covers every decorative element that carries
+  one of those selectors (confirmed by the existing Task 5.3 note).
+  `.gallery__blossom` (styles/gallery.css) does NOT carry the
+  `.decorative-asset` class chain through that selector on its own
+  wrapper div - but gallerySection.js's buildBlossomAccent() sets
+  `className = "decorative-asset gallery__blossom ..."`, i.e. it DOES
+  carry `.decorative-asset` directly (confirmed in
+  scripts/gallerySection.js), so it is already covered by the shared rule
+  and needs no fix. The three parallax layer placeholder divs
+  (#parallax-bg/#parallax-mid/#parallax-fg, index.html) currently have no
+  CSS rule targeting them at all and are empty (ParallaxController wiring
+  is Task 20's job, not this task's) - an empty block-level div with no
+  width/content defaults to the width of its containing block (`<body>`,
+  itself `width: 100%`), so it cannot itself exceed the viewport or cause
+  overflow while empty. Confirmed as expected/no fix needed for this task;
+  Task 20 (or a later responsive pass once real background-image content
+  is added to these layers) is where sizing rules for their eventual
+  content belongs.
+
+  Conclusion: one genuine gap found and fixed (`.rsvp__contact-card`
+  min-width guard, styles/rsvp.css). Every other checked item was already
+  correctly covered by construction or by a prior dedicated audit. Audit:
+  PASS (after the one fix).
+*/
+
+h1, h2, h3 {
+  font-family: var(--font-heading);
+  /* Long fairy-script headline text should never force horizontal scroll on narrow screens */
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+h1 {
+  font-size: var(--font-size-h1);
+}
+
+h2 {
+  font-size: var(--font-size-h2);
+}
+
+h3 {
+  font-size: var(--font-size-h3);
+}
+
+p,
+li,
+a,
+button,
+input,
+textarea,
+select {
+  font-size: var(--font-size-body);
+}
+
+/*
+  #hero: the opening scene. Full viewport height, both axes centered, so
+  the headline (and CTA button below it) is the first thing the guest
+  sees on load. Redesign (design.md Architecture): all seven scenes are
+  always present and never `hidden` - #hero relies on body's single
+  --bg-gradient wash (set on <body> in the rule above) rather than
+  declaring its own background, so it stays visually continuous with
+  every scene below it instead of reading as a separate "page".
+*/
+#hero {
+  position: relative; /* anchors the absolutely-positioned butterfly flourishes below */
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  text-align: center;
+}
+
+/*
+  Decorative hero flourishes (renderDecorativeFlourishes() in heroSection.js):
+  a small thin-line crown above the headline, and two thin-line butterflies
+  near #hero's top corners (redesign pass: single muted-gold stroke-only
+  line-art, no fills). All are `.decorative-asset` (base.css's existing
+  max-width guarantee) plus `pointer-events: none` here so they can never
+  intercept a tap/click meant for the headline or CTA button beneath them.
+
+  Percentage-based top/left/right offsets (not fixed px) so these stay
+  clear of the viewport edges at 320px width too, rather than a fixed-px
+  offset that could push them (or the space they occupy) outside the
+  viewport on the narrowest supported screens.
+*/
+.hero-decorative-flourish {
+  pointer-events: none;
+}
+
+.hero-crown {
+  /* Static, non-absolute placement: sits above the headline in normal
+     flow (it's #hero's first child), so it can never overlap the
+     headline/button text regardless of viewport size. */
+  margin-bottom: -0.5rem;
+}
+
+.hero-butterfly {
+  position: absolute;
+  top: 6%;
+}
+
+.hero-butterfly--left {
+  left: 4%;
+}
+
+.hero-butterfly--right {
+  right: 4%;
+}
+
+/*
+  Hero storybook copy (Task 11.1, Requirements 1.1, 12.1): the wrapper
+  around the three fixed lines ("ONCE UPON A TIME...", "A little princess
+  is turning seven.", "Join us as we celebrate"), the childName/age-built
+  headline, and the eventDate/venueName lines. Stacked/centered to match
+  #hero's existing flex column layout.
+*/
+.hero-copy {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  /*
+    Task 11.5 audit fix: every other section's content wrapper
+    (.entourage__content, .closing__content, .gallery__layout,
+    .glass-card) explicitly sets width/max-width: 100% so it has a
+    definite width to wrap/break against - this wrapper was missing that
+    pair. Because #hero uses `align-items: center` (not the flex default
+    `stretch`), .hero-copy otherwise shrink-wraps to its widest child's
+    content width instead of #hero's own width. A long, space-less
+    config value (e.g. venueName/eventDate near their 200-char validation
+    ceiling with no spaces) could then grow this wrapper past the
+    viewport before any overflow-wrap/word-break rule on a child line has
+    a constrained box to break against - overflow-wrap only breaks a word
+    when its container has a definite width to overflow, so without this,
+    `.section`'s `overflow: hidden` backstop would silently clip that text
+    rather than wrap it, violating Requirement 1.4. This rule gives
+    .hero-copy a definite width (100% of #hero's own already-safe content
+    box), so the .hero-line/`.headline` wrap guards below/`h1,h2,h3` in
+    this file actually take effect.
+  */
+  width: 100%;
+  max-width: 100%;
+}
+
+.hero-line {
+  margin: 0;
+  font-family: var(--font-body);
+  color: var(--color-text);
+  /* Same audit fix as .hero-copy above: matches the overflow-wrap/
+     word-break/max-width guard already applied to every other
+     config-driven text element in this codebase (see
+     .event-details__value, .entourage__member, .gift-note,
+     .photo-frame__placeholder-label) so a single long unbreakable token
+     in eventDate/venueName breaks inside the box instead of overflowing. */
+  overflow-wrap: break-word;
+  word-break: break-word;
+  max-width: 100%;
+}
+
+.hero-line--prelude {
+  font-family: var(--font-heading);
+  font-style: italic;
+  letter-spacing: 0.05em;
+  /* Luma restyle: this line's highlight color is now the single blue
+     accent (used sparingly for highlights), replacing the old gold. */
+  color: var(--color-accent);
+}
+
+.hero-line--date,
+.hero-line--venue {
+  font-weight: 600;
+}
+
+/*
+  Hero PhotoFrame + soft magical lighting overlay (Task 11.2, Requirement
+  1.2). `.hero-photo-frame` sizes the shared PhotoFrame helper
+  (styles/photoFrame.css) to occupy most of the viewport for the hero
+  scene specifically - the base `.photo-frame` rule is always `width:
+  100%` of its container with no size opinion of its own, so this is
+  where "large, most-of-viewport" is actually expressed for this one
+  usage, without changing PhotoFrame's own shared styling.
+
+  `.hero-photo-frame__overlay` is the "soft magical lighting overlay": a
+  CSS radial-gradient wash applied to its OWN layer stacked on top of the
+  frame (absolutely positioned, full-bleed, click-through), never a
+  filter on the `<img>` itself - so the wash reads correctly whether the
+  photo is today's plain JPG or a later background-removed cutout of the
+  same subject (design.md Component 9).
+*/
+.hero-photo-frame {
+  width: 100%;
+  max-width: 26rem;
+}
+
+/*
+  Luma restyle: the prior pink/lavender radial-gradient "soft magical
+  lighting overlay" is removed - Luma's product UI has no decorative
+  lighting effects on images. The element/class itself is kept as a
+  harmless, fully transparent layer (no background-image, no visible
+  styling) rather than deleted outright, so heroSection.js's DOM
+  structure and heroSection.test.js's existing renderPhoto() assertions
+  (which check for a `.hero-photo-frame__overlay` element) keep passing
+  unchanged. Visually this now renders nothing at all.
+*/
+.hero-photo-frame__overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+@media (min-width: 768px) {
+  .hero-photo-frame {
+    max-width: 34rem;
+  }
+}
+
+/* HeroSection headline (Task 11.1, Requirement 1.1).
+   Mobile-first size stays comfortably under the 320px viewport width even for
+   longer names/ages; overflow-wrap/word-break above already guard against
+   forced horizontal scroll. Full overflow verification across breakpoints is
+   handled in Task 11.5. */
+.headline {
+  font-family: var(--font-heading);
+  font-size: 1.75rem;
+  line-height: 1.3;
+  text-align: center;
+  /* Solid, readable fallback color - set BEFORE the gradient/transparent
+     treatment below in the cascade, so browsers without background-clip:
+     text support (the @supports guard below) keep this instead of
+     silently rendering invisible/transparent text. */
+  color: var(--color-text);
+}
+
+/*
+  Redesign pass (classy/editorial): the earlier gradient-text + glow
+  treatment (background-clip: text with a pink/lavender/gold gradient and a
+  text-shadow glow) has been removed in favor of a single, refined solid
+  color - `.headline`'s base `color: var(--color-text)` rule above already
+  covers this, so no additional rule is needed here. Kept as a comment
+  (rather than deleting silently) so the "why" behind this simplification
+  is documented for future edits: a solid deep plum/charcoal color reads as
+  restrained and editorial, where a multicolor gradient + glow read as
+  "candy"/glittery - the opposite of the classy tone this redesign targets.
+*/
+
+/*
+  Headline entrance animation (Task 3.2, Requirements 1.2, 1.3).
+  Default `.headline` state above has no opacity/transform, so the headline
+  is already in its final visible state unless/until JS adds
+  `.headline--animate-in` (playHeadlineAnimation() in heroSection.js). That
+  keeps this CSS safe as a fallback on its own: if JS never runs, or the
+  user prefers reduced motion (heroSection.js never applies this class in
+  that case), the headline just renders in place with no animation.
+
+  `headline-fade-in-cascade` is a fade + slight upward-slide entrance.
+  Total duration is 700ms, comfortably inside the <=2000ms budget in
+  Requirement 1.2.
+*/
+@keyframes headline-fade-in-cascade {
+  from {
+    opacity: 0;
+    transform: translateY(0.75rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.headline--animate-in {
+  animation: headline-fade-in-cascade 700ms ease-out;
+}
+
+/*
+  Decorative font load timeout fallback (Requirement 1.5/11.3).
+  Applied by FontLoader/heroSection.js when the heading webfont doesn't
+  finish loading within 3000ms. Skips straight to the standard body font
+  rather than the serif tail of --font-heading, so the fallback is a
+  deliberate, deterministic choice rather than depending on the browser's
+  own (variable, un-timed) font-load fallback behavior.
+*/
+.headline--fallback-font {
+  font-family: var(--font-body);
+}
+
+/*
+  Tablet/desktop breakpoint scaling (768px+), Requirement 9.2.
+  Typography and decorative elements scale up here. Sizes use clamp() with the
+  mobile value as the floor and a viewport-relative middle term, so growth is
+  gradual across 768px-1920px rather than jumping straight to a large fixed value
+  that could overflow a narrower window just past the breakpoint. Body text's
+  floor stays at 1rem (16px), so it can only grow, never shrink below the
+  enforced minimum (Requirement 4.4).
+*/
+@media (min-width: 768px) {
+  :root {
+    --font-size-h1: clamp(1.75rem, 1.1rem + 2vw, 3rem);       /* 28px -> up to 48px */
+    --font-size-h2: clamp(1.375rem, 1rem + 1.2vw, 2.125rem);  /* 22px -> up to 34px */
+    --font-size-h3: clamp(1.125rem, 0.95rem + 0.6vw, 1.5rem); /* 18px -> up to 24px */
+    --font-size-body: clamp(1rem, 0.9rem + 0.3vw, 1.125rem);  /* 16px -> up to 18px */
+    --decorative-max-width: clamp(11.25rem, 8rem + 8vw, 20rem); /* 180px -> up to 320px */
+  }
+
+  .section {
+    padding: 2.5rem 2rem;
+  }
+
+  .headline {
+    font-size: clamp(1.75rem, 1rem + 3.2vw, 4rem);
+  }
+}
+
+/*
+  ScrollRevealController (scripts/scrollRevealController.js, Component 1).
+  Any element carrying a `data-reveal-direction` attribute starts in a
+  hidden/offset state keyed off that attribute's value, then transitions to
+  its final state (opacity 1, transform: none) once JS adds
+  `.reveal--visible` - either via the IntersectionObserver path (first
+  intersection past the 0.15 threshold) or, under reduced motion / when
+  IntersectionObserver isn't available, immediately via revealNow(), so the
+  element never gets stuck in the hidden state in that path.
+
+  Elements are selected by [data-reveal-direction] rather than assuming a
+  shared base class, since any section can opt an element in just by
+  adding the attribute (design.md Component 1 responsibilities).
+*/
+[data-reveal-direction] {
+  transition: opacity 700ms ease-out, transform 700ms ease-out;
+}
+
+[data-reveal-direction="fade-up"] {
+  opacity: 0;
+  transform: translateY(1.5rem);
+}
+
+[data-reveal-direction="slide-left"] {
+  opacity: 0;
+  transform: translateX(-2rem);
+}
+
+[data-reveal-direction="slide-right"] {
+  opacity: 0;
+  transform: translateX(2rem);
+}
+
+[data-reveal-direction="zoom-in"] {
+  opacity: 0;
+  transform: scale(0.92);
+}
+
+[data-reveal-direction].reveal--visible {
+  opacity: 1;
+  transform: none;
+}
+
+/*
+  Defensive CSS-level reduced-motion guard, matching this codebase's
+  existing pattern (see .headline--animate-in's keyframes above, which are
+  simply never applied by JS under reduced motion). The JS-level
+  revealNow() synchronous path already handles the primary reduced-motion
+  requirement (Requirement 10.1) by adding .reveal--visible immediately
+  with no observer ever created - this rule only guards against the
+  transition itself being visible/animated in the (defensive,
+  belt-and-suspenders) case that a `data-reveal-direction` element's
+  opacity/transform change is ever observed by the browser's own
+  reduced-motion handling independent of the JS timing.
+*/
+@media (prefers-reduced-motion: reduce) {
+  [data-reveal-direction] {
+    transition: none;
+  }
+}
+
+/*
+  Task 19.2 audit fix (Requirement 10.3): the hero's "BEGIN THE STORY"
+  button (.cta-button, heroSection.js's renderCallToAction()) is a native
+  <button> with no tabindex override, so it was already Tab-reachable and
+  operable via Enter/Space - but unlike .rsvp__button (styles/rsvp.css)
+  and .glass-card (styles/glass.css), it had no explicit :focus-visible
+  outline rule anywhere in the stylesheet. reset.css's `button { ... }`
+  reset does not remove outline, so the browser default focus ring was
+  still shown - this rule replaces that with the same gold
+  outline/offset treatment already used for .rsvp__button, for visual
+  consistency across every keyboard-focusable interactive element.
+*/
+.cta-button:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 3px;
+}
+
+/*
+  Multi-page split: .cta-button had only the :focus-visible rule above -
+  it relied on the browser's native <button> rendering for its actual
+  appearance. Now that heroSection.js's renderCallToAction() builds an
+  `<a>` (a real cross-page link to details.html, not a `<button>`) reusing
+  this same class, it needs an explicit base rule so the anchor still
+  renders as a visible, tappable pill button rather than plain link text.
+  Matches the site's accent-blue/pill-button Luma aesthetic used
+  elsewhere (e.g. the single blue accent color, pill-shaped affordances).
+*/
+.cta-button {
+  display: inline-block;
+  padding: 0.85rem 2rem;
+  border: none;
+  border-radius: 999px;
+  background-color: var(--color-accent);
+  color: var(--color-card-bg);
+  font-family: var(--font-body);
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/*
+  `.back-link` (the plain "← Home"/"← Back" text links that used to sit at
+  the top of details.html and rsvp.html) has been REMOVED, rules and all, at
+  the user's request: it read as a bare blue system link sitting above an
+  otherwise ornate castle page, and looked out of place.
+
+  Nothing replaced it. The browser's own back button is now the way back
+  from either page. Kept as a comment rather than deleted silently so a
+  future edit doesn't reintroduce the same plain-link treatment by accident:
+  if in-page back-navigation is wanted again, `.castle-button`
+  (styles/castleOrnate.css) is the treatment that matches this site.
+*/

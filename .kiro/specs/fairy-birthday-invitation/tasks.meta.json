@@ -1,0 +1,1718 @@
+{
+  "pbtResults": {},
+  "executionHistory": {
+    "1. Set up project structure and static assets": [
+      {
+        "executionId": "1d818086-97d4-4f61-bae8-fea32a393031",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788789391298
+      },
+      {
+        "executionId": "1d818086-97d4-4f61-bae8-fea32a393031",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788789408472
+      },
+      {
+        "executionId": "1d818086-97d4-4f61-bae8-fea32a393031",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788789520117
+      }
+    ],
+    "2.1 Define the `EventConfig` structure (childName, age, eventDate, eventTime, venueName, venueAddress, mapLink, rsvpContact, themeNote, giftNote, message, themeColors) in a single config source file": [
+      {
+        "executionId": "1d818086-97d4-4f61-bae8-fea32a393031",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788789391449
+      },
+      {
+        "executionId": "1d818086-97d4-4f61-bae8-fea32a393031",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788789527904
+      },
+      {
+        "executionId": "1d818086-97d4-4f61-bae8-fea32a393031",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788790118406
+      }
+    ],
+    "2.2 Implement field-level validation: non-empty childName (<=100 chars), integer age (1-120), non-empty venueName (<=200 chars), non-empty venueAddress (<=200 chars), non-empty rsvpContact (<=200 chars), non-empty themeNote (<=200 chars), optional mapLink (<=500 chars if present), optional giftNote (<=280 chars if present), valid eventDate on/after build date, valid eventTime, message (<=280 chars), themeColors (>=1 color)": [
+      {
+        "executionId": "1d818086-97d4-4f61-bae8-fea32a393031",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788789392348
+      },
+      {
+        "executionId": "1d818086-97d4-4f61-bae8-fea32a393031",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788790514959
+      },
+      {
+        "executionId": "1d818086-97d4-4f61-bae8-fea32a393031",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788790893502
+      }
+    ],
+    "2.3 Implement config-source-load-failure detection, checked before field-level validation runs, producing an observable \"configuration could not be loaded\" error distinct from field-validation errors": [
+      {
+        "executionId": "1d818086-97d4-4f61-bae8-fea32a393031",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788789392436
+      },
+      {
+        "executionId": "1d818086-97d4-4f61-bae8-fea32a393031",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788789529013
+      },
+      {
+        "executionId": "1d818086-97d4-4f61-bae8-fea32a393031",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788790119764
+      }
+    ],
+    "2.4 Implement error reporting for field-validation failures that identifies which field(s) failed and renders no partial/placeholder content in their place": [
+      {
+        "executionId": "1d818086-97d4-4f61-bae8-fea32a393031",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788789392494
+      },
+      {
+        "executionId": "1d818086-97d4-4f61-bae8-fea32a393031",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788791196792
+      },
+      {
+        "executionId": "1d818086-97d4-4f61-bae8-fea32a393031",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788791661107
+      }
+    ],
+    "3.1 Implement `renderHeadline(config)` to display \"You are invited to {childName}'s {age}th birthday\" using the decorative font": [
+      {
+        "executionId": "1d818086-97d4-4f61-bae8-fea32a393031",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788789392559
+      },
+      {
+        "executionId": "1d818086-97d4-4f61-bae8-fea32a393031",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788789530248
+      },
+      {
+        "executionId": "1d818086-97d4-4f61-bae8-fea32a393031",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788790120854
+      }
+    ],
+    "3.2 Implement `playHeadlineAnimation()` entrance animation (fade/letter cascade) completing within 2000ms of the headline becoming visible, with a reduced-motion fallback (immediate final state, no animation)": [
+      {
+        "executionId": "1d818086-97d4-4f61-bae8-fea32a393031",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788789392759
+      },
+      {
+        "executionId": "1d818086-97d4-4f61-bae8-fea32a393031",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788790516843
+      },
+      {
+        "executionId": "1d818086-97d4-4f61-bae8-fea32a393031",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788790897591
+      }
+    ],
+    "3.3 Implement decorative font loading with a 3000ms timeout that falls back to a standard font while still rendering the headline text correctly": [
+      {
+        "executionId": "1d818086-97d4-4f61-bae8-fea32a393031",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788789392862
+      },
+      {
+        "executionId": "1d818086-97d4-4f61-bae8-fea32a393031",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788791197900
+      },
+      {
+        "executionId": "1d818086-97d4-4f61-bae8-fea32a393031",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788791662412
+      }
+    ],
+    "3.4 Verify no horizontal overflow/clipped text at 320px width and above": [
+      {
+        "executionId": "1d818086-97d4-4f61-bae8-fea32a393031",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788789392940
+      },
+      {
+        "executionId": "1d818086-97d4-4f61-bae8-fea32a393031",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788791671187
+      },
+      {
+        "executionId": "1d818086-97d4-4f61-bae8-fea32a393031",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788791978866
+      }
+    ],
+    "4.1 Implement `renderDetails(config)` to display date, time, venueName, venueAddress, rsvpContact, and themeNote as primary, unobstructed content on mobile viewports (320px-480px)": [
+      {
+        "executionId": "1d818086-97d4-4f61-bae8-fea32a393031",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788789393014
+      },
+      {
+        "executionId": "1d818086-97d4-4f61-bae8-fea32a393031",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788789531235
+      },
+      {
+        "executionId": "1d818086-97d4-4f61-bae8-fea32a393031",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788790122292
+      }
+    ],
+    "4.2 Add decorative fairy motifs as a non-overlapping background layer (behind text, using z-index/layout rules that don't block readability)": [
+      {
+        "executionId": "1d818086-97d4-4f61-bae8-fea32a393031",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788789393095
+      },
+      {
+        "executionId": "1d818086-97d4-4f61-bae8-fea32a393031",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788790517861
+      },
+      {
+        "executionId": "1d818086-97d4-4f61-bae8-fea32a393031",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788790894562
+      }
+    ],
+    "4.3 Render `eventDate`/`eventTime` exactly as provided in `EventConfig`, with no timezone conversion applied": [
+      {
+        "executionId": "1d818086-97d4-4f61-bae8-fea32a393031",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788789393164
+      },
+      {
+        "executionId": "1d818086-97d4-4f61-bae8-fea32a393031",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788791198974
+      },
+      {
+        "executionId": "1d818086-97d4-4f61-bae8-fea32a393031",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788791661547
+      }
+    ],
+    "4.4 Implement conditional rendering of `mapLink` (as a \"how to get there\" link) and `giftNote`, each shown only when present in `EventConfig`, with no placeholder or blank content rendered when either is absent": [
+      {
+        "executionId": "1d818086-97d4-4f61-bae8-fea32a393031",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788789393255
+      },
+      {
+        "executionId": "1d818086-97d4-4f61-bae8-fea32a393031",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788791671452
+      },
+      {
+        "executionId": "1d818086-97d4-4f61-bae8-fea32a393031",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788791981820
+      }
+    ],
+    "5.1 Implement mobile-first base styles covering 320px-1920px, with breakpoint scaling of typography and decorative elements at 768px": [
+      {
+        "executionId": "1d818086-97d4-4f61-bae8-fea32a393031",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788789393329
+      },
+      {
+        "executionId": "1d818086-97d4-4f61-bae8-fea32a393031",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788789532264
+      },
+      {
+        "executionId": "1d818086-97d4-4f61-bae8-fea32a393031",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788790123220
+      }
+    ],
+    "5.2 Enforce a minimum font size of 16px for all body/headline text and ensure pinch-zoom is never disabled or restricted": [
+      {
+        "executionId": "1d818086-97d4-4f61-bae8-fea32a393031",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788789393395
+      },
+      {
+        "executionId": "1d818086-97d4-4f61-bae8-fea32a393031",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788790915862
+      },
+      {
+        "executionId": "1d818086-97d4-4f61-bae8-fea32a393031",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788791187593
+      }
+    ],
+    "5.3 Constrain decorative fairy assets to their container width at every breakpoint so they never cause horizontal overflow": [
+      {
+        "executionId": "1d818086-97d4-4f61-bae8-fea32a393031",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788789393465
+      },
+      {
+        "executionId": "1d818086-97d4-4f61-bae8-fea32a393031",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788791200109
+      },
+      {
+        "executionId": "1d818086-97d4-4f61-bae8-fea32a393031",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788791659367
+      }
+    ],
+    "6.1 Implement `spawnSparkleAt(position)` and the particle data structure (position, age, lifespanMs, opacity)": [
+      {
+        "executionId": "1d818086-97d4-4f61-bae8-fea32a393031",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788789393530
+      },
+      {
+        "executionId": "1d818086-97d4-4f61-bae8-fea32a393031",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788790137678
+      },
+      {
+        "executionId": "1d818086-97d4-4f61-bae8-fea32a393031",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788790504260
+      }
+    ],
+    "6.2 Implement `updateAndFadeParticles(deltaMs)` with opacity fade-out and removal once expired": [
+      {
+        "executionId": "1d818086-97d4-4f61-bae8-fea32a393031",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788789393628
+      },
+      {
+        "executionId": "1d818086-97d4-4f61-bae8-fea32a393031",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788790518651
+      },
+      {
+        "executionId": "1d818086-97d4-4f61-bae8-fea32a393031",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788790890335
+      }
+    ],
+    "6.3 Implement `clearAll()` and enforce `MAX_PARTICLES_FOR_DEVICE` (30 for viewport widths <=768px, 60 for widths >768px)": [
+      {
+        "executionId": "1d818086-97d4-4f61-bae8-fea32a393031",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788789393692
+      },
+      {
+        "executionId": "1d818086-97d4-4f61-bae8-fea32a393031",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788791201126
+      },
+      {
+        "executionId": "1d818086-97d4-4f61-bae8-fea32a393031",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788791656778
+      }
+    ],
+    "7.1 Implement `preloadFairySprite()` with a 3000ms load timeout; on timeout or failure, fall back to the reduced-motion cross-fade path": [
+      {
+        "executionId": "1d818086-97d4-4f61-bae8-fea32a393031",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788789393760
+      },
+      {
+        "executionId": "1d818086-97d4-4f61-bae8-fea32a393031",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788790138535
+      },
+      {
+        "executionId": "1d818086-97d4-4f61-bae8-fea32a393031",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788790505342
+      }
+    ],
+    "7.2 Implement flight path computation (`computeFlightPath`, `evaluatePathAt`) between two sections": [
+      {
+        "executionId": "1d818086-97d4-4f61-bae8-fea32a393031",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788789393833
+      },
+      {
+        "executionId": "1d818086-97d4-4f61-bae8-fea32a393031",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788790519596
+      },
+      {
+        "executionId": "1d818086-97d4-4f61-bae8-fea32a393031",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788790891306
+      }
+    ],
+    "7.3 Implement `hasAdjacentSection` check and the no-adjacent-section guard: ignore the trigger and play no fairy-flight animation when there is no adjacent section in the requested direction": [
+      {
+        "executionId": "1d818086-97d4-4f61-bae8-fea32a393031",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788789393894
+      },
+      {
+        "executionId": "1d818086-97d4-4f61-bae8-fea32a393031",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788791202175
+      },
+      {
+        "executionId": "1d818086-97d4-4f61-bae8-fea32a393031",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788791657893
+      }
+    ],
+    "7.4 Implement `triggerFairyTransition(fromSection, toSection)` main animation loop per design.md pseudocode (progress clamped to `[0.0, 1.0]`, total flight time <= `TRANSITION_DURATION_MS` of 1500ms), driven by `requestAnimationFrame`": [
+      {
+        "executionId": "1d818086-97d4-4f61-bae8-fea32a393031",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788789393973
+      },
+      {
+        "executionId": "1d818086-97d4-4f61-bae8-fea32a393031",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788791672600
+      },
+      {
+        "executionId": "1d818086-97d4-4f61-bae8-fea32a393031",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788791980488
+      }
+    ],
+    "7.5 Implement `isTransitioning()` and the concurrency guard so a trigger received while a transition is active is deterministically ignored, never queued": [
+      {
+        "executionId": "1d818086-97d4-4f61-bae8-fea32a393031",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788789394043
+      },
+      {
+        "executionId": "1d818086-97d4-4f61-bae8-fea32a393031",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788792239064
+      },
+      {
+        "executionId": "cc8fa660-2ee4-41a1-8493-b63fb254a941",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788792579229
+      },
+      {
+        "executionId": "cc8fa660-2ee4-41a1-8493-b63fb254a941",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788792587837
+      },
+      {
+        "executionId": "cc8fa660-2ee4-41a1-8493-b63fb254a941",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788792830814
+      }
+    ],
+    "7.6 Implement the reduced-motion fallback (`playSimpleCrossFade`), used when `prefers-reduced-motion` is set or when sprite preload fails/times out": [
+      {
+        "executionId": "1d818086-97d4-4f61-bae8-fea32a393031",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788789394108
+      },
+      {
+        "executionId": "cc8fa660-2ee4-41a1-8493-b63fb254a941",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788792841948
+      },
+      {
+        "executionId": "cc8fa660-2ee4-41a1-8493-b63fb254a941",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788793450677
+      }
+    ],
+    "7.7 Ensure viewport-bounds clamping of `state.fairyPosition` on every animation frame": [
+      {
+        "executionId": "1d818086-97d4-4f61-bae8-fea32a393031",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788789394171
+      },
+      {
+        "executionId": "cc8fa660-2ee4-41a1-8493-b63fb254a941",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788793457441
+      },
+      {
+        "executionId": "cc8fa660-2ee4-41a1-8493-b63fb254a941",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788793599596
+      }
+    ],
+    "7.8 On transition complete, clear all particles, reveal the destination section, and hide the origin section": [
+      {
+        "executionId": "1d818086-97d4-4f61-bae8-fea32a393031",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788789394246
+      },
+      {
+        "executionId": "cc8fa660-2ee4-41a1-8493-b63fb254a941",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788793606397
+      },
+      {
+        "executionId": "cc8fa660-2ee4-41a1-8493-b63fb254a941",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788794845735
+      }
+    ],
+    "8.1 Implement `observe(sections)` to detect scroll-based or tap-based (\"next\") section changes": [
+      {
+        "executionId": "1d818086-97d4-4f61-bae8-fea32a393031",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788789394308
+      },
+      {
+        "executionId": "1d818086-97d4-4f61-bae8-fea32a393031",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788790139518
+      },
+      {
+        "executionId": "1d818086-97d4-4f61-bae8-fea32a393031",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788790506244
+      }
+    ],
+    "8.2 Implement `onSectionChange(handler)` wiring that invokes `FairyTransitionController.triggerFairyTransition`": [
+      {
+        "executionId": "1d818086-97d4-4f61-bae8-fea32a393031",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788789394375
+      },
+      {
+        "executionId": "1d818086-97d4-4f61-bae8-fea32a393031",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788790916668
+      },
+      {
+        "executionId": "1d818086-97d4-4f61-bae8-fea32a393031",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788791188795
+      }
+    ],
+    "9. Wire up main application entry point": [
+      {
+        "executionId": "1d818086-97d4-4f61-bae8-fea32a393031",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788789394438
+      },
+      {
+        "executionId": "cc8fa660-2ee4-41a1-8493-b63fb254a941",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788794872556
+      },
+      {
+        "executionId": "cc8fa660-2ee4-41a1-8493-b63fb254a941",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788795205371
+      }
+    ],
+    "10.1 Implement frame-time monitoring: when a rolling average frame time of >=33ms is sustained for >=2000ms, reduce active particle count and `TRANSITION_DURATION_MS` by 50% each, with floors of 10 particles and 50% of the original nominal duration": [
+      {
+        "executionId": "1d818086-97d4-4f61-bae8-fea32a393031",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788789394506
+      },
+      {
+        "executionId": "cc8fa660-2ee4-41a1-8493-b63fb254a941",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788795213150
+      },
+      {
+        "executionId": "cc8fa660-2ee4-41a1-8493-b63fb254a941",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788796779010
+      }
+    ],
+    "10.2 Verify all animation loops use `requestAnimationFrame` (no `setInterval`-driven animation)": [
+      {
+        "executionId": "1d818086-97d4-4f61-bae8-fea32a393031",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788789394572
+      },
+      {
+        "executionId": "cc8fa660-2ee4-41a1-8493-b63fb254a941",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788795214264
+      },
+      {
+        "executionId": "cc8fa660-2ee4-41a1-8493-b63fb254a941",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788795292639
+      }
+    ],
+    "11.1 Manual check with OS-level reduced motion enabled: confirm cross-fade fallback replaces fairy flight everywhere it's used": [
+      {
+        "executionId": "1d818086-97d4-4f61-bae8-fea32a393031",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788789394645
+      },
+      {
+        "executionId": "cc8fa660-2ee4-41a1-8493-b63fb254a941",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788796787349
+      },
+      {
+        "executionId": "cc8fa660-2ee4-41a1-8493-b63fb254a941",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788797836126
+      }
+    ],
+    "11.2 Manual mobile device check for animation smoothness and absence of horizontal overflow across the 320px-1920px range": [
+      {
+        "executionId": "1d818086-97d4-4f61-bae8-fea32a393031",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788789394740
+      },
+      {
+        "executionId": "cc8fa660-2ee4-41a1-8493-b63fb254a941",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788796788400
+      },
+      {
+        "executionId": "cc8fa660-2ee4-41a1-8493-b63fb254a941",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788797837199
+      }
+    ],
+    "11.3 Confirm build fails clearly both when EventConfig fails field-level validation and when the config source itself fails to load/parse": [
+      {
+        "executionId": "1d818086-97d4-4f61-bae8-fea32a393031",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788789394811
+      },
+      {
+        "executionId": "cc8fa660-2ee4-41a1-8493-b63fb254a941",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788796789226
+      },
+      {
+        "executionId": "cc8fa660-2ee4-41a1-8493-b63fb254a941",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788797838100
+      }
+    ],
+    "8. Implement SectionScrollObserver": [
+      {
+        "executionId": "1d818086-97d4-4f61-bae8-fea32a393031",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788791188982
+      }
+    ],
+    "6. Implement SparkleParticleSystem": [
+      {
+        "executionId": "1d818086-97d4-4f61-bae8-fea32a393031",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788791656932
+      }
+    ],
+    "5. Implement ResponsiveLayoutManager": [
+      {
+        "executionId": "1d818086-97d4-4f61-bae8-fea32a393031",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788791659611
+      }
+    ],
+    "2. Implement EventConfig data model and validation": [
+      {
+        "executionId": "1d818086-97d4-4f61-bae8-fea32a393031",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788791661346
+      }
+    ],
+    "3. Build HeroSection component": [
+      {
+        "executionId": "1d818086-97d4-4f61-bae8-fea32a393031",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788791978989
+      }
+    ],
+    "4. Build EventDetailsSection component": [
+      {
+        "executionId": "1d818086-97d4-4f61-bae8-fea32a393031",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788791981980
+      }
+    ],
+    "2.5 Write unit tests for EventConfig validation covering valid config, each invalid-field case (including venueName, venueAddress, rsvpContact, themeNote non-empty/length checks, and mapLink/giftNote optional length checks), and the distinction between a source-load-failure error and a field-validation-failure error": [
+      {
+        "executionId": "1d818086-97d4-4f61-bae8-fea32a393031",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788792186085
+      },
+      {
+        "executionId": "1d818086-97d4-4f61-bae8-fea32a393031",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788792247639
+      },
+      {
+        "executionId": "cc8fa660-2ee4-41a1-8493-b63fb254a941",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788792574813
+      }
+    ],
+    "5.4 Add checks/tests confirming no overflow at 320px, 375px, 768px, 1024px, 1440px, and 1920px": [
+      {
+        "executionId": "1d818086-97d4-4f61-bae8-fea32a393031",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788792187195
+      }
+    ],
+    "5.5 Write property test for **Property 1: No horizontal overflow across supported viewport widths (320px-1920px)**": [
+      {
+        "executionId": "1d818086-97d4-4f61-bae8-fea32a393031",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788792188310
+      }
+    ],
+    "6.4 Write unit tests for particle lifecycle (opacity bounds, removal on expiry, cap enforcement at the 768px boundary)": [
+      {
+        "executionId": "1d818086-97d4-4f61-bae8-fea32a393031",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788792189351
+      }
+    ],
+    "6.5 Write property test for **Property 8: Particle cap scales with viewport width (30 at <=768px, 60 at >768px)**": [
+      {
+        "executionId": "1d818086-97d4-4f61-bae8-fea32a393031",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788792190585
+      }
+    ],
+    "3.5 Write unit tests for the headline animation timing bound, the reduced-motion path, and the font-fallback path": [
+      {
+        "executionId": "1d818086-97d4-4f61-bae8-fea32a393031",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788792191569
+      },
+      {
+        "executionId": "1d818086-97d4-4f61-bae8-fea32a393031",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788792248753
+      },
+      {
+        "executionId": "cc8fa660-2ee4-41a1-8493-b63fb254a941",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788792576059
+      }
+    ],
+    "4.5 Write property test for **Property 9: EventConfig values render accurately with no timezone conversion**": [
+      {
+        "executionId": "1d818086-97d4-4f61-bae8-fea32a393031",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788792192671
+      },
+      {
+        "executionId": "1d818086-97d4-4f61-bae8-fea32a393031",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788792249764
+      },
+      {
+        "executionId": "cc8fa660-2ee4-41a1-8493-b63fb254a941",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788792576891
+      }
+    ],
+    "4.6 Write property test for **Property 10: Optional fields render only when present, with no placeholder content**": [
+      {
+        "executionId": "1d818086-97d4-4f61-bae8-fea32a393031",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788792193625
+      },
+      {
+        "executionId": "1d818086-97d4-4f61-bae8-fea32a393031",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788792250621
+      },
+      {
+        "executionId": "cc8fa660-2ee4-41a1-8493-b63fb254a941",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788792578029
+      }
+    ],
+    "7. Implement FairyTransitionController": [
+      {
+        "executionId": "cc8fa660-2ee4-41a1-8493-b63fb254a941",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788794845876
+      }
+    ],
+    "10. Performance safeguards": [
+      {
+        "executionId": "cc8fa660-2ee4-41a1-8493-b63fb254a941",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788796779137
+      }
+    ],
+    "11. Cross-cutting verification pass": [
+      {
+        "executionId": "cc8fa660-2ee4-41a1-8493-b63fb254a941",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788797838247
+      }
+    ],
+    "1. Remove superseded navigation modules and their tests": [
+      {
+        "executionId": "ff979e8b-cee4-4799-a7a7-d34a169cc1be",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788878624233
+      },
+      {
+        "executionId": "ff979e8b-cee4-4799-a7a7-d34a169cc1be",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788878648118
+      },
+      {
+        "executionId": "ff979e8b-cee4-4799-a7a7-d34a169cc1be",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788878814035
+      }
+    ],
+    "2. Update EventConfig theme colors to the new palette and add the": [
+      {
+        "executionId": "ff979e8b-cee4-4799-a7a7-d34a169cc1be",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788878624450
+      },
+      {
+        "executionId": "ff979e8b-cee4-4799-a7a7-d34a169cc1be",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788878821965
+      },
+      {
+        "executionId": "ff979e8b-cee4-4799-a7a7-d34a169cc1be",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788880123672
+      }
+    ],
+    "3. Rewrite `index.html` for the seven-scene continuous-scroll structure": [
+      {
+        "executionId": "ff979e8b-cee4-4799-a7a7-d34a169cc1be",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788878624658
+      },
+      {
+        "executionId": "ff979e8b-cee4-4799-a7a7-d34a169cc1be",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788878822794
+      },
+      {
+        "executionId": "ff979e8b-cee4-4799-a7a7-d34a169cc1be",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788880124375
+      }
+    ],
+    "4. Update the design token layer in `styles/base.css`": [
+      {
+        "executionId": "ff979e8b-cee4-4799-a7a7-d34a169cc1be",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788878624876
+      },
+      {
+        "executionId": "ff979e8b-cee4-4799-a7a7-d34a169cc1be",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788878823430
+      },
+      {
+        "executionId": "ff979e8b-cee4-4799-a7a7-d34a169cc1be",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788880125210
+      }
+    ],
+    "5.1 Implement `ensureFontsOrFallback(timeoutMs)` generalizing the": [
+      {
+        "executionId": "ff979e8b-cee4-4799-a7a7-d34a169cc1be",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788878625073
+      },
+      {
+        "executionId": "ff979e8b-cee4-4799-a7a7-d34a169cc1be",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788880134118
+      },
+      {
+        "executionId": "ff979e8b-cee4-4799-a7a7-d34a169cc1be",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788880453153
+      }
+    ],
+    "6.1 Implement `recordFrame(nowMs)` and `isDegraded()` using the": [
+      {
+        "executionId": "ff979e8b-cee4-4799-a7a7-d34a169cc1be",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788878625251
+      },
+      {
+        "executionId": "ff979e8b-cee4-4799-a7a7-d34a169cc1be",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788880135139
+      },
+      {
+        "executionId": "ff979e8b-cee4-4799-a7a7-d34a169cc1be",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788880454106
+      }
+    ],
+    "7.1 Implement `observe(elements)` reading each element's": [
+      {
+        "executionId": "ff979e8b-cee4-4799-a7a7-d34a169cc1be",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788878625431
+      },
+      {
+        "executionId": "ff979e8b-cee4-4799-a7a7-d34a169cc1be",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788880463801
+      },
+      {
+        "executionId": "ff979e8b-cee4-4799-a7a7-d34a169cc1be",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788880894300
+      }
+    ],
+    "7.2 Implement the reduced-motion / no-`IntersectionObserver` path:": [
+      {
+        "executionId": "ff979e8b-cee4-4799-a7a7-d34a169cc1be",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788878625660
+      },
+      {
+        "executionId": "ff979e8b-cee4-4799-a7a7-d34a169cc1be",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788880464843
+      },
+      {
+        "executionId": "ff979e8b-cee4-4799-a7a7-d34a169cc1be",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788880895455
+      }
+    ],
+    "8.1 Implement `init(layers)`: a single `requestAnimationFrame` loop": [
+      {
+        "executionId": "ff979e8b-cee4-4799-a7a7-d34a169cc1be",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788878625843
+      },
+      {
+        "executionId": "ff979e8b-cee4-4799-a7a7-d34a169cc1be",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788880465580
+      },
+      {
+        "executionId": "ff979e8b-cee4-4799-a7a7-d34a169cc1be",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788880896679
+      }
+    ],
+    "8.2 Implement the reduced-motion guard: `init()` never starts the": [
+      {
+        "executionId": "ff979e8b-cee4-4799-a7a7-d34a169cc1be",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788878626072
+      },
+      {
+        "executionId": "ff979e8b-cee4-4799-a7a7-d34a169cc1be",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788880466677
+      },
+      {
+        "executionId": "ff979e8b-cee4-4799-a7a7-d34a169cc1be",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788880897562
+      }
+    ],
+    "8.3 Implement `enableMouseParallax(heroElement)` as an optional,": [
+      {
+        "executionId": "ff979e8b-cee4-4799-a7a7-d34a169cc1be",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788878626263
+      },
+      {
+        "executionId": "ff979e8b-cee4-4799-a7a7-d34a169cc1be",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788880908452
+      },
+      {
+        "executionId": "ff979e8b-cee4-4799-a7a7-d34a169cc1be",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788881156182
+      }
+    ],
+    "8.4 Wire `ParallaxController` to `PerformanceMonitor.isDegraded()`:": [
+      {
+        "executionId": "ff979e8b-cee4-4799-a7a7-d34a169cc1be",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788878626434
+      },
+      {
+        "executionId": "ff979e8b-cee4-4799-a7a7-d34a169cc1be",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788880909382
+      },
+      {
+        "executionId": "ff979e8b-cee4-4799-a7a7-d34a169cc1be",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788881157269
+      }
+    ],
+    "9.1 Extend the existing ambient sparkle canvas module with": [
+      {
+        "executionId": "ff979e8b-cee4-4799-a7a7-d34a169cc1be",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788878626618
+      },
+      {
+        "executionId": "ff979e8b-cee4-4799-a7a7-d34a169cc1be",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788880467409
+      },
+      {
+        "executionId": "ff979e8b-cee4-4799-a7a7-d34a169cc1be",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788880898546
+      }
+    ],
+    "9.2 Add a small butterfly-sprite pool (2-3 max) that occasionally": [
+      {
+        "executionId": "ff979e8b-cee4-4799-a7a7-d34a169cc1be",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788878626810
+      },
+      {
+        "executionId": "ff979e8b-cee4-4799-a7a7-d34a169cc1be",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788880899525
+      }
+    ],
+    "9.3 Wire the existing device-tier particle cap (30 at ≤768px, 60 at": [
+      {
+        "executionId": "ff979e8b-cee4-4799-a7a7-d34a169cc1be",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788878626986
+      },
+      {
+        "executionId": "ff979e8b-cee4-4799-a7a7-d34a169cc1be",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788880910128
+      },
+      {
+        "executionId": "ff979e8b-cee4-4799-a7a7-d34a169cc1be",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788881158062
+      }
+    ],
+    "10.1 Implement `PhotoFrame.build({label, aspect, slot, src})`: a": [
+      {
+        "executionId": "ff979e8b-cee4-4799-a7a7-d34a169cc1be",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788878627191
+      },
+      {
+        "executionId": "ff979e8b-cee4-4799-a7a7-d34a169cc1be",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788880136241
+      },
+      {
+        "executionId": "ff979e8b-cee4-4799-a7a7-d34a169cc1be",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788880455247
+      }
+    ],
+    "10.2 Implement `GlassCard.build({ariaLabel})`: a `backdrop-filter`": [
+      {
+        "executionId": "ff979e8b-cee4-4799-a7a7-d34a169cc1be",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788878627392
+      },
+      {
+        "executionId": "ff979e8b-cee4-4799-a7a7-d34a169cc1be",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788880137049
+      },
+      {
+        "executionId": "ff979e8b-cee4-4799-a7a7-d34a169cc1be",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788880456072
+      }
+    ],
+    "11.1 Implement `render(config)` rendering the exact copy lines": [
+      {
+        "executionId": "ff979e8b-cee4-4799-a7a7-d34a169cc1be",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788878627621
+      },
+      {
+        "executionId": "ff979e8b-cee4-4799-a7a7-d34a169cc1be",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788881166895
+      },
+      {
+        "executionId": "ff979e8b-cee4-4799-a7a7-d34a169cc1be",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788882727463
+      }
+    ],
+    "11.2 Render a `PhotoFrame` (\"hero\" slot, large, most-of-viewport,": [
+      {
+        "executionId": "ff979e8b-cee4-4799-a7a7-d34a169cc1be",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788878627823
+      },
+      {
+        "executionId": "ff979e8b-cee4-4799-a7a7-d34a169cc1be",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788881184893
+      },
+      {
+        "executionId": "ff979e8b-cee4-4799-a7a7-d34a169cc1be",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788882728739
+      }
+    ],
+    "11.3 Render the \"BEGIN THE STORY\" button wired to": [
+      {
+        "executionId": "ff979e8b-cee4-4799-a7a7-d34a169cc1be",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788878628023
+      },
+      {
+        "executionId": "ff979e8b-cee4-4799-a7a7-d34a169cc1be",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788881185886
+      },
+      {
+        "executionId": "ff979e8b-cee4-4799-a7a7-d34a169cc1be",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788882729635
+      }
+    ],
+    "11.4 Register decorative butterflies/petals/sparkles as": [
+      {
+        "executionId": "ff979e8b-cee4-4799-a7a7-d34a169cc1be",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788878628222
+      },
+      {
+        "executionId": "ff979e8b-cee4-4799-a7a7-d34a169cc1be",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788881186972
+      },
+      {
+        "executionId": "ff979e8b-cee4-4799-a7a7-d34a169cc1be",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788882730621
+      }
+    ],
+    "11.5 Verify no horizontal overflow/clipped text at 320px width and": [
+      {
+        "executionId": "ff979e8b-cee4-4799-a7a7-d34a169cc1be",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788878628430
+      },
+      {
+        "executionId": "ff979e8b-cee4-4799-a7a7-d34a169cc1be",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788883617705
+      }
+    ],
+    "12.1 Implement `render()` building the three `PhotoFrame` slots in": [
+      {
+        "executionId": "ff979e8b-cee4-4799-a7a7-d34a169cc1be",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788878628623
+      },
+      {
+        "executionId": "ff979e8b-cee4-4799-a7a7-d34a169cc1be",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788881168007
+      },
+      {
+        "executionId": "ff979e8b-cee4-4799-a7a7-d34a169cc1be",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788882731705
+      }
+    ],
+    "12.2 Register `gallery-main` as a `zoom-in` reveal target,": [
+      {
+        "executionId": "ff979e8b-cee4-4799-a7a7-d34a169cc1be",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788878628822
+      },
+      {
+        "executionId": "ff979e8b-cee4-4799-a7a7-d34a169cc1be",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788883605388
+      }
+    ],
+    "12.3 Verify no horizontal overflow at 320px width and above": [
+      {
+        "executionId": "ff979e8b-cee4-4799-a7a7-d34a169cc1be",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788878628999
+      },
+      {
+        "executionId": "ff979e8b-cee4-4799-a7a7-d34a169cc1be",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788883606208
+      }
+    ],
+    "13. Rewrite EventDetailsSection as a floating GlassCard": [
+      {
+        "executionId": "ff979e8b-cee4-4799-a7a7-d34a169cc1be",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788878629123
+      }
+    ],
+    "13.1 Implement `renderDetails(config)` rendering DATE, TIME, VENUE,": [
+      {
+        "executionId": "ff979e8b-cee4-4799-a7a7-d34a169cc1be",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788878629222
+      },
+      {
+        "executionId": "ff979e8b-cee4-4799-a7a7-d34a169cc1be",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788881168764
+      },
+      {
+        "executionId": "ff979e8b-cee4-4799-a7a7-d34a169cc1be",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788882732815
+      }
+    ],
+    "13.2 Render a floral backdrop layer behind the card, registered as a": [
+      {
+        "executionId": "ff979e8b-cee4-4799-a7a7-d34a169cc1be",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788878629322
+      },
+      {
+        "executionId": "ff979e8b-cee4-4799-a7a7-d34a169cc1be",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788881187783
+      },
+      {
+        "executionId": "ff979e8b-cee4-4799-a7a7-d34a169cc1be",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788882733920
+      }
+    ],
+    "13.3 Implement conditional rendering of `mapLink` (as a \"how to get": [
+      {
+        "executionId": "ff979e8b-cee4-4799-a7a7-d34a169cc1be",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788878629423
+      },
+      {
+        "executionId": "ff979e8b-cee4-4799-a7a7-d34a169cc1be",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788881188919
+      },
+      {
+        "executionId": "ff979e8b-cee4-4799-a7a7-d34a169cc1be",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788882734942
+      }
+    ],
+    "13.4 Verify primary content (date/time/venue/address/dress": [
+      {
+        "executionId": "ff979e8b-cee4-4799-a7a7-d34a169cc1be",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788878629536
+      },
+      {
+        "executionId": "ff979e8b-cee4-4799-a7a7-d34a169cc1be",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788883618413
+      }
+    ],
+    "14.1 Implement `renderEntourage(config)` rendering every group in": [
+      {
+        "executionId": "ff979e8b-cee4-4799-a7a7-d34a169cc1be",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788878629679
+      },
+      {
+        "executionId": "ff979e8b-cee4-4799-a7a7-d34a169cc1be",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788881169799
+      },
+      {
+        "executionId": "ff979e8b-cee4-4799-a7a7-d34a169cc1be",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788882735755
+      }
+    ],
+    "14.2 Register each role group as its own `fade-up` reveal target so": [
+      {
+        "executionId": "ff979e8b-cee4-4799-a7a7-d34a169cc1be",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788878629769
+      },
+      {
+        "executionId": "ff979e8b-cee4-4799-a7a7-d34a169cc1be",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788881190006
+      },
+      {
+        "executionId": "ff979e8b-cee4-4799-a7a7-d34a169cc1be",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788882736882
+      }
+    ],
+    "14.3 Verify long member names wrap rather than clip/overflow at": [
+      {
+        "executionId": "ff979e8b-cee4-4799-a7a7-d34a169cc1be",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788878629867
+      },
+      {
+        "executionId": "ff979e8b-cee4-4799-a7a7-d34a169cc1be",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788883622834
+      }
+    ],
+    "15.1 Implement `computeRemaining(targetDate, nowMs)` per": [
+      {
+        "executionId": "ff979e8b-cee4-4799-a7a7-d34a169cc1be",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788878629968
+      },
+      {
+        "executionId": "ff979e8b-cee4-4799-a7a7-d34a169cc1be",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788881170662
+      },
+      {
+        "executionId": "ff979e8b-cee4-4799-a7a7-d34a169cc1be",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788882737888
+      }
+    ],
+    "15.2 Implement `render(config)` building `targetDate` from": [
+      {
+        "executionId": "ff979e8b-cee4-4799-a7a7-d34a169cc1be",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788878630075
+      },
+      {
+        "executionId": "ff979e8b-cee4-4799-a7a7-d34a169cc1be",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788881190789
+      },
+      {
+        "executionId": "ff979e8b-cee4-4799-a7a7-d34a169cc1be",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788882738785
+      }
+    ],
+    "15.3 Drive the display update via `requestAnimationFrame`, writing": [
+      {
+        "executionId": "ff979e8b-cee4-4799-a7a7-d34a169cc1be",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788878630173
+      },
+      {
+        "executionId": "ff979e8b-cee4-4799-a7a7-d34a169cc1be",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788883615860
+      },
+      {
+        "executionId": "5b9b5288-050f-4b32-834e-05562e10e728",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788921056456
+      }
+    ],
+    "15.4 Implement the \"event day\" alternate state shown when": [
+      {
+        "executionId": "ff979e8b-cee4-4799-a7a7-d34a169cc1be",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788878630273
+      },
+      {
+        "executionId": "5b9b5288-050f-4b32-834e-05562e10e728",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788921093445
+      },
+      {
+        "executionId": "5b9b5288-050f-4b32-834e-05562e10e728",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788921403804
+      }
+    ],
+    "16.1 Implement `render(config)` rendering the \"Reserve Your Magical": [
+      {
+        "executionId": "ff979e8b-cee4-4799-a7a7-d34a169cc1be",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788878630369
+      },
+      {
+        "executionId": "ff979e8b-cee4-4799-a7a7-d34a169cc1be",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788882748400
+      },
+      {
+        "executionId": "ff979e8b-cee4-4799-a7a7-d34a169cc1be",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788883591026
+      }
+    ],
+    "16.2 Implement `revealContactCard()`: adds an emphasized class and": [
+      {
+        "executionId": "ff979e8b-cee4-4799-a7a7-d34a169cc1be",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788878630477
+      },
+      {
+        "executionId": "ff979e8b-cee4-4799-a7a7-d34a169cc1be",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788883602443
+      }
+    ],
+    "16.3 Wire the \"RSVP NOW\" button per `config.rsvpLink`: WHERE": [
+      {
+        "executionId": "ff979e8b-cee4-4799-a7a7-d34a169cc1be",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788878630588
+      },
+      {
+        "executionId": "ff979e8b-cee4-4799-a7a7-d34a169cc1be",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788883603477
+      }
+    ],
+    "16.4 Document the `rsvpLink` branch behavior directly above the": [
+      {
+        "executionId": "ff979e8b-cee4-4799-a7a7-d34a169cc1be",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788878630762
+      },
+      {
+        "executionId": "ff979e8b-cee4-4799-a7a7-d34a169cc1be",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788883604573
+      }
+    ],
+    "17.1 Implement `renderClosing(config)` rendering the exact copy": [
+      {
+        "executionId": "ff979e8b-cee4-4799-a7a7-d34a169cc1be",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788878630971
+      },
+      {
+        "executionId": "ff979e8b-cee4-4799-a7a7-d34a169cc1be",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788882748676
+      },
+      {
+        "executionId": "ff979e8b-cee4-4799-a7a7-d34a169cc1be",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788883592081
+      }
+    ],
+    "17.2 Register the closing scene as a reveal target that calls": [
+      {
+        "executionId": "ff979e8b-cee4-4799-a7a7-d34a169cc1be",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788878631171
+      },
+      {
+        "executionId": "ff979e8b-cee4-4799-a7a7-d34a169cc1be",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788883616628
+      },
+      {
+        "executionId": "5b9b5288-050f-4b32-834e-05562e10e728",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788921055504
+      }
+    ],
+    "17.3 Verify no horizontal overflow/clipped text at 320px width and": [
+      {
+        "executionId": "ff979e8b-cee4-4799-a7a7-d34a169cc1be",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788878631344
+      },
+      {
+        "executionId": "5b9b5288-050f-4b32-834e-05562e10e728",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788921093837
+      },
+      {
+        "executionId": "5b9b5288-050f-4b32-834e-05562e10e728",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788921402996
+      }
+    ],
+    "18.1 Apply/extend the existing mobile-first base styles (320px": [
+      {
+        "executionId": "ff979e8b-cee4-4799-a7a7-d34a169cc1be",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788878631512
+      },
+      {
+        "executionId": "5b9b5288-050f-4b32-834e-05562e10e728",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788921412633
+      },
+      {
+        "executionId": "5b9b5288-050f-4b32-834e-05562e10e728",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788921954202
+      }
+    ],
+    "18.2 Constrain every decorative/parallax asset to its container": [
+      {
+        "executionId": "ff979e8b-cee4-4799-a7a7-d34a169cc1be",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788878631678
+      },
+      {
+        "executionId": "5b9b5288-050f-4b32-834e-05562e10e728",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788921414596
+      },
+      {
+        "executionId": "5b9b5288-050f-4b32-834e-05562e10e728",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788921955180
+      }
+    ],
+    "19.1 Add ARIA labels to each scene `<section>` and to every": [
+      {
+        "executionId": "ff979e8b-cee4-4799-a7a7-d34a169cc1be",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788878631859
+      },
+      {
+        "executionId": "5b9b5288-050f-4b32-834e-05562e10e728",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788921413747
+      },
+      {
+        "executionId": "5b9b5288-050f-4b32-834e-05562e10e728",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788921956262
+      }
+    ],
+    "19.2 Verify \"BEGIN THE STORY\" and \"RSVP NOW\" are reachable and": [
+      {
+        "executionId": "ff979e8b-cee4-4799-a7a7-d34a169cc1be",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788878632040
+      },
+      {
+        "executionId": "5b9b5288-050f-4b32-834e-05562e10e728",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788921415399
+      },
+      {
+        "executionId": "5b9b5288-050f-4b32-834e-05562e10e728",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788921957274
+      }
+    ],
+    "20. Wire up main application entry point": [
+      {
+        "executionId": "ff979e8b-cee4-4799-a7a7-d34a169cc1be",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788878632229
+      },
+      {
+        "executionId": "5b9b5288-050f-4b32-834e-05562e10e728",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788921966189
+      },
+      {
+        "executionId": "5b9b5288-050f-4b32-834e-05562e10e728",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788922250858
+      }
+    ],
+    "21.1 Manual check with OS-level reduced motion enabled across all": [
+      {
+        "executionId": "ff979e8b-cee4-4799-a7a7-d34a169cc1be",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788878632410
+      },
+      {
+        "executionId": "5b9b5288-050f-4b32-834e-05562e10e728",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788922366096
+      },
+      {
+        "executionId": "5b9b5288-050f-4b32-834e-05562e10e728",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788922598246
+      }
+    ],
+    "21.2 Manual mobile device check for scroll smoothness and absence of": [
+      {
+        "executionId": "ff979e8b-cee4-4799-a7a7-d34a169cc1be",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788878632691
+      },
+      {
+        "executionId": "5b9b5288-050f-4b32-834e-05562e10e728",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788922600366
+      },
+      {
+        "executionId": "5b9b5288-050f-4b32-834e-05562e10e728",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788922953066
+      }
+    ],
+    "21.3 Confirm build fails clearly both when EventConfig fails": [
+      {
+        "executionId": "ff979e8b-cee4-4799-a7a7-d34a169cc1be",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788878632860
+      },
+      {
+        "executionId": "5b9b5288-050f-4b32-834e-05562e10e728",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788922367047
+      },
+      {
+        "executionId": "5b9b5288-050f-4b32-834e-05562e10e728",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788922599265
+      }
+    ],
+    "21.4 Manual visual QA of the new palette/typography across": [
+      {
+        "executionId": "ff979e8b-cee4-4799-a7a7-d34a169cc1be",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788878633040
+      },
+      {
+        "executionId": "5b9b5288-050f-4b32-834e-05562e10e728",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788922601178
+      },
+      {
+        "executionId": "5b9b5288-050f-4b32-834e-05562e10e728",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788922953968
+      }
+    ],
+    "5. Implement FontLoader": [
+      {
+        "executionId": "ff979e8b-cee4-4799-a7a7-d34a169cc1be",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788880453230
+      }
+    ],
+    "6. Implement PerformanceMonitor": [
+      {
+        "executionId": "ff979e8b-cee4-4799-a7a7-d34a169cc1be",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788880454173
+      }
+    ],
+    "10. Implement shared helpers: PhotoFrame and GlassCard": [
+      {
+        "executionId": "ff979e8b-cee4-4799-a7a7-d34a169cc1be",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788880456134
+      }
+    ],
+    "7. Implement ScrollRevealController": [
+      {
+        "executionId": "ff979e8b-cee4-4799-a7a7-d34a169cc1be",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788880895686
+      }
+    ],
+    "8. Implement ParallaxController": [
+      {
+        "executionId": "ff979e8b-cee4-4799-a7a7-d34a169cc1be",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788881157431
+      }
+    ],
+    "9. Implement AmbientParticleField (extends the existing sparkle": [
+      {
+        "executionId": "ff979e8b-cee4-4799-a7a7-d34a169cc1be",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788881158227
+      }
+    ],
+    "16. Implement RsvpSection": [
+      {
+        "executionId": "ff979e8b-cee4-4799-a7a7-d34a169cc1be",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788883604663
+      }
+    ],
+    "12. Implement GallerySection (\"Princess Gallery\")": [
+      {
+        "executionId": "ff979e8b-cee4-4799-a7a7-d34a169cc1be",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788883606304
+      }
+    ],
+    "17. Rewrite ClosingSection": [
+      {
+        "executionId": "5b9b5288-050f-4b32-834e-05562e10e728",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788921403369
+      }
+    ],
+    "15. Implement CountdownSection": [
+      {
+        "executionId": "5b9b5288-050f-4b32-834e-05562e10e728",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788921404124
+      }
+    ],
+    "18. Responsive layout pass across all seven scenes": [
+      {
+        "executionId": "5b9b5288-050f-4b32-834e-05562e10e728",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788921955303
+      }
+    ],
+    "19. Accessibility pass": [
+      {
+        "executionId": "5b9b5288-050f-4b32-834e-05562e10e728",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788921957375
+      }
+    ],
+    "21. Cross-cutting verification pass": [
+      {
+        "executionId": "5b9b5288-050f-4b32-834e-05562e10e728",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788922296878
+      },
+      {
+        "executionId": "5b9b5288-050f-4b32-834e-05562e10e728",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788922954091
+      }
+    ],
+    "13.1a Render a dress-code color-swatch row beneath the DRESS CODE": [
+      {
+        "executionId": "5b9b5288-050f-4b32-834e-05562e10e728",
+        "chatSessionId": "sess_793ad2e6-6aad-4bbc-9d60-6a9b7dea3a97",
+        "timestamp": 1788922356766
+      }
+    ]
+  }
+}

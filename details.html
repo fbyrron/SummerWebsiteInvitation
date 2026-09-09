@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>You're Invited! A Fairy Birthday Celebration — Details</title>
+  <meta name="description" content="A magical fairy-themed birthday invitation.">
+
+  <!-- Luma-style visual restyle: --font-heading/--font-body (styles/base.css)
+       still resolve to a single OS-native sans-serif stack. The Google
+       Fonts link below is a SEPARATE, later, storybook/fairytale addition
+       scoped to this page's EventDetails/Entourage/Countdown/Closing
+       scenes (styles/detailsOrnate.css's --details-font-serif custom
+       property) - it reuses the SAME "Playfair Display" family already
+       loaded on index.html (styles/heroOrnate.css's --hero-font-serif),
+       so the two pages feel like one coherent site, but does not load the
+       script/calligraphy family ("Great Vibes") - that's specific to the
+       child's name on the hero, not needed on this more restrained page. -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <!-- "Cinzel" is added alongside Playfair for the castle pass: the gallery
+       hall heading, the Party Details heading, every engraved niche label,
+       and the `.castle-button` RSVP link are all set in wide-tracked Roman
+       capitals, which a text serif like Playfair does not render
+       convincingly at display size. Same family index.html loads, so the
+       two pages stay one house style. -->
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,600&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="styles/reset.css">
+  <link rel="stylesheet" href="styles/base.css">
+  <!-- Shared castle ornament vocabulary (.gilded-frame / .gilded-frame__mat
+       / .castle-button), loaded by BOTH index.html and details.html. On this
+       page it supplies the gallery portraits' gilt moulding and the closing
+       scene's RSVP button. Must come AFTER base.css so `.castle-button` wins
+       the single-class cascade tie against `.cta-button`, and BEFORE
+       gallery.css/eventDetails.css so those can override the shared
+       defaults and use the `--castle-*` palette tokens. -->
+  <link rel="stylesheet" href="styles/castleOrnate.css">
+  <link rel="stylesheet" href="styles/glass.css">
+  <link rel="stylesheet" href="styles/eventDetails.css">
+  <link rel="stylesheet" href="styles/entourage.css">
+  <link rel="stylesheet" href="styles/photoFrame.css">
+  <link rel="stylesheet" href="styles/countdown.css">
+  <link rel="stylesheet" href="styles/gallery.css">
+  <link rel="stylesheet" href="styles/rsvp.css">
+  <!-- Storybook/fairytale pass (details.html scenes only, EXCLUDING
+       Gallery which is a separate parallel task): loaded LAST so its
+       `.section-number` override can win a same-specificity tie against
+       base.css's shared rule, and so --details-font-serif is available
+       to entourage.css/countdown.css's retinted rules above (custom
+       property resolution doesn't depend on <link> order the way a
+       cascade tie does, but keeping this last matches the same
+       "loaded last to override shared rules" convention as
+       styles/heroOrnate.css on index.html). -->
+  <link rel="stylesheet" href="styles/detailsOrnate.css">
+</head>
+<body>
+
+  <!--
+    Details page (multi-page split): Gallery, EventDetails, Entourage,
+    Countdown, and Closing scenes live here. Hero is index.html; RSVP is
+    rsvp.html (linked from the end of the Closing scene below).
+
+    Parallax backdrop layers - see index.html for the full explanation.
+  -->
+  <div id="parallax-bg" class="parallax-layer parallax-layer--bg" aria-hidden="true"></div>
+  <div id="parallax-mid" class="parallax-layer parallax-layer--mid" aria-hidden="true"></div>
+  <div id="parallax-fg" class="parallax-layer parallax-layer--fg" aria-hidden="true"></div>
+
+  <!-- The "← Home" back-link that used to sit here has been REMOVED at the
+       user's request ("doesn't look good, better removed"). Nothing replaced
+       it: the browser's own back button is now the way back to the landing
+       page from here. Same removal applied to rsvp.html's "← Back" link. -->
+
+  <main id="app">
+    <!--
+      Five scenes, in document order. Content is filled in by each section's
+      render() call; these are placeholders carrying only id/class/aria-label.
+
+      No dividers between them: the floral `.scene-divider` images were removed
+      at the user's request, along with assets/scene/divider-floral.png and
+      tools/make_divider_asset.py. The scenes now sit directly one after the
+      next; each already opens with its own gilt cameo and heading, which marks
+      the start of a scene clearly enough without a separator between them.
+
+      (Earlier passes also had a `.scene-footer` horizon band here and, before
+      that, three different CSS-drawn dividers. All gone.)
+    -->
+    <section id="gallery" class="section" aria-label="Princess Gallery"></section>
+
+    <section id="event-details" class="section" aria-label="Event details"></section>
+
+    <!-- aria-label updated with the heading: this scene is the Filipino
+         seventh-birthday seven-symbols tradition (7 Roses, 7 Candles,
+         7 Wishes...), not a wedding/debut entourage. The section id and the
+         `config.entourage` key are deliberately left alone - see
+         scripts/entourageSection.js's header for why only the guest-facing
+         words changed. -->
+    <section id="entourage" class="section" aria-label="The Seven Symbols"></section>
+
+    <section id="countdown" class="section" aria-label="Countdown to the celebration"></section>
+
+    <section id="closing" class="section" aria-label="Closing message"></section>
+  </main>
+
+  <script type="module" src="scripts/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,523 @@
+/*
+  eventDetails.css
+  Styles for EventDetailsSection (design.md Component 11).
+
+  -------------------------------------------------------------------------
+  THIS PASS: castle-garden niches, not one plain box
+  -------------------------------------------------------------------------
+  The user's note: "don't put event-details__item in one box, it is so
+  plain. make a style like a castle or garden of castle."
+
+  So the single frosted `.glass-card` wrapper is gone (see
+  scripts/eventDetailsSection.js for why, and for the note that
+  styles/glass.css itself is untouched — countdown still uses it). Each
+  detail is now an arched stone NICHE: the silhouette of a castle window,
+  with a gilt fleur-de-lis crest at the head of its arch, an engraved label,
+  and the value below.
+
+  The shape is the whole trick. A rectangle with a gold border is still a
+  box; `border-radius: 50% 50% 0.4rem 0.4rem / 30% 30% 0 0` gives a tall
+  rounded arch on top and square corners at the base, which is what actually
+  reads as a castle window rather than a card.
+
+  Layers, back to front:
+    .event-details__garden   CSS-painted stone wash, rose trellis lattice,
+                             climbing blooms, and a low hedge along the base
+    .event-details__content  the chapter marker, heading, grid, and footnotes
+    .event-details__item     one arched niche per detail
+
+  This file loads AFTER styles/castleOrnate.css, so the shared `--castle-*`
+  palette tokens are available here — see that file's own load-order note.
+
+  Mobile-first baseline: legible, unobstructed primary content at 320px-480px
+  (Requirement 3.4), 16px minimum font size (Requirement 9.4), and every
+  config-driven text element keeps the overflow-wrap/word-break/max-width
+  guard used throughout this codebase.
+
+  #event-details keeps `class="section"` (details.html) and therefore
+  base.css's padding — unlike #gallery, this scene has no full-bleed
+  requirement. `position: relative` is added so the garden backdrop layer can
+  be absolutely positioned against it, and `.section`'s existing
+  `overflow: hidden` contains that layer.
+*/
+
+#event-details {
+  position: relative;
+}
+
+/*
+  The castle garden wall. Layered back to front in the order written:
+    - warm sun bloom from the upper right,
+    - two blush rose clusters climbing the trellis,
+    - a lavender cluster on the left,
+    - the trellis itself: two crossing diagonal lattices,
+    - a low hedge band along the bottom edge,
+    - the base stone-and-garden wash.
+
+  The lattice is held at very low contrast on purpose. A crisp trellis would
+  read as a busy pattern behind the text; at this strength it reads as
+  garden structure the eye resolves only when it looks for it, which is what
+  keeps the six niches legible on top of it.
+*/
+.event-details__garden {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image:
+    /* sun bloom, upper right */
+    radial-gradient(ellipse 45% 35% at 88% 6%, rgba(255, 223, 150, 0.45) 0%, rgba(255, 223, 150, 0) 70%),
+    /* climbing rose cluster, upper left */
+    radial-gradient(circle at 6% 12%, rgba(246, 201, 219, 0.5) 0%, rgba(246, 201, 219, 0) 32%),
+    /* climbing rose cluster, lower right */
+    radial-gradient(circle at 95% 82%, rgba(246, 201, 219, 0.45) 0%, rgba(246, 201, 219, 0) 30%),
+    /* lavender cluster, mid left */
+    radial-gradient(circle at 2% 62%, rgba(201, 166, 224, 0.4) 0%, rgba(201, 166, 224, 0) 28%),
+    /* rose trellis: two crossing lattices */
+    repeating-linear-gradient(
+      45deg,
+      rgba(160, 140, 115, 0.14) 0 1px,
+      rgba(160, 140, 115, 0) 1px 2.25rem
+    ),
+    repeating-linear-gradient(
+      -45deg,
+      rgba(160, 140, 115, 0.14) 0 1px,
+      rgba(160, 140, 115, 0) 1px 2.25rem
+    ),
+    /* low hedge along the base */
+    linear-gradient(0deg, rgba(154, 178, 143, 0.3) 0%, rgba(154, 178, 143, 0.12) 5%, rgba(154, 178, 143, 0) 12%),
+    /* base stone-and-garden wash */
+    linear-gradient(165deg, #FBF6EC 0%, var(--castle-stone-light) 38%, #FDF1F5 72%, #FFFDF8 100%);
+  background-repeat: no-repeat, no-repeat, no-repeat, no-repeat, repeat, repeat, no-repeat, no-repeat;
+}
+
+.event-details__content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 100%;
+}
+
+/*
+  Scene heading, matching the gallery hall's engraved treatment so the two
+  scenes read as the same building: gold serif capitals with a letterpress
+  highlight, flanked by short gilt rules.
+*/
+.event-details__heading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.9rem;
+  margin: 0.35rem 0 1.75rem;
+  font-family: var(--castle-font-caps);
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  text-align: center;
+  color: var(--castle-gold-text);
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+
+.event-details__heading::before,
+.event-details__heading::after {
+  content: '';
+  display: block;
+  width: 2rem;
+  height: 1px;
+  flex: 0 0 auto;
+  background-image: linear-gradient(90deg, rgba(216, 178, 92, 0) 0%, var(--castle-gilt-mid) 100%);
+}
+
+.event-details__heading::after {
+  background-image: linear-gradient(90deg, var(--castle-gilt-mid) 0%, rgba(216, 178, 92, 0) 100%);
+}
+
+/*
+  The grid of niches. One column at 320px; wider viewports get more columns
+  further down. `align-items: stretch` (the grid default) is what keeps every
+  niche in a row the same height, so the arches line up along one course the
+  way real windows in a wall do.
+
+  `row-gap` is larger than `column-gap` to leave room for each niche's crest,
+  which sits half outside the top of its arch.
+*/
+.event-details__niches {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2.25rem 1.25rem;
+  width: 100%;
+  max-width: 58rem;
+  margin: 0;
+}
+
+/*
+  One arched niche. Six surfaces make it read as carved stone rather than a
+  card:
+    - the arched silhouette (see the file header for why this specific
+      border-radius),
+    - a pale stone fill, lighter at the top where light falls in,
+    - a gilt hairline border, with a cream keyline inset just inside it,
+    - a soft inner shadow at the head of the arch, as if recessed,
+    - a grounded drop shadow at the base,
+    - extra top padding to clear the crest sitting in the arch.
+
+  `min-width: 0` keeps a long value (an address) wrapping inside the niche
+  instead of widening the grid column — grid items default to a content-based
+  minimum, same trap as flex items.
+*/
+.event-details__item {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3rem;
+  width: 100%;
+  min-width: 0;
+  padding: 2.4rem 1.25rem 1.5rem;
+  text-align: center;
+  border: 1px solid var(--castle-gilt-mid);
+  border-radius: 50% 50% 0.4rem 0.4rem / 30% 30% 0 0;
+  background-image: linear-gradient(
+    180deg,
+    #FFFFFF 0%,
+    var(--castle-ivory) 18%,
+    var(--castle-stone-light) 72%,
+    #EFE6D6 100%
+  );
+  box-shadow:
+    inset 0 0 0 3px rgba(255, 255, 255, 0.75),
+    inset 0 0 0 4px rgba(216, 178, 92, 0.3),
+    inset 0 1.25rem 2rem rgba(160, 140, 115, 0.16),
+    0 0.5rem 1.25rem rgba(139, 105, 20, 0.14);
+}
+
+/*
+  The gilt fleur-de-lis crest, set at the head of the arch like a keystone.
+  Half outside the niche's top edge, on its own gold-ringed disc, so it reads
+  as a cast ornament fixed to the stone rather than a character typed inside
+  the box.
+*/
+.event-details__crest {
+  position: absolute;
+  top: -0.85rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: block;
+  width: 1.7rem;
+  height: 1.7rem;
+  border-radius: 50%;
+  border: 1px solid var(--castle-gilt-mid);
+  background-image: radial-gradient(
+    circle at 35% 28%,
+    #FFFFFF 0%,
+    var(--castle-gilt-light) 55%,
+    rgba(216, 178, 92, 0.75) 100%
+  );
+  box-shadow:
+    0 0 0.75rem rgba(255, 223, 150, 0.85),
+    inset 0 0 0 2px rgba(255, 253, 248, 0.8);
+  font-size: 0.9rem;
+  line-height: 1.65rem;
+  text-align: center;
+  color: var(--castle-gilt-deep);
+}
+
+/*
+  Engraved label. Gold Cinzel capitals with a white letterpress highlight
+  above and a faint dark line below — the two-tone shadow is what makes small
+  caps look cut into stone instead of printed on it.
+*/
+.event-details__label {
+  font-family: var(--castle-font-caps);
+  font-weight: 700;
+  font-size: 1rem; /* 16px minimum per Requirement 9.4 */
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--castle-gold-text);
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.85), 0 -1px 0 rgba(107, 78, 12, 0.12);
+  /* Tracking also applies after the final letter, pushing centred caps left
+     of true optical centre; matching left padding cancels it. */
+  padding-left: 0.16em;
+}
+
+/*
+  A value line. A niche now holds SEVERAL of these — "When" is the date and
+  the time, "Where" is the venue and the address — so `margin-top` gives the
+  second and later lines air from the one above without adding a gap after the
+  label. `:not(:first-of-type)` targets exactly that: `<dd>` elements after
+  the first one in the niche.
+*/
+.event-details__value {
+  margin: 0;
+  font-family: var(--castle-font-serif);
+  font-size: 1rem; /* 16px minimum, legible at 320px-480px */
+  line-height: 1.55;
+  color: var(--castle-ink);
+  overflow-wrap: break-word;
+  word-break: break-word;
+  max-width: 100%;
+}
+
+.event-details__value:not(:first-of-type) {
+  margin-top: 0.3rem;
+}
+
+/*
+  The niche's primary line — the date in "When", the venue name in "Where".
+  Larger and in the gold tone, so each niche has an obvious answer with its
+  supporting detail beneath it, rather than two equal-weight lines the eye has
+  to choose between.
+*/
+.event-details__value--lead {
+  font-weight: 600;
+  font-size: 1.1rem;
+  line-height: 1.4;
+  color: var(--castle-gold-text);
+}
+
+/*
+  The dress-code niche spans the full grid width. Its value is a full
+  sentence while every other field is a date, a time, a name, or an address —
+  in an even grid it would be several times its row-mates' height, which
+  looks like a bug rather than emphasis. Full width reads as deliberate, and
+  the dress code is genuinely the one detail guests must act on before
+  arriving.
+
+  A wide box also needs a flatter arch: the percentage-based vertical radius
+  above would scale into an enormous dome across the full grid width, so the
+  arch is re-cut in rem here to keep the same visual curve.
+*/
+.event-details__item--wide {
+  grid-column: 1 / -1;
+  border-radius: 6rem 6rem 0.4rem 0.4rem / 3rem 3rem 0 0;
+}
+
+/*
+  Dress-code colour-swatch row (Requirement 3.9). Rendered directly beneath
+  the DRESS CODE value, inside the same niche — a row of small filled
+  circles, one per entry in config.themeColors, reinforcing (not replacing)
+  the text instruction. Wraps on narrow viewports instead of overflowing.
+*/
+.event-details__swatch-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 0.6rem;
+}
+
+/*
+  Each swatch's shared shape/size/border. `background-color` is set
+  per-instance as an inline style in eventDetailsSection.js (the exact hex
+  value from config.themeColors), since that value is dynamic per-instance
+  data, not a fixed design token — everything else about a swatch's
+  appearance is shared and lives here.
+
+  Ringed in gilt with an inner white highlight, so a row of pastel circles
+  reads as set gemstones rather than plain colour dots.
+*/
+.event-details__swatch {
+  display: inline-block;
+  width: 1.35rem;
+  height: 1.35rem;
+  border-radius: 50%;
+  border: 1px solid var(--castle-gilt-mid);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.85),
+    inset 0 -0.2rem 0.3rem rgba(139, 105, 20, 0.12),
+    0 0.15rem 0.3rem rgba(139, 105, 20, 0.18);
+  flex-shrink: 0;
+}
+
+/*
+  The map link — now INSIDE the Address niche.
+
+  It used to sit below the whole grid, detached from the thing it describes.
+  The user asked whether it belonged with the venue; it does, and it is now
+  rendered inside the Address niche (eventDetailsSection.js's `withMapLink`).
+  Address rather than Venue: Venue is the place's name, Address is its
+  location, and "how to get there" answers the location question.
+
+  Styled as a garden gate: gold small-caps under a gilt rule, with a bloom
+  glyph leading it. A plain underlined blue link would be the one
+  Luma-minimal element left standing in a castle garden.
+
+  `margin-top` plus the gilt top rule separate it from the address text above
+  it inside the same niche, so it reads as an action attached to that address
+  rather than another line of it.
+*/
+.event-details__map-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+  padding: 0.6rem 0.25rem 0;
+  font-family: var(--castle-font-caps);
+  font-size: 1rem; /* 16px minimum per Requirement 9.4 */
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--castle-gold-text);
+  border-top: 1px solid rgba(216, 178, 92, 0.5);
+  overflow-wrap: break-word;
+  word-break: break-word;
+  max-width: 100%;
+}
+
+.event-details__map-link::before {
+  content: "⚘";
+  font-family: var(--castle-font-serif);
+  font-size: 1.1em;
+  letter-spacing: 0;
+  color: var(--castle-gilt-mid);
+}
+
+.event-details__map-link:hover {
+  color: var(--castle-gilt-deep);
+  border-bottom-color: var(--castle-gilt-deep);
+}
+
+.event-details__map-link:focus-visible {
+  outline: 2px solid var(--castle-gilt-deep);
+  outline-offset: 4px;
+}
+
+/*
+  The real RSVP button, where the removed RSVP niche used to be.
+
+  All of its appearance comes from `.castle-button` (styles/castleOrnate.css),
+  applied by eventDetailsSection.js alongside `cta-button`. This rule is
+  placement only.
+
+  `.event-details__content` is a flex column with `align-items: center`, so
+  the button already centres itself and does not need the `align-self`
+  correction the closing scene's copy of this button needs (that column is
+  stretch-aligned). Only the space above and below it is set here.
+*/
+.event-details__rsvp {
+  margin: 2rem 0 0.5rem;
+}
+
+/*
+  The gift note, as a parchment scroll. The rolled ends are the two
+  pseudo-elements: narrow vertical gilt bands pinned to the left and right
+  edges, which is what turns a rectangle of paper into a scroll.
+*/
+.event-details__gift-scroll {
+  position: relative;
+  margin-top: 1.5rem;
+  padding: 1.1rem 2.25rem;
+  width: 100%;
+  max-width: 34rem;
+  border-radius: 0.25rem;
+  background-image: linear-gradient(
+    180deg,
+    #FFFDF6 0%,
+    var(--castle-parchment) 45%,
+    #F7EBD3 100%
+  );
+  box-shadow:
+    inset 0 0 0 1px rgba(216, 178, 92, 0.55),
+    inset 0 0 2rem rgba(170, 130, 75, 0.1),
+    0 0.4rem 1rem rgba(139, 105, 20, 0.16);
+}
+
+.event-details__gift-scroll::before,
+.event-details__gift-scroll::after {
+  content: '';
+  position: absolute;
+  top: -0.2rem;
+  bottom: -0.2rem;
+  width: 0.55rem;
+  border-radius: 0.3rem;
+  background-image: linear-gradient(
+    90deg,
+    #C4972F 0%,
+    var(--castle-gilt-light) 45%,
+    var(--castle-gilt-mid) 100%
+  );
+  box-shadow: 0 0 0 1px rgba(107, 78, 12, 0.4);
+}
+
+.event-details__gift-scroll::before {
+  left: -0.3rem;
+}
+
+.event-details__gift-scroll::after {
+  right: -0.3rem;
+  transform: scaleX(-1);
+}
+
+.event-details__gift-note {
+  margin: 0;
+  font-family: var(--castle-font-serif);
+  font-size: 1rem; /* 16px minimum, legible at 320px-480px */
+  font-style: italic;
+  line-height: 1.6;
+  text-align: center;
+  color: var(--castle-ink);
+  overflow-wrap: break-word;
+  word-break: break-word;
+  max-width: 100%;
+}
+
+@media (min-width: 768px) {
+  .event-details__heading::before,
+  .event-details__heading::after {
+    width: 4rem;
+  }
+
+  /*
+    Two across, at every width from here up.
+
+    After merging Date+Time into "When" and Venue+Address into "Where", there
+    are exactly two short niches plus the wide dress-code banner. Two columns
+    is now the only layout that works: "When" and "Where" sit side by side as
+    a matched pair of windows, with the banner spanning beneath them. A third
+    column would have nothing to put in it.
+  */
+  .event-details__niches {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2.75rem 1.75rem;
+  }
+
+  .event-details__label,
+  .event-details__value {
+    font-size: 1.125rem;
+  }
+
+  .event-details__value--lead {
+    font-size: 1.3rem;
+  }
+
+  .event-details__map-link,
+  .event-details__gift-note {
+    font-size: 1.125rem;
+  }
+
+  .event-details__swatch {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  /*
+    Still two columns (see the 768px block for why), just roomier: the grid is
+    capped narrower than the 58rem baseline so the two niches on a wide monitor
+    stay window-proportioned instead of stretching into broad panels.
+  */
+  .event-details__niches {
+    max-width: 44rem;
+    gap: 3rem 2.25rem;
+  }
+
+  .event-details__item {
+    padding: 2.75rem 1.5rem 1.75rem;
+  }
+}

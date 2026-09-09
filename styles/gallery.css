@@ -1,0 +1,432 @@
+/*
+  gallery.css
+  Styles for GallerySection ("Princess Gallery", design.md Component 10).
+
+  -------------------------------------------------------------------------
+  THIS PASS: a portrait gallery in a castle
+  -------------------------------------------------------------------------
+  Rewritten from full-bleed background-photo panels to framed portraits hung
+  on a castle wall, per the user's request that the gallery photos be the
+  thing that reads "like a picture frame in a castle".
+
+  What each piece does:
+    .gallery__wall      CSS-painted masonry courses, arched wall niches, and
+                        warm torch glow. No image asset — same approach as
+                        the landing page's `.hero-bg-garden`.
+    .gallery__rail      the moulded picture rail the frames hang from.
+    .gallery__cord      the hanging cord: a V of two thin lines from the
+                        rail to the frame's top corners.
+    .gallery__frame     size and aspect only. The gilt moulding itself comes
+                        from `.gilded-frame` (styles/castleOrnate.css),
+                        shared with the landing page's invite frame.
+    .gallery__mat       the visible mat border width around each photo.
+    .gallery__plaque    the engraved gold nameplate under each frame.
+    .gallery__corner    small gilt corner scrolls finishing the hall.
+
+  This file must load AFTER styles/castleOrnate.css so `.gallery__frame` can
+  override the shared moulding defaults (thickness, corner radius) — see
+  that file's own load-order note.
+
+  Mobile-first baseline: one column at 320px, three across on a wide
+  screen. 16px minimum font size, and the plaque label carries the same
+  overflow-wrap/word-break/max-width guard used throughout this codebase.
+
+  #gallery full-bleed: `#gallery` carries `class="section"` (details.html),
+  and `.section` (base.css) sets `padding: 1.5rem 1rem` plus
+  `overflow: hidden`. The wall layer must reach the section's own edges, so
+  the padding is dropped here and re-applied inside `.gallery__content`
+  instead. Scoped to `#gallery` only rather than editing the shared
+  `.section` rule, which every other section still needs unchanged.
+  `overflow: hidden` is kept — it usefully contains the absolutely
+  positioned corner scrolls.
+*/
+
+#gallery {
+  position: relative;
+  padding: 0;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+/*
+  The castle wall. Layered back-to-front in the order written:
+    - warm torch glow from the upper corners, so the hall is lit rather than
+      evenly flat,
+    - two arched niches, one behind each outer portrait, giving the wall
+      depth without needing any real geometry,
+    - horizontal mortar lines and vertical joints, offset per course so the
+      masonry reads as staggered blocks rather than a grid,
+    - the base stone wash.
+
+  The mortar lines are `repeating-linear-gradient`s at low contrast on
+  purpose: at full strength the wall competes with the photos, which are the
+  actual subject here.
+*/
+.gallery__wall {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image:
+    /* torch glow, upper left and upper right */
+    radial-gradient(ellipse 40% 30% at 8% 4%, rgba(255, 223, 150, 0.5) 0%, rgba(255, 223, 150, 0) 70%),
+    radial-gradient(ellipse 40% 30% at 92% 4%, rgba(255, 223, 150, 0.5) 0%, rgba(255, 223, 150, 0) 70%),
+    /* soft blush bloom low-centre, tying the hall to the site's garden palette */
+    radial-gradient(ellipse 55% 30% at 50% 100%, rgba(246, 201, 219, 0.35) 0%, rgba(246, 201, 219, 0) 70%),
+    /* arched niches behind the outer portraits */
+    radial-gradient(ellipse 15% 34% at 18% 44%, rgba(160, 140, 115, 0.22) 0%, rgba(160, 140, 115, 0) 72%),
+    radial-gradient(ellipse 15% 34% at 82% 44%, rgba(160, 140, 115, 0.22) 0%, rgba(160, 140, 115, 0) 72%),
+    /* mortar: horizontal courses */
+    repeating-linear-gradient(
+      180deg,
+      rgba(160, 140, 115, 0.16) 0 1px,
+      rgba(160, 140, 115, 0) 1px 4.5rem
+    ),
+    /* mortar: vertical joints */
+    repeating-linear-gradient(
+      90deg,
+      rgba(160, 140, 115, 0.13) 0 1px,
+      rgba(160, 140, 115, 0) 1px 9rem
+    ),
+    /* base stone */
+    linear-gradient(170deg, #FBF6EC 0%, var(--castle-stone-light) 42%, #EFE6D6 72%, #F8F1E6 100%);
+  background-repeat: no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, repeat, repeat, no-repeat;
+}
+
+.gallery__content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 100%;
+  /* Re-applies the padding dropped from `#gallery` above, so content is
+     inset from the viewport while the wall behind it still runs edge to
+     edge. */
+  padding: 2rem 1rem 2.5rem;
+}
+
+/*
+  Hall heading, engraved into the masonry: gold serif capitals with a
+  letterpress highlight, flanked by short gilt rules rather than sitting
+  bare. The rules are pseudo-elements so no extra DOM is needed.
+*/
+.gallery__heading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.9rem;
+  margin: 0 0 1.25rem;
+  font-family: var(--castle-font-caps);
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  text-align: center;
+  color: var(--castle-gold-text);
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+
+.gallery__heading::before,
+.gallery__heading::after {
+  content: '';
+  display: block;
+  width: 2rem;
+  height: 1px;
+  flex: 0 0 auto;
+  background-image: linear-gradient(90deg, rgba(216, 178, 92, 0) 0%, var(--castle-gilt-mid) 100%);
+}
+
+.gallery__heading::after {
+  background-image: linear-gradient(90deg, var(--castle-gilt-mid) 0%, rgba(216, 178, 92, 0) 100%);
+}
+
+/*
+  The picture rail: a moulded band across the wall at the height the frames
+  hang from. Three stacked gradients give it a lit top edge, a body, and a
+  shadowed underside, which is what makes a 0.5rem strip read as moulding
+  rather than a line.
+*/
+.gallery__rail {
+  width: 100%;
+  max-width: 62rem;
+  height: 0.55rem;
+  margin: 0 0 2.75rem;
+  border-radius: 0.1rem;
+  background-image: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.9) 0%,
+    var(--castle-stone-light) 35%,
+    var(--castle-stone-mid) 72%,
+    rgba(160, 140, 115, 0.75) 100%
+  );
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.7),
+    0 0.4rem 0.9rem rgba(160, 140, 115, 0.3);
+}
+
+/*
+  The grid of portraits. One column at 320px; the 768px+ block widens it.
+  `align-items: start` so a portrait whose plaque wraps to two lines doesn't
+  stretch its neighbours' frames to match.
+*/
+.gallery__portraits {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 3rem 2rem;
+  align-items: start;
+  justify-items: center;
+  width: 100%;
+  max-width: 62rem;
+}
+
+.gallery__portrait {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 20rem;
+  min-width: 0;
+}
+
+/*
+  Hanging cord. The element itself is the gap between the rail and the
+  frame; its two pseudo-elements are the cord's left and right runs,
+  rotated so they meet at a point at the top. Absolute positioning inside a
+  fixed-height box keeps the geometry independent of the frame's width.
+*/
+.gallery__cord {
+  position: relative;
+  width: 100%;
+  height: 1.6rem;
+  pointer-events: none;
+}
+
+.gallery__cord::before,
+.gallery__cord::after {
+  content: '';
+  position: absolute;
+  top: -1.15rem;
+  width: 1px;
+  height: 3rem;
+  background-image: linear-gradient(180deg, rgba(160, 140, 115, 0.15) 0%, rgba(139, 105, 20, 0.55) 100%);
+  transform-origin: top center;
+}
+
+.gallery__cord::before {
+  left: 50%;
+  transform: rotate(-19deg);
+}
+
+.gallery__cord::after {
+  left: 50%;
+  transform: rotate(19deg);
+}
+
+/*
+  The frame: size and proportion only. Every gilt surface — the moulding
+  gradient, the outer edge line, the hanging shadow, the crest diamonds —
+  comes from `.gilded-frame` in styles/castleOrnate.css.
+
+  `--gilded-frame-thickness` is overridden down from the shared 0.9rem
+  default: the landing page's frame holds a whole block of copy and wants a
+  heavy moulding, but a portrait at this size wants a finer one so the photo
+  stays dominant.
+*/
+.gallery__frame {
+  --gilded-frame-thickness: 0.7rem;
+  width: 100%;
+  max-width: 100%;
+  border-radius: 0.25rem;
+}
+
+/*
+  The visible mat border around the photo. Thin, and thinner at the top than
+  the bottom — a real mount is cut with extra weight at the base so the
+  image sits optically centred rather than looking like it is sliding down.
+*/
+.gallery__mat {
+  padding: 0.6rem 0.6rem 0.9rem;
+  background-color: var(--castle-ivory);
+}
+
+/*
+  The photo. All source images are portrait 2:3 (~1366x2049), so at
+  `aspect-ratio: 2 / 3` with `cover` nothing is cropped today; a future photo
+  at another ratio is centre-cropped rather than distorted or letterboxed
+  inside the mat.
+
+  `max-width: 100%` and the explicit `height` beat base.css's
+  `.section img { max-width: min(100%, var(--decorative-max-width)) }` rule,
+  which would otherwise clamp these to ~180px — that cap is meant for small
+  decorative assets, and a gallery portrait is primary content. Higher
+  specificity (0,2,0 vs 0,1,1) wins regardless of load order, so this does
+  not silently depend on stylesheet ordering.
+*/
+.gallery__frame .gallery__photo {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  aspect-ratio: 2 / 3;
+  object-fit: cover;
+  object-position: center top;
+  border-radius: 0.05rem;
+  /* A hairline shadow where the photo meets the mat, so the print reads as
+     sitting behind the mount rather than printed onto it. */
+  box-shadow: 0 0 0 1px rgba(139, 105, 20, 0.25), inset 0 0 1.5rem rgba(107, 78, 12, 0.1);
+}
+
+/*
+  The engraved nameplate below each frame. Cast brass rather than a text
+  label: a horizontal gilt gradient for the metal, a bevel keyline inside
+  the border, and the caption in small gold serif capitals with a white
+  letterpress highlight above it.
+
+  It is a separate element below the frame — not overlaid on the photo — so
+  no darkening scrim is needed and the photo is never obscured.
+*/
+.gallery__plaque {
+  position: relative;
+  /*
+    Clears the frame's bottom crest diamond. That ornament
+    (castleOrnate.css's `.gilded-frame::after`) is a 1.4rem square rotated
+    45deg and centred on the frame's bottom edge, so its lower point reaches
+    ~0.99rem below the frame. 1.4rem leaves a visible gap rather than the
+    plaque nearly touching it.
+  */
+  margin-top: 1.4rem;
+  padding: 0.5rem 1rem;
+  max-width: 100%;
+  border: 1px solid var(--castle-gilt-mid);
+  border-radius: 0.2rem;
+  background-image: linear-gradient(
+    100deg,
+    #E8D5A6 0%,
+    var(--castle-gilt-light) 26%,
+    #E4CE96 54%,
+    var(--castle-gilt-light) 78%,
+    #DCC384 100%
+  );
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.6),
+    0 0.25rem 0.6rem rgba(139, 105, 20, 0.25);
+}
+
+.gallery__plaque-label {
+  margin: 0;
+  font-family: var(--castle-font-serif);
+  font-size: 1rem; /* 16px floor, Requirement 9.4 */
+  font-weight: 600;
+  font-style: italic;
+  letter-spacing: 0.06em;
+  line-height: 1.35;
+  text-align: center;
+  color: #6B4E0C;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.55);
+  /* Same guard used throughout this codebase (e.g. .event-details__value,
+     .entourage__member) so a long caption can never force horizontal
+     overflow at a 320px viewport. */
+  overflow-wrap: break-word;
+  word-break: break-word;
+  max-width: 100%;
+}
+
+/*
+  Gilt corner scrolls finishing the hall's four corners. Absolutely
+  positioned against `.gallery__content`, decorative, non-interactive.
+  Hidden below 768px — at 320px they would sit on top of the portraits
+  rather than in clear wall space.
+
+  Selected as `.gallery__content .gallery__corner` (0,2,0) rather than
+  `.gallery__corner` alone (0,1,0), because `#gallery` carries
+  `class="section"` and base.css's `.section svg` rule (0,1,1) would
+  otherwise outrank a single class and force `height: auto` back on. It
+  happens to compute to the same 2.75rem for a 1:1 viewBox today, but the
+  sizing here should not silently depend on that.
+*/
+.gallery__content .gallery__corner {
+  position: absolute;
+  z-index: 2;
+  width: 2.75rem;
+  height: 2.75rem;
+  opacity: 0.7;
+  pointer-events: none;
+  display: none;
+}
+
+.gallery__content .gallery__corner--tl {
+  top: 0.75rem;
+  left: 0.75rem;
+}
+
+.gallery__content .gallery__corner--tr {
+  top: 0.75rem;
+  right: 0.75rem;
+  transform: scaleX(-1);
+}
+
+.gallery__content .gallery__corner--bl {
+  bottom: 0.75rem;
+  left: 0.75rem;
+  transform: scaleY(-1);
+}
+
+.gallery__content .gallery__corner--br {
+  bottom: 0.75rem;
+  right: 0.75rem;
+  transform: scale(-1, -1);
+}
+
+@media (min-width: 768px) {
+  .gallery__content {
+    padding: 3rem 2rem 3.5rem;
+  }
+
+  .gallery__heading {
+    margin-bottom: 1.75rem;
+  }
+
+  .gallery__heading::before,
+  .gallery__heading::after {
+    width: 4rem;
+  }
+
+  .gallery__content .gallery__corner {
+    display: block;
+  }
+
+  /*
+    Two across at tablet width. Three would put each frame under ~14rem
+    wide, at which point the plaque caption wraps to three lines and the
+    portraits read as thumbnails again — the exact thing this rewrite was
+    meant to fix.
+  */
+  .gallery__portraits {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 3.5rem 2.5rem;
+  }
+
+  .gallery__plaque-label {
+    font-size: 1.05rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  /*
+    Three across: one gallery wall, all portraits visible together, which is
+    the whole point of hanging them rather than stacking full-screen panels.
+  */
+  .gallery__portraits {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 3.5rem 3rem;
+  }
+
+  .gallery__portrait {
+    max-width: 18.5rem;
+  }
+
+  .gallery__frame {
+    --gilded-frame-thickness: 0.85rem;
+  }
+}

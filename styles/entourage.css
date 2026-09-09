@@ -1,0 +1,724 @@
+/*
+  entourage.css
+  Styles for EntourageSection ("The Seven Symbols", design.md Component 12)
+  and ClosingSection.
+
+  -------------------------------------------------------------------------
+  THIS PASS: one frame per group
+  -------------------------------------------------------------------------
+  The user asked that each `.entourage__group` reveal be its own box or
+  frame. Each group is now a self-contained framed panel in a grid, and the
+  vertical timeline it used to be part of is gone.
+
+  Deleted, and why:
+    .entourage__list::before  the central gold-to-lavender connecting line.
+                              One line running through all six groups says
+                              they are one continuous sequence — so revealing
+                              them one at a time read as a line being drawn,
+                              not as six separate things arriving.
+    .entourage__marker        the per-group dot on that line. It only existed
+                              to mark a position ON the line. Each panel now
+                              carries its own gilt crest instead.
+    .entourage__divider       the sparkle glyph between consecutive stops. A
+                              divider separates items within one continuous
+                              run; six discrete framed panels separate
+                              themselves.
+
+  Added: `.entourage__group` as a parchment panel with a cast header plaque
+  (`.entourage__plaque` + `.entourage__crest` + `.entourage__role`).
+
+  Deliberately a DIFFERENT shape from the event-details niches
+  (styles/eventDetails.css), which are arched stone castle windows. These are
+  square-shouldered parchment rolls with gilt corner brackets, so the two
+  scenes read as different objects in the same castle rather than the same
+  card used twice.
+
+  `.entourage__member` is set in the castle serif at plain weight and a muted
+  ink tone — castle-flavoured but deliberately quiet, per the user's note
+  that the names should not compete for attention ("not agaw pansin"). The
+  ornament budget on this scene goes to the panel and its plaque; the 49
+  names are read as a list.
+
+  This file loads AFTER styles/castleOrnate.css, so the shared `--castle-*`
+  palette tokens are available here.
+
+  Mobile-first baseline: 16px minimum font size, overflow-wrap/word-break on
+  every name (some are long), no fixed-pixel widths.
+  #entourage/#closing are already `.section` (base.css), which has
+  `overflow: hidden`, so no rule here needs to fight that.
+*/
+
+#entourage {
+  position: relative;
+}
+
+.entourage__content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+  max-width: 100%;
+}
+
+/*
+  Scene heading, matching the gallery hall's and Party Details' engraved
+  treatment so all three scenes read as the same building: gold serif
+  capitals with a letterpress highlight, flanked by short gilt rules.
+*/
+.entourage__heading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.9rem;
+  margin: 0.35rem 0 0.5rem;
+  font-family: var(--castle-font-caps, "Cinzel", "Playfair Display", Georgia, serif);
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  text-align: center;
+  color: var(--castle-gold-text, #8B6914);
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+
+.entourage__heading::before,
+.entourage__heading::after {
+  content: '';
+  display: block;
+  width: 2rem;
+  height: 1px;
+  flex: 0 0 auto;
+  background-image: linear-gradient(90deg, rgba(216, 178, 92, 0) 0%, var(--castle-gilt-mid, #D8B25C) 100%);
+}
+
+.entourage__heading::after {
+  background-image: linear-gradient(90deg, var(--castle-gilt-mid, #D8B25C) 0%, rgba(216, 178, 92, 0) 100%);
+}
+
+/*
+  The grid of panels. One column at 320px; wider viewports get more further
+  down. `align-items: start` so a group whose names run long does not stretch
+  its row-mates' panels to match — each panel ends where its own list ends,
+  which is what makes them read as separate objects.
+*/
+.entourage__list {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem 1.5rem;
+  align-items: start;
+  width: 100%;
+  max-width: 58rem;
+  /* Room for the header plaques, which straddle their panels' top edges and
+     rise ~1rem above them (see `.entourage__plaque`'s negative margin-top).
+     Without this the first row's plaques would collide with the heading, and
+     `#entourage`'s inherited `.section { overflow: hidden }` would clip
+     anything that reached past the section's own top edge. */
+  padding-top: 1.5rem;
+}
+
+/*
+  One symbol group's panel. Parchment rather than stone, with a gilt hairline
+  and a grounded shadow so it sits on the page as a sheet rather than a flat
+  block of colour.
+
+  `padding-top` is generous because the header plaque overlaps the panel's
+  top edge (see `.entourage__plaque`).
+
+  `min-width: 0` keeps a long name wrapping inside the panel instead of
+  widening the grid column — grid items default to a content-based minimum,
+  the same trap as flex items.
+*/
+.entourage__group {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.9rem;
+  width: 100%;
+  min-width: 0;
+  padding: 2rem 1.25rem 1.5rem;
+  border-radius: 0.3rem;
+  background-image: linear-gradient(
+    180deg,
+    #FFFDF6 0%,
+    var(--castle-parchment, #FDF6E6) 48%,
+    #F7EBD3 100%
+  );
+  box-shadow:
+    inset 0 0 0 1px rgba(216, 178, 92, 0.6),
+    inset 0 0 2.5rem rgba(170, 130, 75, 0.09),
+    0 0.5rem 1.25rem rgba(139, 105, 20, 0.16);
+}
+
+/*
+  Gilt corner brackets, top-left and bottom-right. Two pseudo-elements
+  rather than four, on purpose: a diagonal pair reads as a deliberate
+  asymmetric mount, where all four corners bracketed starts to look like the
+  gallery's picture frames — which these are not meant to be.
+*/
+.entourage__group::before,
+.entourage__group::after {
+  content: '';
+  position: absolute;
+  width: 1.15rem;
+  height: 1.15rem;
+  border-style: solid;
+  border-color: var(--castle-gilt-mid, #D8B25C);
+  opacity: 0.85;
+}
+
+.entourage__group::before {
+  top: 0.4rem;
+  left: 0.4rem;
+  border-width: 1px 0 0 1px;
+}
+
+.entourage__group::after {
+  bottom: 0.4rem;
+  right: 0.4rem;
+  border-width: 0 1px 1px 0;
+}
+
+/*
+  The header plaque: a cast gilt band carrying the crest and the group name.
+  Pulled up so it straddles the panel's top edge, which is what makes it read
+  as a nameplate fixed TO the panel rather than the first line of text inside
+  it.
+
+  `max-width` keeps it clear of the panel's own corner bracket at narrow
+  widths.
+*/
+.entourage__plaque {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: -3rem;
+  padding: 0.45rem 1.1rem;
+  max-width: calc(100% - 2rem);
+  border: 1px solid var(--castle-gilt-mid, #D8B25C);
+  border-radius: 999px;
+  background-image: linear-gradient(
+    100deg,
+    #E8D5A6 0%,
+    var(--castle-gilt-light, #FBEFC8) 28%,
+    #E4CE96 56%,
+    var(--castle-gilt-light, #FBEFC8) 80%,
+    #DCC384 100%
+  );
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.6),
+    0 0.25rem 0.7rem rgba(139, 105, 20, 0.25);
+}
+
+.entourage__crest {
+  flex: 0 0 auto;
+  font-size: 0.85rem;
+  line-height: 1;
+  color: #6B4E0C;
+}
+
+/*
+  The group name ("7 Roses"). Engraved gold capitals on the plaque — this is
+  the panel's one loud element, which is what lets the member names below it
+  stay quiet.
+*/
+.entourage__role {
+  margin: 0;
+  font-family: var(--castle-font-caps, "Cinzel", "Playfair Display", Georgia, serif);
+  font-weight: 700;
+  font-size: 1rem; /* 16px minimum per Requirement 4.4 */
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #6B4E0C;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.55);
+  overflow-wrap: break-word;
+  word-break: break-word;
+  /* Tracking also applies after the final letter, pushing centred caps left
+     of true optical centre; matching left padding cancels it. */
+  padding-left: 0.12em;
+}
+
+.entourage__members {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/*
+  A member's name.
+
+  Castle-flavoured but deliberately quiet, per the user's note that these
+  should not compete for attention: the castle serif (Playfair Display) at
+  PLAIN weight, upright, in the muted ink tone, at the 16px floor with normal
+  tracking. No gold, no italics, no small-caps, no letterpress shadow — every
+  one of those is used elsewhere on this page for things that are meant to be
+  looked at, and 49 names all shouting would make the scene unreadable.
+
+  The serif family alone is what ties them to the castle; everything else
+  here is restraint.
+
+  Font-family carries an inline fallback because entourage.css is loaded by
+  rsvp.html too (per its <head>), which does not load the Google Fonts link —
+  so `--castle-font-serif` may be undefined there. In practice #entourage is
+  never rendered outside details.html (renderEntourage() no-ops if the
+  element is absent), so this is defensive.
+*/
+.entourage__member {
+  font-family: var(--castle-font-serif, "Playfair Display", Georgia, "Times New Roman", serif);
+  font-weight: 400;
+  font-size: 1rem; /* 16px minimum, legible at 320px-480px */
+  line-height: 1.5;
+  text-align: center;
+  color: var(--castle-ink, #6B5A45);
+  overflow-wrap: break-word;
+  word-break: break-word;
+  max-width: 100%;
+}
+
+/*
+  Wrap-guard arithmetic at the 320px floor, worst case (no 768px+ scale-up):
+    320px viewport
+    - .section padding 1rem each side (base.css)   = 288px  (#entourage content box)
+    - .entourage__group padding 1.25rem each side  = 248px  (the name column)
+  `.entourage__group` is `min-width: 0` (overriding the grid item's default
+  content-based minimum, which would otherwise let one long unbroken name push
+  the panel past its column), and `.entourage__members` is `width: 100%`, so
+  overflow-wrap/word-break on `.entourage__member` always has a real,
+  non-zero width to break against. 248px at the 16px minimum is comfortably
+  enough to wrap rather than clip any single name, including unbroken
+  character runs. The panel's corner brackets sit inside its own padding and
+  never overlap the name column.
+
+  This replaces the previous timeline-era arithmetic, which measured against
+  `.entourage__list`'s 1.75rem left gutter and the role/member 0.5rem left
+  margins — none of which exist anymore.
+*/
+
+@media (min-width: 768px) {
+  .entourage__content {
+    gap: 1.5rem;
+  }
+
+  .entourage__heading::before,
+  .entourage__heading::after {
+    width: 4rem;
+  }
+
+  /*
+    Two across. Three at this width would put each panel near 15rem, at which
+    point the longer names ("Ninang Danica Gail Sebastian") wrap to two lines
+    and the list stops scanning as one name per row.
+  */
+  .entourage__list {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2.5rem 2rem;
+  }
+
+  .entourage__role,
+  .entourage__member {
+    font-size: 1.125rem;
+  }
+}
+
+@media (min-width: 1200px) {
+  /*
+    Three across, so the six groups sit as two clean rows of three. Held back
+    to 1200px rather than the usual 1024px breakpoint for the name-wrapping
+    reason above — at 1024px three columns are still too narrow for the
+    longest names.
+  */
+  .entourage__list {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2.5rem 1.75rem;
+  }
+}
+
+/*
+  ==========================================================================
+  ClosingSection
+  ==========================================================================
+  Kept in this file rather than a separate stylesheet (matching the earlier
+  decision to co-locate them). Reuses the same `--castle-*` tokens as the
+  rest of the page.
+
+  `.closing__heading` (config.childName, the page's final line) gets the
+  richest treatment here — large italic serif in the antique-gold tone.
+  `.closing__signoff` matches it, one step quieter. `.closing__message` (two
+  full sentences of prose) keeps a plain ink colour: it is read, not looked
+  at, so legibility takes priority over ornamentation.
+
+  The RSVP link at the end of this scene is a `.castle-button`
+  (styles/castleOrnate.css, applied by closingSection.js) — only its
+  placement is set here.
+
+  THIS PASS: the copy is mounted on a parchment SCROLL. A scroll rather than
+  another framed panel because this scene is a farewell address, and a
+  proclamation on an unfurled sheet is the fairytale object for a message
+  being read out, where a frame is the object for something being looked at.
+  It also keeps all four scenes on this page distinct: gilt frames in the
+  gallery, arched stone niches for the details, bracketed parchment panels for
+  the seven symbols, and a rolled scroll here.
+*/
+
+/*
+  .closing__scroll — the unfurled sheet.
+
+  Rolled at the TOP and BOTTOM (not the sides, which is how the gift note in
+  styles/eventDetails.css is rolled). That is the difference between a scroll
+  being held open to read from — rods above and below, the sheet hanging
+  between them — and a small note unrolled sideways. The two are deliberately
+  different so the page does not use the same object twice.
+
+  The rods are the two pseudo-elements below. This element paints the sheet:
+  aged parchment, slightly warmer toward the edges, with an inner shadow at
+  the top and bottom where it curls back under each rod. The vertical padding
+  is generous specifically to clear those rods.
+
+  Centred and width-capped: a proclamation reads as centred text on a sheet of
+  a readable measure, not as full-width prose.
+*/
+.closing__scroll {
+  position: relative;
+  width: 100%;
+  max-width: 34rem;
+  margin: 1.75rem auto;
+  padding: 2.5rem 1.5rem;
+  border-radius: 0.15rem;
+  background-image:
+    /* faint aged mottling toward the left and right edges */
+    linear-gradient(90deg, rgba(170, 130, 75, 0.12) 0%, rgba(170, 130, 75, 0) 12%, rgba(170, 130, 75, 0) 88%, rgba(170, 130, 75, 0.12) 100%),
+    /* the sheet */
+    linear-gradient(180deg, #FFFDF6 0%, var(--castle-parchment, #FDF6E6) 45%, #F9EEDA 100%);
+  box-shadow:
+    /* the curl back under each rod */
+    inset 0 0.7rem 1.1rem -0.5rem rgba(139, 105, 20, 0.35),
+    inset 0 -0.7rem 1.1rem -0.5rem rgba(139, 105, 20, 0.35),
+    /* a hairline edge so the sheet ends against the page */
+    inset 0 0 0 1px rgba(216, 178, 92, 0.4),
+    /* the sheet lifted off the page */
+    0 0.75rem 1.75rem rgba(139, 105, 20, 0.18);
+}
+
+/*
+  The two rods the sheet is wound onto, across its top and bottom edges.
+
+  Wider than the sheet (`left`/`right: -0.75rem`) and rounded, so their ends
+  project past it the way a real rod does — that overhang is most of what
+  makes this read as a scroll rather than a sheet with two gold stripes on it.
+  The horizontal gilt gradient gives each rod a lit top and a shadowed
+  underside along its length.
+*/
+.closing__scroll::before,
+.closing__scroll::after {
+  content: '';
+  position: absolute;
+  left: -0.75rem;
+  right: -0.75rem;
+  height: 0.85rem;
+  border-radius: 0.45rem;
+  background-image: linear-gradient(
+    180deg,
+    #F7E3B0 0%,
+    var(--castle-gilt-light, #FBEFC8) 22%,
+    var(--castle-gilt-mid, #D8B25C) 58%,
+    #B8860B 88%,
+    #8B6914 100%
+  );
+  box-shadow:
+    0 0 0 1px rgba(107, 78, 12, 0.45),
+    0 0.3rem 0.7rem rgba(139, 105, 20, 0.3);
+}
+
+.closing__scroll::before {
+  top: -0.3rem;
+}
+
+.closing__scroll::after {
+  bottom: -0.3rem;
+  /* Flipped so the lit edge of the lower rod faces the sheet, as it would if
+     the light is coming from above the whole object. */
+  transform: scaleY(-1);
+}
+
+/*
+  The content column inside the sheet. Centred, because everything on a
+  proclamation is: the message, the sign-off, the name, and the button.
+*/
+.closing__content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.85rem;
+  width: 100%;
+  max-width: 100%;
+  text-align: center;
+}
+
+.closing__heading {
+  margin: 0;
+  font-family: var(--castle-font-serif, "Playfair Display", Georgia, "Times New Roman", serif);
+  font-style: italic;
+  font-weight: 700;
+  font-size: 1.75rem;
+  line-height: 1.25;
+  color: var(--castle-gold-text, #8B6914);
+  /*
+    This line renders config.childName verbatim (closingSection.js's
+    childNameLine) and, unlike a real h1-h3, a plain `<p>` does not pick up
+    base.css's `h1, h2, h3` overflow-wrap/word-break rule - without its own
+    guard, a long childName (up to the 100-char ceiling allowed by
+    Requirement 12.2) would be clipped by #closing's inherited
+    `.section { overflow: hidden }` backstop instead of wrapping, violating
+    Requirements 7.3/9.1.
+  */
+  overflow-wrap: break-word;
+  word-break: break-word;
+  max-width: 100%;
+}
+
+.closing__message {
+  font-family: var(--castle-font-serif, "Playfair Display", Georgia, "Times New Roman", serif);
+  font-size: 1rem; /* 16px minimum, legible at 320px-480px */
+  line-height: 1.6;
+  color: var(--castle-ink, #6B5A45);
+  overflow-wrap: break-word;
+  word-break: break-word;
+  margin: 0;
+  max-width: 100%;
+}
+
+/*
+  Illuminated drop cap on the first line, in the manuscript tradition — a
+  large gilt initial that the rest of the sentence wraps around. This is the
+  single strongest signal that a block of text is a proclamation rather than
+  a paragraph, and it is why this scene no longer reads as three plain
+  sentences on a sheet.
+
+  `float: left` is what makes the following two lines wrap beside it rather
+  than starting below it. `line-height: 0.85` pulls the glyph's own leading in
+  so its cap height aligns with the first line of body text instead of sitting
+  a line-height above it.
+
+  `::first-letter` rather than a wrapping element: it leaves the sentence as
+  one uninterrupted text node, so a screen reader reads "Thank you..."
+  normally instead of announcing a stray "T" followed by "hank you".
+*/
+.closing__message--lead::first-letter {
+  float: left;
+  margin: 0.1rem 0.5rem 0 0;
+  font-family: var(--castle-font-caps, "Cinzel", "Playfair Display", Georgia, serif);
+  font-weight: 700;
+  font-size: 3.2rem;
+  line-height: 0.85;
+  color: var(--castle-gilt-deep, #B8860B);
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.9), 0 2px 3px rgba(139, 105, 20, 0.25);
+}
+
+/*
+  The lead line is left-aligned, alone among the scroll's centred children.
+  A drop cap only works against a straight left edge — with centred text every
+  line starts at a different x, so the initial would float away from the
+  paragraph it belongs to.
+*/
+.closing__message--lead {
+  align-self: stretch;
+  text-align: left;
+}
+
+/*
+  Gilt flourish rule between the message and the sign-off, so the scroll has a
+  visible break between what is being said and who it is from. The glyph is a
+  florette flanked by two tapered gilt rules, all drawn here — the element
+  itself is empty and `aria-hidden` (closingSection.js).
+*/
+.closing__flourish {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  width: 100%;
+  max-width: 14rem;
+  margin: 0.5rem 0;
+  color: var(--castle-gilt-mid, #D8B25C);
+}
+
+.closing__flourish::before {
+  content: '';
+  flex: 1 1 auto;
+  height: 1px;
+  background-image: linear-gradient(90deg, rgba(216, 178, 92, 0) 0%, var(--castle-gilt-mid, #D8B25C) 100%);
+}
+
+.closing__flourish::after {
+  content: "❦";
+  flex: 0 0 auto;
+  font-family: var(--castle-font-serif, "Playfair Display", Georgia, serif);
+  font-size: 1rem;
+  line-height: 1;
+}
+
+/*
+  The wax seal, stamped with the child's initial (closingSection.js reads it
+  from config.childName). This is the object that finishes a scroll.
+
+  -------------------------------------------------------------------------
+  REBUILT: why the first attempt did not read as wax
+  -------------------------------------------------------------------------
+  The user said it did not look real. It didn't, and the reason was the SHAPE.
+  It used an off-round `border-radius` (48% 52% 51% 49% / ...), which produces
+  a very slightly squashed ellipse — still a smooth, mathematically perfect
+  curve all the way round. Real wax is pressed out from the centre and stops
+  wherever it stops: the edge is lumpy, with a different radius every few
+  degrees. No `border-radius` value can express that, because it only has four
+  corners to work with.
+
+  So the outline is now a 24-point `clip-path: polygon()` with a radius that
+  varies between roughly 42% and 48%. That single change is most of the
+  difference — the eye reads an irregular perimeter as a poured material and a
+  smooth one as a drawn shape.
+
+  Two consequences of using clip-path, both handled below:
+
+    1. `box-shadow` no longer works for the drop shadow. box-shadow is cast
+       from the border-box, so clip-path cuts it away entirely. The outer
+       shadow is a `filter: drop-shadow()` instead, which follows the clipped
+       silhouette — so the shadow is blob-shaped too.
+
+    2. An `inset` box-shadow can't make the rim either: it hugs the rectangular
+       border-box, not the polygon, so it would draw a dark band across the
+       corners of an invisible square. The rim darkening is a
+       `radial-gradient` background layer instead, which is concentric and
+       therefore follows the blob.
+
+  Everything else that makes it read as wax:
+    - a domed fill, lightest off-centre at the upper left, so light falls on it
+    - two faint mottling blooms, because poured wax is not one flat colour
+    - an impressed inner disc (the `::before`), the flat area the stamp pressed
+    - the initial cut INTO that disc — dark, with the highlight ABOVE it and
+      the shadow BELOW. Reverse those two and it reads as raised lettering
+      instead of an impression.
+*/
+.closing__seal {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 4.25rem;
+  height: 4.25rem;
+  margin: 0.5rem 0 0;
+  /* The lumpy wax perimeter. 24 points, radius varying ~42%-48% - see the
+     note above for why border-radius cannot do this. */
+  clip-path: polygon(
+    96.0% 50.0%, 95.4% 62.2%, 89.2% 72.6%, 83.5% 83.5%,
+    72.5% 88.9%, 62.0% 94.8%, 50.0% 97.8%, 38.2% 94.1%,
+    26.7% 90.4%, 18.5% 81.5%, 9.3% 73.5%, 5.6% 61.9%,
+    4.7% 50.0%, 4.2% 37.7%, 10.5% 27.2%, 17.0% 17.0%,
+    26.1% 8.6%, 38.4% 6.6%, 50.0% 3.6%, 62.2% 4.6%,
+    72.7% 10.8%, 82.5% 17.5%, 91.0% 26.3%, 94.1% 38.2%
+  );
+  background-image:
+    /* rim darkening - concentric, so it follows the blob rather than the box */
+    radial-gradient(circle at 50% 50%, rgba(90, 25, 45, 0) 52%, rgba(90, 25, 45, 0.5) 88%, rgba(70, 18, 35, 0.7) 100%),
+    /* mottling, so it is not one flat colour */
+    radial-gradient(circle at 70% 66%, rgba(150, 55, 85, 0.45) 0%, rgba(150, 55, 85, 0) 40%),
+    radial-gradient(circle at 30% 70%, rgba(210, 130, 160, 0.3) 0%, rgba(210, 130, 160, 0) 34%),
+    /* the domed body, lit from the upper left */
+    radial-gradient(circle at 36% 30%, #E09FB6 0%, #C86E8E 32%, #A84A6B 66%, #8A3352 100%);
+  /* Follows the clipped silhouette, unlike box-shadow. */
+  filter: drop-shadow(0 0.35rem 0.55rem rgba(110, 35, 60, 0.45));
+  font-family: var(--castle-font-caps, "Cinzel", "Playfair Display", Georgia, serif);
+  font-weight: 700;
+  font-size: 1.6rem;
+  line-height: 1;
+  color: #F3CBD8;
+  /* Highlight ABOVE, shadow BELOW = cut into the wax. */
+  text-shadow: 0 -1px 0 rgba(255, 255, 255, 0.4), 0 1px 2px rgba(80, 22, 40, 0.75);
+}
+
+/*
+  The impressed disc: the flat, slightly sunken area the stamp pressed into the
+  middle of the blob, with a raised lip of wax around it. A circle here on
+  purpose — the STAMP is machined and round, even though the wax around it is
+  not. That contrast between a clean inner circle and a lumpy outer edge is
+  itself a strong part of the effect.
+
+  Inset shadows work fine on this one: it is its own element with a plain
+  `border-radius`, not the clipped blob.
+*/
+.closing__seal::before {
+  content: '';
+  position: absolute;
+  inset: 17%;
+  border-radius: 50%;
+  background-image: radial-gradient(
+    circle at 50% 42%,
+    rgba(90, 25, 45, 0.34) 0%,
+    rgba(90, 25, 45, 0.14) 62%,
+    rgba(90, 25, 45, 0) 100%
+  );
+  box-shadow:
+    /* the lip of wax pushed up around the stamp */
+    inset 0 1px 0 rgba(255, 255, 255, 0.3),
+    inset 0 -1px 0 rgba(80, 22, 40, 0.45),
+    /* a soft outer glow where the wax rises back to full height */
+    0 0 0.35rem rgba(255, 210, 225, 0.16);
+}
+
+.closing__signoff {
+  font-family: var(--castle-font-serif, "Playfair Display", Georgia, "Times New Roman", serif);
+  font-size: 1.125rem;
+  line-height: 1.5;
+  font-style: italic;
+  color: var(--castle-gold-text, #8B6914);
+  margin: 0.5rem 0 0 0;
+  max-width: 100%;
+}
+
+/*
+  The RSVP button at the end of this scene. Placement only — its appearance is
+  entirely `.castle-button` (styles/castleOrnate.css).
+
+  `align-self: center` is what stops it stretching. `.closing__content` is a
+  flex column, and a flex item fills the cross axis unless told otherwise, so
+  without this the button would render as a full-width pill spanning the whole
+  scroll. (`align-items: center` on the column above already handles this now,
+  but this stays explicit so the button cannot start stretching again if that
+  column's alignment is ever changed.)
+*/
+.closing__content > .castle-button {
+  align-self: center;
+  margin-top: 0.75rem;
+}
+
+@media (min-width: 768px) {
+  .closing__scroll {
+    padding: 3rem 3rem;
+    margin: 2.5rem auto;
+  }
+
+  .closing__scroll::before,
+  .closing__scroll::after {
+    left: -1.25rem;
+    right: -1.25rem;
+    height: 1rem;
+    border-radius: 0.5rem;
+  }
+
+  .closing__heading {
+    font-size: 2.25rem;
+  }
+
+  .closing__message {
+    font-size: 1.125rem;
+  }
+
+  .closing__signoff {
+    font-size: 1.25rem;
+  }
+}

@@ -1,0 +1,482 @@
+/*
+  castleOrnate.css
+  Shared "castle" ornament vocabulary — loaded by index.html AND details.html.
+
+  -------------------------------------------------------------------------
+  WHAT LIVES HERE
+  -------------------------------------------------------------------------
+    .gilded-frame        an ornate gilt picture-frame moulding
+    .gilded-frame__mat   the mat board mounted inside it
+    .castle-button       a fairytale-castle button/link
+    .scene-cameo         Summer's portrait in a gilt oval locket
+
+  What does NOT live here: size, aspect and placement of a frame's contents.
+  Those are per-consumer and stay in the consumer's own stylesheet:
+    styles/heroOrnate.css  `.hero-frame` / `.hero-frame__mat`   (invite copy)
+    styles/gallery.css     `.gallery__frame` / `.gallery__mat`  (photos)
+
+  -------------------------------------------------------------------------
+  SCENE DIVIDERS AND FOOTER: gone entirely
+  -------------------------------------------------------------------------
+  There is no divider between scenes and no footer band anymore. This is the end
+  of a long series: three CSS-drawn dividers (a gilt double rule, then a
+  rose-and-vine sprig, with looping then scroll-driven animation), then a
+  supplied floral `<img>` divider, then a photographic footer horizon band — the
+  user disliked each in turn, and has now asked for the dividers removed too.
+
+  Removed from this file across those passes, and NOT to be reintroduced without
+  a request: `.scene-divider` and everything under it, `.scene-footer` and its
+  castle/garden layers, and every `scene-divider-*` / `scene-footer-*` keyframe.
+
+  Removed from the project alongside: assets/scene/divider-floral.png,
+  assets/scene/footer-*.jpg, tools/make_divider_asset.py and
+  tools/make_footer_assets.py.
+
+  The scenes now sit directly one after another. Each opens with its own gilt
+  `.scene-cameo` and engraved heading, which marks a scene's start without a
+  separator between them.
+
+  This file went from about 1150 lines to this. That is the honest measure of how
+  much of it was drawing things that either did not work or were not wanted.
+
+  -------------------------------------------------------------------------
+  LOAD ORDER (matters)
+  -------------------------------------------------------------------------
+  Both pages load this file immediately AFTER styles/base.css and BEFORE every
+  consumer stylesheet, because:
+    - `.castle-button` and base.css's `.cta-button` are both single-class
+      selectors, so the cascade tie is broken by order alone. This file must come
+      second to win.
+    - `.gallery__frame` / `.hero-frame` need to override the defaults set here
+      (thickness, radius), so their stylesheets must come after this one.
+
+  -------------------------------------------------------------------------
+  PALETTE
+  -------------------------------------------------------------------------
+  These ARE custom properties on `:root`, unlike heroOrnate.css's deliberately
+  local literal hex values. The reasoning inverts: heroOrnate.css keeps literals
+  because its palette is a one-page exception that should not leak into the shared
+  token set, whereas this file is shared across pages and consumers, so the values
+  need one authoritative definition. Namespaced `--castle-*` so they cannot
+  collide with base.css's `--color-*` Luma tokens, which stay untouched.
+*/
+:root {
+  /* Gilt, light to dark — the moulding's highlight, body, shadow and edge. */
+  --castle-gilt-light: #FBEFC8;
+  --castle-gilt-mid: #D8B25C;
+  --castle-gilt-deep: #B8860B;
+  --castle-gilt-edge: #6B4E0C;
+
+  /* Mat board and paper surfaces. */
+  --castle-ivory: #FFFDF8;
+  --castle-cream: #FCF6EC;
+  --castle-parchment: #FDF6E6;
+
+  /* Engraved text tones. */
+  --castle-gold-text: #8B6914;
+  --castle-ink: #6B5A45;
+
+  /* Castle masonry, light to dark. */
+  --castle-stone-light: #F6EFE2;
+  --castle-stone-mid: #E2D5C1;
+  --castle-stone-deep: #A08C73;
+
+  /* Garden accents. */
+  --castle-blush: #F6C9DB;
+  --castle-lavender: #C9A6E0;
+
+  /*
+    Default moulding thickness. Overridable per consumer: the hero's frame holds
+    a whole block of copy and wants a heavy moulding, while a gallery portrait
+    wants a finer one so the photo stays dominant.
+  */
+  --gilded-frame-thickness: 0.9rem;
+
+  /* Fonts. Both pages already load these families (see each page's <head>);
+     re-exposed here under a shared name so this file does not depend on whichever
+     page-scoped alias happens to exist. */
+  --castle-font-caps: "Cinzel", "Playfair Display", Georgia, serif;
+  --castle-font-serif: "Playfair Display", Georgia, "Times New Roman", serif;
+}
+
+/*
+  ==========================================================================
+  .gilded-frame — the moulding
+  ==========================================================================
+  The `padding` IS the moulding's visible thickness: the mat sits inside it, so
+  the gilt gradient shows only in that band.
+
+  The gradient alternates light and dark stops rather than running a simple
+  light-to-dark ramp. That is what makes it read as turned, carved gilt instead of
+  a flat gold rectangle — real moulding has several beads and hollows across its
+  width, each catching light differently.
+
+  The fill is fully OPAQUE on purpose. A translucent fill lets the background show
+  through the "wood", which no amount of border ornament recovers from — the frame
+  stops being a physical object.
+
+  Consumers must set their own size. This block sets no width, height or margin.
+*/
+.gilded-frame {
+  position: relative;
+  padding: var(--gilded-frame-thickness);
+  border-radius: 0.35rem;
+  background-image: linear-gradient(
+    135deg,
+    #F7E3B0 0%,
+    #C4972F 14%,
+    var(--castle-gilt-light) 30%,
+    var(--castle-gilt-deep) 46%,
+    #EBD394 62%,
+    #C4972F 78%,
+    var(--castle-gilt-light) 92%,
+    var(--castle-gilt-mid) 100%
+  );
+  box-shadow:
+    /* crisp dark outer edge, so the moulding ends cleanly against whatever is
+       behind it */
+    0 0 0 1px rgba(107, 78, 12, 0.65),
+    /* hanging shadow — this is what lifts the frame off the wall */
+    0 1.25rem 2.5rem rgba(96, 64, 28, 0.35),
+    /* warm ambient bounce from the gilt */
+    0 0 3.5rem rgba(255, 223, 150, 0.45),
+    /* top-edge highlight along the moulding */
+    inset 0 1px 0 rgba(255, 253, 248, 0.75);
+}
+
+/*
+  Cast crest ornaments, centred on the moulding's top and bottom edges.
+  Pseudo-elements, so no consumer has to add DOM nodes for them, and they are
+  never exposed to the accessibility tree.
+*/
+.gilded-frame::before,
+.gilded-frame::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  width: 1.4rem;
+  height: 1.4rem;
+  transform: translateX(-50%) rotate(45deg);
+  border-radius: 0.2rem;
+  background-image: linear-gradient(135deg, var(--castle-gilt-light) 0%, var(--castle-gilt-mid) 45%, var(--castle-gilt-deep) 100%);
+  box-shadow:
+    0 0 0 1px rgba(107, 78, 12, 0.55),
+    0 0 0.85rem rgba(255, 223, 150, 0.8);
+}
+
+.gilded-frame::before {
+  top: -0.7rem;
+}
+
+.gilded-frame::after {
+  bottom: -0.7rem;
+}
+
+/*
+  ==========================================================================
+  .gilded-frame__mat — the mat board
+  ==========================================================================
+  Three separate frame details, stacked in one `box-shadow`:
+    1. the dark rabbet line where the moulding's inner edge meets the mat (the
+       shadowed gap every real frame has there),
+    2. a gold bevel hairline just inside it, the mat's cut edge,
+    3. a soft inner shadow falling from the top, reading as light through glazing.
+  Plus four small gold corner pins as background gradients — a classic mount
+  detail, and far cheaper than four more elements.
+
+  Deliberately left slightly translucent: a little of the scene behind bleeding
+  through keeps the frame part of its surroundings rather than a flat white
+  rectangle pasted over them. The opaque moulding around it carries the "solid
+  object" read, so the mat does not have to.
+
+  No padding is set here — a text frame wants generous margins around its copy, a
+  photo frame wants a thin visible mat border. Each consumer sets its own.
+*/
+.gilded-frame__mat {
+  position: relative;
+  border-radius: 0.15rem;
+  background-color: rgba(255, 253, 248, 0.9);
+  background-repeat: no-repeat;
+  background-position:
+    0.5rem 0.5rem,
+    calc(100% - 0.5rem) 0.5rem,
+    0.5rem calc(100% - 0.5rem),
+    calc(100% - 0.5rem) calc(100% - 0.5rem);
+  background-size: 0.3rem 0.3rem;
+  background-image:
+    radial-gradient(circle, var(--castle-gilt-deep) 0%, var(--castle-gilt-mid) 60%, rgba(216, 178, 92, 0) 100%),
+    radial-gradient(circle, var(--castle-gilt-deep) 0%, var(--castle-gilt-mid) 60%, rgba(216, 178, 92, 0) 100%),
+    radial-gradient(circle, var(--castle-gilt-deep) 0%, var(--castle-gilt-mid) 60%, rgba(216, 178, 92, 0) 100%),
+    radial-gradient(circle, var(--castle-gilt-deep) 0%, var(--castle-gilt-mid) 60%, rgba(216, 178, 92, 0) 100%);
+  box-shadow:
+    0 0 0 2px rgba(107, 78, 12, 0.45),
+    inset 0 0 0 1px rgba(184, 134, 11, 0.55),
+    inset 0 0.6rem 1.75rem rgba(170, 130, 75, 0.16);
+}
+
+/*
+  ==========================================================================
+  .castle-button — the fairytale-castle button
+  ==========================================================================
+  Replaces base.css's flat blue `.cta-button` pill wherever it is applied. Used by
+  the hero's "BEGIN THE STORY" link (index.html), the Party Details RSVP link and
+  the closing scene's RSVP link (details.html).
+
+  Additive to `.cta-button`, not a replacement: the shared class still contributes
+  the tap target and the `:focus-visible` outline, so this rule only overrides the
+  surfaces that differ. Because this file loads after base.css, every property
+  below wins the single-class cascade tie.
+
+  Design intent: cast metal, not a flat pastel chip. Four things stacked, none of
+  which work alone — a vertical ivory-to-champagne fill (light from above), a gilt
+  border with an inset cream keyline (the bevel), engraved gold Cinzel capitals
+  with a letterpress highlight, and a warm glow plus a grounded shadow (weight and
+  material).
+
+  CENTRING: this is `inline-flex`, not `inline-block`, and that is a fix rather
+  than a preference. As an inline-block the label sat on a text baseline, so its
+  vertical position depended on the inherited `line-height` and the font's own
+  ascent/descent rather than on the geometric middle of the padding box, and the
+  flourish glyphs' differing metrics pulled it further off. `inline-flex` +
+  `align-items: center` + an explicit `line-height: 1` centres it geometrically.
+*/
+.castle-button {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.8em;
+  line-height: 1;
+  text-align: center;
+  padding: 0.9rem 2.2rem;
+  border: 1px solid var(--castle-gilt-mid);
+  border-radius: 999px;
+  background-color: var(--castle-ivory);
+  background-image: linear-gradient(
+    180deg,
+    #FFFFFF 0%,
+    var(--castle-ivory) 22%,
+    var(--castle-cream) 58%,
+    #F3E4C6 100%
+  );
+  font-family: var(--castle-font-caps);
+  font-size: 1rem; /* 16px floor, Requirement 9.4 */
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--castle-gold-text);
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.85);
+  box-shadow:
+    /* the bevel: a cream keyline just inside the gilt border */
+    inset 0 0 0 2px rgba(255, 255, 255, 0.85),
+    /* a second, finer gilt line inside that, so the rim reads as turned */
+    inset 0 0 0 3px rgba(216, 178, 92, 0.45),
+    /* grounded weight */
+    0 0.4rem 1rem rgba(139, 105, 20, 0.22),
+    /* warm gilt glow */
+    0 0 1.75rem rgba(255, 223, 150, 0.55);
+  cursor: pointer;
+}
+
+/*
+  Small gilt flourishes flanking the label, e.g. "✦ RSVP ✦" — the detail that
+  takes this from "a nice cream button" to "a plaque in a castle". Purely
+  decorative pseudo-elements, never announced by assistive technology, so the
+  accessible name stays exactly the link's own text.
+
+  Flex items, so the button's `gap` spaces them and `align-items: center` centres
+  them. `flex: 0 0 auto` stops them being squashed when the label is long.
+*/
+.castle-button::before,
+.castle-button::after {
+  content: "✦";
+  flex: 0 0 auto;
+  font-family: var(--castle-font-serif);
+  font-size: 0.7em;
+  font-weight: 400;
+  letter-spacing: 0;
+  line-height: 1;
+  color: var(--castle-gilt-mid);
+  text-shadow: none;
+}
+
+/*
+  Cancels the trailing letter-space. `letter-spacing: 0.2em` on the button also
+  applies after the label's LAST letter, and that space counts in the text run's
+  advance width — so without this the label sits 0.1em left of true centre and the
+  right-hand flourish sits 0.2em further out than the left one.
+
+  The `/ 0.7` is not decoration. `em` in a margin resolves against the element's
+  OWN font-size, and this pseudo-element is `0.7em` of the button — so a bare
+  `-0.2em` would remove only 0.14 of the button's em, not the 0.2 that needs
+  cancelling.
+*/
+.castle-button::after {
+  margin-left: calc(-0.2em / 0.7);
+}
+
+.castle-button:hover {
+  border-color: var(--castle-gilt-deep);
+  background-image: linear-gradient(
+    180deg,
+    #FFFFFF 0%,
+    var(--castle-ivory) 18%,
+    #FBEFC8 62%,
+    #EBD394 100%
+  );
+  box-shadow:
+    inset 0 0 0 2px rgba(255, 255, 255, 0.9),
+    inset 0 0 0 3px rgba(184, 134, 11, 0.55),
+    0 0.5rem 1.25rem rgba(139, 105, 20, 0.28),
+    0 0 2.5rem rgba(255, 223, 150, 0.8);
+}
+
+.castle-button:active {
+  /* Pressed metal: the fill flips so light now falls from below, and the grounded
+     shadow tightens as the button sits down onto the surface. */
+  background-image: linear-gradient(
+    0deg,
+    #FFFFFF 0%,
+    var(--castle-ivory) 30%,
+    var(--castle-cream) 100%
+  );
+  box-shadow:
+    inset 0 0 0 2px rgba(255, 255, 255, 0.85),
+    inset 0 0.15rem 0.4rem rgba(139, 105, 20, 0.25),
+    0 0.15rem 0.4rem rgba(139, 105, 20, 0.2);
+}
+
+/*
+  Gold focus ring, overriding base.css's `.cta-button:focus-visible` blue outline
+  for castle buttons only. Both are 0,2,0 selectors, so load order decides — same
+  as every other rule in this file.
+*/
+.castle-button:focus-visible {
+  outline: 2px solid var(--castle-gilt-deep);
+  outline-offset: 4px;
+}
+
+/*
+  ==========================================================================
+  .scene-cameo — Summer's portrait at the head of each scene
+  ==========================================================================
+  Built by scripts/sceneCameo.js and prepended by eventDetailsSection.js,
+  entourageSection.js, countdownSection.js and closingSection.js.
+
+  An OVAL LOCKET, deliberately not a rectangular gilt frame. Three of those
+  already hang in the Princess Gallery, and adding four more would spend the frame
+  motif until it stopped meaning "this is a picture". An oval at a small scale is
+  a different object: an accent above a heading, not a fifth exhibit.
+
+  Four things make it read as a cast locket rather than a cropped circle:
+    - a gilt moulding ring, painted with the same alternating light/dark gradient
+      as `.gilded-frame`, so the two are recognisably the same metal
+    - a dark rabbet line and a cream keyline where the ring meets the photo
+    - a hanging loop above it (the `::before`), so it reads as worn, not floating
+    - a grounded drop shadow plus the family's warm gilt glow
+
+  `aspect-ratio: 4 / 5` rather than a circle: the source photos are portrait, so a
+  tall oval crops far less of the subject than a circle would.
+*/
+.scene-cameo {
+  position: relative;
+  align-self: center;
+  flex: 0 0 auto;
+  width: 5.5rem;
+  aspect-ratio: 4 / 5;
+  /* Generous top margin clears the hanging loop above. */
+  margin: 0.9rem auto 1.1rem;
+  padding: 0.3rem;
+  border-radius: 50%;
+  background-image: linear-gradient(
+    145deg,
+    #F7E3B0 0%,
+    #C4972F 18%,
+    var(--castle-gilt-light) 38%,
+    var(--castle-gilt-deep) 58%,
+    #EBD394 76%,
+    var(--castle-gilt-mid) 100%
+  );
+  box-shadow:
+    0 0 0 1px rgba(107, 78, 12, 0.6),
+    0 0.6rem 1.25rem rgba(96, 64, 28, 0.3),
+    0 0 2rem rgba(255, 223, 150, 0.5);
+}
+
+/*
+  The hanging loop. A small gilt ring above the bezel, its lower half tucked
+  behind the locket — which is why only its top shows, and why it reads as a loop
+  the locket hangs from rather than a bead sitting on top of it.
+*/
+.scene-cameo::before {
+  content: '';
+  position: absolute;
+  top: -0.6rem;
+  left: 50%;
+  width: 0.85rem;
+  height: 0.85rem;
+  transform: translateX(-50%);
+  border-radius: 50%;
+  border: 2px solid var(--castle-gilt-mid);
+  background: transparent;
+  box-shadow: 0 0 0 1px rgba(107, 78, 12, 0.45), 0 0 0.5rem rgba(255, 223, 150, 0.7);
+}
+
+/*
+  The photo inside the bezel.
+
+  `object-position: center 22%` biases the crop toward the top of the portrait, so
+  the oval frames her face — the default `center` on a full-length portrait crops
+  to the torso.
+
+  `max-width`/`height` beat base.css's `.section img` cap (which would clamp this
+  to ~180px) on specificity, 0,2,0 against 0,1,1, so it does not depend on
+  stylesheet order.
+*/
+.scene-cameo .scene-cameo__img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  object-position: center 22%;
+  /* The bezel: a dark rabbet line against the gilt, then a cream keyline. */
+  box-shadow:
+    0 0 0 1px rgba(107, 78, 12, 0.55),
+    inset 0 0 0 2px rgba(255, 253, 248, 0.75);
+}
+
+@media (min-width: 768px) {
+  .scene-cameo {
+    width: 7rem;
+    margin: 1.1rem auto 1.4rem;
+    padding: 0.35rem;
+  }
+
+  .scene-cameo::before {
+    top: -0.75rem;
+    width: 1.05rem;
+    height: 1.05rem;
+  }
+}
+
+/*
+  ==========================================================================
+  Reduced motion
+  ==========================================================================
+  Almost nothing in this file animates anymore. Every looping and scroll-driven
+  animation belonged to the deleted CSS divider and footer, and went with them —
+  the floral divider is a static image, which is one of its advantages.
+
+  What remains is the button's hover and active states, which change instantly
+  with no `transition` declared. This guard is therefore defensive, matching the
+  convention used in base.css and reset.css, rather than a fix for present
+  behaviour.
+*/
+@media (prefers-reduced-motion: reduce) {
+  .castle-button {
+    transition: none;
+  }
+}

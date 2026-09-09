@@ -1,0 +1,14 @@
+{
+  "name": "fairy-birthday-invitation",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Mobile-first fairy-themed birthday invitation static site.",
+  "scripts": {
+    "test": "node --test \"scripts/**/*.test.js\"",
+    "serve": "python -m http.server 8080"
+  },
+  "devDependencies": {
+    "fast-check": "^3.15.1"
+  }
+}

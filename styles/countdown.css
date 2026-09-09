@@ -1,0 +1,223 @@
+/*
+  countdown.css
+  Styles for CountdownSection (design.md Component 13, tasks 15.1-15.2).
+
+  Mobile-first baseline, matching the same tokens/patterns as
+  styles/eventDetails.css and styles/entourage.css: 16px minimum font size,
+  no fixed-pixel widths that could overflow at 320px, overflow-wrap/
+  word-break guards where text could otherwise be long.
+
+  #countdown is already `.section` (base.css, overflow: hidden) and its
+  content lives inside a `.glass-card` (styles/glass.css) - this file only
+  styles the heading and the four-number grid.
+
+  Storybook/fairytale pass: .countdown__number/.countdown__today switch
+  from --font-heading (system sans) to the details-page serif token, and
+  from plain charcoal to a warm antique-gold tone, so the big digits read
+  as elegant storybook numerals. .countdown__label switches from the
+  plain blue accent to the same gold tone, for consistency with the
+  labels retint elsewhere on this page (styles/entourage.css's
+  .entourage__role/.entourage__marker).
+*/
+
+/*
+  Scene heading.
+
+  -------------------------------------------------------------------------
+  FIXED: it was the odd one out, and it was left-aligned
+  -------------------------------------------------------------------------
+  The user asked whether this heading's font was out of place and whether it
+  should be centred. Both, yes.
+
+  It had exactly one declaration — `margin: 0` — so it fell through to
+  base.css's `h2 { font-family: var(--font-heading) }`, which is the OS-native
+  sans-serif stack. Every other scene heading on this page (Princess Gallery,
+  Party Details, The Seven Symbols) had already moved to engraved gilt Cinzel
+  capitals during the castle pass; this one was simply missed, so it rendered
+  as a plain system-sans word in the middle of a castle.
+
+  It was also left-aligned, because nothing centred it and `.glass-card__body`
+  (styles/glass.css) is a stretch-aligned flex column. Everything else in this
+  card — the four countdown units, the "Today!" message — is centred within
+  its own box, so the heading sitting hard left was the only thing off-axis.
+
+  Now it matches the other three headings exactly: gilt Cinzel capitals with a
+  letterpress highlight, flanked by short tapered gilt rules, centred.
+*/
+.countdown__heading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.9rem;
+  margin: 0 0 0.35rem;
+  font-family: var(--castle-font-caps, "Cinzel", "Playfair Display", Georgia, serif);
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  text-align: center;
+  color: var(--castle-gold-text, #8B6914);
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+
+.countdown__heading::before,
+.countdown__heading::after {
+  content: '';
+  display: block;
+  width: 1.75rem;
+  height: 1px;
+  flex: 0 0 auto;
+  background-image: linear-gradient(90deg, rgba(216, 178, 92, 0) 0%, var(--castle-gilt-mid, #D8B25C) 100%);
+}
+
+.countdown__heading::after {
+  background-image: linear-gradient(90deg, var(--castle-gilt-mid, #D8B25C) 0%, rgba(216, 178, 92, 0) 100%);
+}
+
+/*
+  Centres the card's contents for this scene only.
+
+  `.glass-card__body` (styles/glass.css) is a stretch-aligned flex column,
+  shared with any other future card, so it is not changed. Scoping the
+  override to `#countdown` keeps it local — and `#countdown` is in fact the
+  only remaining `.glass-card` user, since Party Details dropped its card
+  during the castle pass.
+*/
+#countdown .glass-card__body {
+  align-items: center;
+}
+
+/*
+  "Event day" alternate display (design.md Error Scenario 5, task 15.4):
+  replaces .countdown__grid entirely once isPast is true, rather than
+  showing 00:00:00:00 indefinitely. Kept visually consistent with
+  .countdown__heading's typography (same heading font, no fixed-px width
+  so it never overflows at 320px) rather than introducing a new look.
+*/
+.countdown__today {
+  margin: 0;
+  /* Same shared-stylesheet fallback note as styles/entourage.css's
+     .entourage__role - --details-font-serif is defined by
+     styles/detailsOrnate.css (details.html-only). */
+  font-family: var(--details-font-serif, "Playfair Display", Georgia, "Times New Roman", serif);
+  font-weight: 700;
+  font-size: 1.75rem;
+  color: #8B6914;
+  line-height: 1.1;
+  max-width: 100%;
+  /* Centred to match the heading and the unit grid, now that this card's body
+     is a centre-aligned column. Matters once the message wraps to two lines. */
+  text-align: center;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+@media (min-width: 768px) {
+  .countdown__today {
+    font-size: 2.25rem;
+  }
+
+  .countdown__heading::before,
+  .countdown__heading::after {
+    width: 3rem;
+  }
+}
+
+/*
+  Four-number grid (Days/Hours/Minutes/Seconds). Uses a fluid
+  auto-fit/minmax grid rather than a fixed 4-column layout, so at very
+  narrow widths (320px) the units can wrap to two columns instead of
+  squeezing four fixed-width columns into the viewport and forcing
+  overflow.
+*/
+.countdown__grid {
+  display: grid;
+  /* Column floor lowered from 4.5rem alongside the smaller phone label
+     below, and the gap tightened, so all four units fit one row on a normal
+     phone (375px+) instead of wrapping to 2x2. At 320px it still wraps,
+     which is the right outcome there rather than squeezing. */
+  grid-template-columns: repeat(auto-fit, minmax(3.5rem, 1fr));
+  gap: 0.5rem;
+  width: 100%;
+  max-width: 100%;
+}
+
+.countdown__unit {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.15rem;
+  min-width: 0;
+  padding: 0.25rem;
+}
+
+.countdown__number {
+  margin: 0;
+  font-family: var(--details-font-serif, "Playfair Display", Georgia, "Times New Roman", serif);
+  font-weight: 700;
+  font-size: 1.75rem; /* comfortably above the 16px minimum */
+  color: #8B6914;
+  line-height: 1.1;
+}
+
+/*
+  Unit label ("DAYS", "HOURS", "MINUTES", "SECONDS").
+
+  -------------------------------------------------------------------------
+  DELIBERATE DIVERGENCE FROM THE 16px FLOOR (Requirement 9.4 / 4.4)
+  -------------------------------------------------------------------------
+  This is the only rule in styles/ that sets a font-size below 1rem, and it
+  contradicts base.css's own audit note ("No rule anywhere in styles/ sets a
+  font-size below 1rem"). Flagged rather than done quietly.
+
+  Why it is right here:
+    - The user asked for it, having seen it on a real phone.
+    - These are four static unit words attached to a large adjacent numeral.
+      The NUMBER carries the information and is 1.75rem (28px); the label only
+      says which unit that number is, and is read as a caption to it, not as
+      prose. It is closer to `.section-number`'s micro-label role than to body
+      copy.
+    - It is a legibility fix, not just a size preference. At 1rem, "SECONDS"
+      plus its tracking is wider than a quarter of a phone's available width,
+      so the four-unit grid wrapped to 2x2 and the countdown stopped scanning
+      as one row of time. Smaller labels let all four sit together.
+    - The floor is a project convention, not an accessibility requirement.
+      WCAG sets no minimum font size; what it requires is that text stay
+      readable when resized to 200%, and this value is in `rem`, so it scales
+      with the user's own browser font setting exactly like everything else.
+
+  Tracking is reduced alongside the size: 0.05em was tuned for 16px and reads
+  as broken-apart letters at 13px.
+
+  The 768px+ block below returns it to 1.125rem, so this exception applies to
+  phones only — which is exactly the scope of the request.
+*/
+.countdown__label {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: 0.8125rem; /* 13px - phones only, see the note above */
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: #8B6914;
+  overflow-wrap: break-word;
+  word-break: break-word;
+  max-width: 100%;
+}
+
+@media (min-width: 768px) {
+  .countdown__grid {
+    grid-template-columns: repeat(auto-fit, minmax(4.5rem, 1fr));
+    gap: 1.5rem;
+  }
+
+  .countdown__number {
+    font-size: 2.25rem;
+  }
+
+  /* Back above the 16px floor from tablet width up - the exception above is
+     scoped to phones, where the space constraint actually exists. */
+  .countdown__label {
+    font-size: 1.125rem;
+    letter-spacing: 0.05em;
+  }
+}

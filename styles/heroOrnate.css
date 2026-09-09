@@ -1,0 +1,258 @@
+/*
+  heroOrnate.css
+  Landing-page hero styling — index.html ONLY.
+
+  -------------------------------------------------------------------------
+  THIS PASS: the artwork IS the screen, the button stacks on top
+  -------------------------------------------------------------------------
+  The user's instruction: the invitation artwork fills the entire landing
+  screen, and the button sits on top of it — a stack.
+
+  So the hero is now two layers sharing one box:
+    1. the artwork, full-bleed, filling the whole viewport (`cover`)
+    2. the button, centred over it
+
+  Both are placed in the SAME CSS grid cell, so they overlap. That is the
+  cleanest way to express a stack: no absolute positioning to fight, both
+  layers contribute to the grid's size, and paint order follows DOM order
+  (artwork first, button second).
+
+  Changed from the previous pass, which fitted the artwork with
+  `object-fit: contain` and put the button in a flex column BELOW it, plus a
+  blurred copy of the image to fill the leftover columns. That was "artwork,
+  then a button under it". This is "button ON the artwork".
+
+  Two things went with that change:
+    - the blurred `.hero-backdrop` fill layer — `cover` leaves no empty space,
+      so there is nothing for it to fill,
+    - `object-fit: contain` — replaced by `cover`, which is what "fills the
+      screen" means.
+
+  CROPPING is handled by serving two source images (heroSection.js's
+  `<picture>`): portrait phone-bg.png for tall screens, landscape laptop-bg.png
+  for wide ones, so `cover` only ever trims the outer margin of whichever
+  artwork was drawn for that shape — never the lettering.
+
+  Mobile-first: the portrait artwork and the tall-screen layout are the 320px
+  baseline; the 768px block layers on the wide-screen treatment.
+*/
+
+/*
+  ==========================================================================
+  NO SCROLL: the landing page is locked to exactly one viewport
+  ==========================================================================
+  The user asked that the landing page not be scrollable — the artwork fills
+  the screen (`object-fit: cover`, which is Flutter's BoxFit.cover) and that is
+  the whole page, nothing below it to scroll to.
+
+  `index.html`'s <html> carries `class="landing"`, so these three rules are
+  scoped to that page ALONE. base.css is shared by details.html and rsvp.html,
+  which MUST still scroll, so the lock cannot live there.
+
+  Why lock BOTH the height and the overflow:
+
+    - `height: 100%` on html AND body (not min-height) pins the document to the
+      viewport so it cannot grow. `#app`/`#hero` below are also pinned, so there
+      is no taller-than-viewport content to reveal by scrolling.
+
+    - `overflow: hidden` on both is the actual scroll lock. Even if something
+      inside were a pixel too tall, the page still would not scroll — it would
+      clip instead. On the landing page clipping a stray pixel is the right
+      trade; there is no content down there to lose.
+
+  Note base.css already sets body `overflow-x: hidden`; this adds the `y` axis
+  for this page only, and `overflow: hidden` covers both.
+*/
+html.landing,
+html.landing body {
+  height: 100%;
+  overflow: hidden;
+}
+
+/*
+  #hero full-bleed, and sized to the ACTUAL visible viewport.
+
+  `#hero` deliberately does NOT carry `class="section"` (index.html), which
+  would apply base.css's padding and inset the artwork from every edge. This
+  rule gives it its own full-bleed box instead.
+
+  base.css's separate `#hero { display: flex; ... }` ID rule (written for a
+  long-gone flat-copy hero) still matches this element, so `display` is set
+  explicitly here to override it.
+
+  HEIGHT UNIT — this is the crux of "not scrollable" on a phone. The three
+  fallbacks are declared in order so a browser keeps the last one it understands:
+
+    100vh   the LARGE viewport (as if the mobile toolbar were retracted). On a
+            phone this is TALLER than what is actually visible, so an element
+            sized to it spills under the toolbar and the page scrolls to reveal
+            the rest. This is the classic "100vh is too tall on mobile" bug —
+            kept only as the floor for very old browsers.
+    100svh  the SMALL viewport (toolbar shown). Never taller than what is
+            visible, so it cannot cause scroll.
+    100dvh  the DYNAMIC viewport, which tracks the visible height as the toolbar
+            shows and hides. This is the one that makes the artwork exactly fill
+            the screen at every moment, with no scroll and no gap. Widely
+            supported now; the two above are the graceful fallbacks.
+
+  `height` (fixed), not `min-height`: min-height would let the box GROW past the
+  viewport if its contents were tall, which is exactly what must not happen here.
+*/
+#hero {
+  width: 100%;
+  max-width: 100%;
+  height: 100vh;
+  height: 100svh;
+  height: 100dvh;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  display: block;
+}
+
+/*
+  The stack. A single-cell grid whose one child area holds both layers: the
+  artwork and the button are each assigned to `grid-area: 1 / 1`, so they
+  occupy the same cell and overlap.
+
+  `place-items: center` centres the button in that cell (the artwork overrides
+  its own placement to stretch, below). The scene fills the viewport, so the
+  button lands in the middle of the screen.
+*/
+.hero-scene {
+  position: relative;
+  display: grid;
+  grid-template-areas: "stack";
+  place-items: center;
+  width: 100%;
+  /* Fixed height on the same dvh ladder as #hero (see that rule), NOT
+     min-height: the scene must exactly fill the viewport and never grow past
+     it, since growing past it is what would let the page scroll. */
+  height: 100vh;
+  height: 100svh;
+  height: 100dvh;
+  overflow: hidden;
+}
+
+/*
+  The artwork layer: the full-bleed `<picture>`, and the `<img>` inside it.
+
+  The `<picture>` element itself is a normal inline box, so it is made to fill
+  the grid cell (`grid-area`, full width and height), and the `<img>` inside it
+  fills the `<picture>` with `object-fit: cover`. `cover` scales the image to
+  cover the whole box and crops the overflow — the fill behaviour "the artwork
+  is the screen" asks for. Cropping is safe here only because heroSection.js
+  serves a portrait or landscape source to match the viewport shape; see this
+  file's header.
+
+  `object-position: center` keeps the crop centred, where the lettering is in
+  both artworks.
+
+  `max-width: none` overrides reset.css's generic `img { max-width: 100% }` so
+  the image can fill a box wider than its own intrinsic width if ever needed;
+  base.css's `.section img` cap never applies here because `#hero` is not a
+  `.section`.
+*/
+.hero-invitation {
+  grid-area: stack;
+  align-self: stretch;
+  justify-self: stretch;
+  width: 100%;
+  /* Fills the grid cell, which is already the full viewport height (the scene
+     is fixed to 100dvh). No min-height here - it would only be able to push the
+     cell TALLER than the viewport, reintroducing scroll. */
+  height: 100%;
+}
+
+.hero-invitation__img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  object-fit: cover;
+  /*
+    CROP ORIGIN = the middle of the picture, on BOTH axes. This is the user's
+    "x=0, y=0 should be center": when `cover` has to trim the image to fit the
+    viewport's aspect ratio, `object-position: center center` anchors the visible
+    part to the picture's centre and trims equally from all sides — so the
+    lettering and the castle, which sit in the middle of both the portrait and
+    landscape artworks, always stay in frame. The alternative anchors (top / a
+    corner) would keep an edge and crop the centre away, pushing the words out of
+    view on the shape the image was not drawn for.
+
+    Written as two explicit keywords rather than the single `center` shorthand so
+    both the horizontal and vertical origin are unmistakable.
+  */
+  object-position: center center;
+}
+
+/*
+  The button layer — placement only.
+
+  Assigned to the same grid cell as the artwork, so it stacks on top of it.
+
+  PLACEMENT: horizontally centred, dropped to the LOWER part of the screen —
+  not dead centre. Dead centre landed the button squarely on top of "Summer's"
+  and covered the lettering (see the user's reality-vs-expectation shot); the
+  whole point of the artwork is that its words are readable. Both the portrait
+  and landscape versions leave a clear stone garden path across the bottom, so
+  the button sits there instead: over empty path, clear of every line of text.
+
+  `align-self: end` pulls it to the bottom of the cell, `justify-self: center`
+  keeps it horizontally centred (overriding `.hero-scene`'s
+  `place-items: center` on the block axis only).
+
+  The gap to the bottom edge is a `margin-bottom`, NOT padding. The user asked
+  about `padding-bottom`, but padding on the button would enlarge the BUTTON
+  (add space inside it, below the label) rather than lift it off the screen
+  edge. `margin-bottom` is the property that puts space between the button and
+  the bottom of the viewport, which is what "sits above the bottom edge" needs.
+  `clamp(2rem, 7vh, 5.5rem)` scales that gap gently with viewport height — a
+  larger cushion on a tall desktop, a modest one on a short phone — while never
+  going below 2rem.
+
+  The garden path is pale, so the button's own cream fill needs separating from
+  it: the extra last shadow below is a soft dark halo added only for this page.
+
+  Every other visual surface (cast-metal fill, gilt rim, engraved capitals,
+  flourishes, hover/active/focus) comes from styles/castleOrnate.css's
+  `.castle-button`.
+*/
+.hero-cta-button--ornate {
+  grid-area: stack;
+  align-self: end;
+  justify-self: center;
+  margin-bottom: clamp(2rem, 7vh, 5.5rem);
+  box-shadow:
+    inset 0 0 0 2px rgba(255, 255, 255, 0.85),
+    inset 0 0 0 3px rgba(216, 178, 92, 0.45),
+    0 0.4rem 1rem rgba(139, 105, 20, 0.22),
+    0 0 1.75rem rgba(255, 223, 150, 0.55),
+    0 0.5rem 2.5rem rgba(90, 60, 40, 0.35);
+}
+
+/*
+  Requirement 1.5 fallback, applied by heroSection.js's
+  ensureDecorativeFontOrFallback() when Cinzel does not resolve within 3000ms.
+  The button's engraved capitals are the only webfont text on this page, so
+  this is where the timeout lands.
+
+  Falls back to the shared body stack and drops the wide tracking with it:
+  0.2em is tuned for Cinzel's narrow classical capitals and reads as
+  broken-apart letters in a system sans-serif.
+*/
+.hero-cta-button--fallback-font {
+  font-family: var(--font-body);
+  letter-spacing: 0.1em;
+}
+
+/*
+  Reduced-motion guard, matching this project's existing convention (base.css,
+  reset.css, castleOrnate.css). Nothing in this file animates by default, so
+  this is a defensive guard for future edits.
+*/
+@media (prefers-reduced-motion: reduce) {
+  .hero-cta-button--ornate {
+    transition: none;
+  }
+}

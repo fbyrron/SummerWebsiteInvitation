@@ -1,0 +1,108 @@
+/*
+  glass.css
+  GlassCard shared helper styling (design.md Component 8, Task 10.2).
+  Used by EventDetailsSection, CountdownSection, and RsvpSection's contact
+  card (tasks 13/15/16) - one shared frosted-glass look so all three read
+  as the same "luxury floating card" treatment.
+
+  Requirements 3.1/3.8/10.4: a backdrop-filter frosted card with a thin
+  hairline border/rounded corners, plus a CSS-only (no JS
+  feature-detection) fallback that keeps the card readable on browsers
+  without `backdrop-filter` support, by raising the background tint's
+  opacity instead of relying on blur for legibility.
+*/
+
+/*
+  Card background tint expressed as an RGB triplet so it can be combined
+  with an alpha channel via rgba() - CSS custom properties holding a hex
+  string can't be alpha-blended directly.
+
+  Storybook/fairytale pass: retinted from pure white (255, 255, 255) to a
+  soft cream/ivory (255, 253, 248 -> hex #FFFDF8), matching
+  styles/heroOrnate.css's documented cream/ivory palette value exactly, so
+  this card reads as the same warm "storybook page" surface as the hero's
+  `.hero-frame` rather than a clinical white card.
+
+  SCOPING DECISION (documented per the task's shared-file-safety check):
+  `.glass-card` is declared here in the SHARED styles/glass.css. Confirmed
+  via grep across the whole scripts/ directory that `buildGlassCard`/
+  `glassCard.js` is now imported by countdownSection.js ONLY, so
+  `.glass-card` is currently used by exactly one scene - details.html's
+  Countdown. Restyling it directly here (rather than adding a page-scoped
+  override in detailsOrnate.css) is safe today.
+
+  UPDATED (castle pass): eventDetailsSection.js used to import it too, and
+  this note used to say so. That import was removed when the user asked for
+  the event details to stop being one box - each detail is now its own
+  arched stone niche (styles/eventDetails.css), with no card wrapper at all.
+  rsvpSection.js builds its own iframe directly and never used this helper;
+  gallerySection.js does not either.
+
+  Flag for future edits: if a later change ever wires `buildGlassCard()`
+  into rsvp.html or another page that still wants the plain Luma-minimal
+  white-card look, that usage would need its own override at that point,
+  since this rule applies globally to every `.glass-card` instance.
+*/
+:root {
+  --glass-card-tint-rgb: 255, 253, 248; /* cream/ivory, matches styles/heroOrnate.css's #FFFDF8 */
+}
+
+.glass-card {
+  position: relative;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box; /* padding never pushes this past its container's width, even at 320px */
+  padding: 1.5rem 1.25rem;
+  border-radius: 1rem;
+  background-color: rgba(var(--glass-card-tint-rgb), 0.85);
+  /* Gold double-line border treatment, replacing the plain gray hairline,
+     matching styles/heroOrnate.css's `.hero-frame` border+outline
+     "scrollwork" pattern (same #D8B25C gold, same inset-outline trick) so
+     this card reads as the same gold-filigree family of surfaces as the
+     hero's frame. */
+  border: 1px solid #D8B25C;
+  outline: 1px solid rgba(216, 178, 92, 0.45);
+  outline-offset: -6px;
+  /* Soft warm glow shadow, replacing the previous plain (shadow-less)
+     look, echoing (at a gentler intensity, since this card holds dense
+     readable content rather than the hero's short display copy) the
+     hero frame's warm gold box-shadow glow. */
+  box-shadow: 0 0 2.5rem rgba(255, 223, 150, 0.35);
+  /* Frosted-glass blur (Requirement 3.1). -webkit- prefix covers Safari,
+     which still requires it for backdrop-filter. Blur intensity kept at
+     16px - a cream-tinted frosted card over the light --bg-gradient reads
+     clean rather than muddy, so no reduction was needed. */
+  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
+}
+
+/* Visible focus indicator for the card's own tabindex="-1" programmatic
+   focus target (glassCard.js), consistent with this project's existing
+   keyboard-accessibility conventions (Requirement 10.3). */
+.glass-card:focus {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+.glass-card__body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  /* Text sizing is intentionally left unset here: any p/li/a/button/etc.
+     callers place inside this container already inherits the 16px-minimum
+     enforced by base.css's shared text-element selector (Requirement 9.4) -
+     no override is needed or wanted at this shared-helper layer. */
+}
+
+/*
+  Requirement 3.8 / 10.4 (Property 10): on any browser that does not
+  support `backdrop-filter`, raise the tint's opacity so the card's
+  content stays clearly readable without relying on the blur at all. Pure
+  CSS - no JS feature-detection needed, applies automatically to every
+  `.glass-card` everywhere it's used.
+*/
+@supports not (backdrop-filter: blur(1px)) {
+  .glass-card {
+    background-color: rgba(var(--glass-card-tint-rgb), 0.98);
+  }
+}

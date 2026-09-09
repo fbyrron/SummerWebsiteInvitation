@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>You're Invited! A Fairy Birthday Celebration — RSVP</title>
+  <meta name="description" content="A magical fairy-themed birthday invitation.">
+
+  <!-- Luma-style visual restyle: no external webfont is loaded anymore.
+       --font-heading/--font-body (styles/base.css) now both resolve to a
+       single OS-native sans-serif stack (system-ui/Segoe UI/Roboto/etc.),
+       so the Google Fonts "Playfair Display"/"Poppins" <link> tags and
+       their preconnect hints have been removed. -->
+
+  <link rel="stylesheet" href="styles/reset.css">
+  <link rel="stylesheet" href="styles/base.css">
+  <link rel="stylesheet" href="styles/glass.css">
+  <link rel="stylesheet" href="styles/eventDetails.css">
+  <link rel="stylesheet" href="styles/entourage.css">
+  <link rel="stylesheet" href="styles/photoFrame.css">
+  <link rel="stylesheet" href="styles/countdown.css">
+  <link rel="stylesheet" href="styles/gallery.css">
+  <link rel="stylesheet" href="styles/rsvp.css">
+</head>
+<body>
+
+  <!--
+    RSVP page (multi-page split): just the Luma RSVP iframe, filling the
+    page (styles/rsvp.css). The three ambient parallax layers are
+    deliberately omitted on this page - a plain, full-bleed iframe page
+    reads cleaner without ambient parallax drifting behind it, and this
+    page has no other decorative content for the parallax layers to sit
+    behind anyway.
+  -->
+
+  <!-- The "← Back" back-link that used to sit here has been REMOVED at the
+       user's request ("doesn't look good, better removed"). Nothing replaced
+       it, so this page is now a navigational leaf: the browser's own back
+       button is the only way out. Flagged to the user; if an in-page exit is
+       wanted later, a `.castle-button` styled link would match the site
+       rather than the plain text link that was here. -->
+
+  <main id="app">
+    <section id="rsvp" class="section" aria-label="RSVP"></section>
+  </main>
+
+  <script type="module" src="scripts/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,55 @@
+/*
+  rsvp.css
+  Styles for RsvpSection (design.md Component 6, RSVP scene).
+
+  Multi-page split: #rsvp is now ALWAYS the sole content of a dedicated
+  rsvp.html page - it is never mixed with other scrolling content on the
+  same page anymore. This file was rewritten from a card-style embed
+  (a max-width-capped, centered iframe within a larger scrolling page) to
+  a full-page dedicated layout: #rsvp fills the viewport, and the Luma
+  RSVP iframe (config.rsvpEmbedUrl) fills the entire page edge-to-edge,
+  with no heading or other content above it.
+
+  Mobile-first baseline, matching the same tokens/patterns as
+  styles/eventDetails.css and styles/countdown.css: 16px minimum font
+  size, no fixed-pixel widths that could overflow at 320px.
+
+  There is no button, contact card, or decorative frame in this scene -
+  the iframe is the only RSVP mechanism.
+*/
+
+#rsvp {
+  /* Overrides .section's base.css padding (1.5rem 1rem) so the iframe can
+     go edge-to-edge, and makes #rsvp fill the full viewport height since
+     it's the only content on rsvp.html. */
+  min-height: 100vh;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.rsvp__content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 100%;
+}
+
+/*
+  Luma RSVP iframe embed. Multi-page split: previously capped at
+  `max-width: 37.5rem` with a `4/3` aspect-ratio so it read as a centered
+  card within a larger scrolling page - now that this page has nothing
+  else on it, the iframe fills all remaining vertical space in the flex
+  column (`flex: 1`) and the full page width (`width: 100%`), so it reads
+  as a true full-bleed, edge-to-edge embed rather than a bounded card.
+*/
+.rsvp__embed {
+  display: block;
+  flex: 1;
+  width: 100%;
+  height: 100%;
+  border: none;
+  border-radius: 0;
+  margin: 0;
+}

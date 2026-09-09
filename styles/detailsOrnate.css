@@ -1,0 +1,88 @@
+/*
+  detailsOrnate.css
+  Details-page-specific storybook/fairytale typography token — details.html
+  ONLY. Companion to styles/heroOrnate.css (index.html's ornate hero), but
+  much narrower in scope: this page keeps its existing EventDetails/
+  Entourage/Countdown/Closing structure and logic entirely unchanged — this
+  file only pushes the page's typography/labels toward the same fairytale
+  feel as the hero, so the two pages read as one coherent site.
+
+  Loaded LAST in details.html's <head> (after base.css, glass.css,
+  eventDetails.css, entourage.css, countdown.css) specifically so the
+  `.section-number` override below can win a same-specificity cascade tie
+  against base.css's shared rule, for this page only — index.html never
+  loads this file, so base.css's original `.section-number` rule (and any
+  future index.html usage of that class) is completely unaffected.
+
+  Font: reuses the SAME serif family already loaded on index.html
+  ("Playfair Display", see index.html's Google Fonts <link> for the exact
+  family/weights) rather than a second/different serif, so headings and
+  labels on this page feel like the same site as the hero. The script/
+  calligraphy family (Great Vibes) is intentionally NOT loaded here — that
+  treatment is specific to the child's name on the hero; this page's
+  "storybook chapter" feel only needs the restrained serif.
+
+  Exposed as a details-page-scoped custom property (NOT added to the
+  shared `:root` in base.css), matching the precedent heroOrnate.css set
+  of keeping page-specific font tokens page-specific rather than polluting
+  the shared token set.
+*/
+:root {
+  --details-font-serif: "Playfair Display", Georgia, "Times New Roman", serif;
+}
+
+/*
+  .section-number redesign: "classy and fairy like a storybook" chapter
+  markers for the 01/02/03 labels rendered by eventDetailsSection.js/
+  entourageSection.js/closingSection.js.
+
+  SCOPING DECISION (documented per the task's option (a) vs (b) choice):
+  `.section-number` is declared in the SHARED styles/base.css and is only
+  ever rendered by details.html's three scenes today (confirmed: grepping
+  scripts/heroSection.js for "section-number" returns zero matches) — so
+  restyling it directly in base.css would currently be safe. Option (a)
+  is chosen anyway, for safety/conservatism: this rule lives here, in a
+  stylesheet loaded ONLY by details.html, rather than touching the shared
+  file at all. That way this redesign can never be broken or need
+  revisiting if a future hero change ever adds its own `.section-number`
+  element to index.html — base.css's original rule (plain blue, no
+  ornament) keeps applying there unchanged, and this override simply never
+  loads on that page.
+
+  Visual treatment: the existing "01"/"02"/"03" text is kept as-is (the
+  lower-risk choice — no JS edits needed) but re-rendered as a small
+  italic serif "chapter marker" in the storybook's antique-gold tone,
+  flanked by a small ornamental flourish glyph on each side, with more
+  generous letter-spacing so it reads as an intentional editorial marker
+  rather than a plain UI micro-label. Colors reused verbatim from
+  styles/heroOrnate.css's documented palette (antique gold text #8B6914,
+  soft gold #D8B25C) rather than inventing new ones, so this page's
+  ornament matches the hero's exactly.
+*/
+.section-number {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  font-family: var(--details-font-serif);
+  font-style: italic;
+  font-weight: 600;
+  font-size: 1.05rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #8B6914; /* antique gold text, styles/heroOrnate.css's documented palette */
+  opacity: 1;
+}
+
+/*
+  Small flourish glyphs flanking the number, e.g. "❋ 01 ❋". Purely
+  decorative pseudo-elements — never exposed to the accessibility tree,
+  same convention as heroOrnate.css's `.hero-frame::before/::after` corner
+  flourishes.
+*/
+.section-number::before,
+.section-number::after {
+  content: "❋";
+  font-style: normal;
+  font-size: 0.7rem;
+  color: #D8B25C; /* soft gold, styles/heroOrnate.css's documented palette */
+}

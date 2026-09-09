@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<!-- class="landing" scopes the no-scroll lock in styles/heroOrnate.css to this
+     page only. The landing page is exactly one viewport - the artwork fills the
+     screen and there is nothing below it - so html/body are pinned to the
+     viewport height with overflow hidden. details.html and rsvp.html carry no
+     such class and scroll normally. -->
+<html lang="en" class="landing">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>You're Invited! A Fairy Birthday Celebration</title>
+  <meta name="description" content="A magical fairy-themed birthday invitation.">
+
+  <!--
+    Landing page = the artwork filling the whole screen, with one button
+    stacked on top.
+
+    The artwork IS the page: all the lettering, the castle, the garden, the
+    blossoms and the gilt flourishes are baked into the image, so
+    heroSection.js/heroOrnate.css build only the full-bleed picture and the
+    button over it.
+
+    Two artworks, one per viewport shape (heroSection.js's <picture>):
+      phone-bg.png   portrait 1024x1536, for tall phone screens
+      laptop-bg.png  landscape 1536x1024, for wide screens
+    Serving the right shape lets the image fill the viewport with `cover`
+    without cropping the lettering.
+
+    Both are preloaded with a `media` condition matching the <picture>'s own
+    breakpoint, so a phone preloads ONLY the portrait and a laptop ONLY the
+    landscape - never both. `fetchpriority="high"` matches the attribute
+    heroSection.js sets on the <img>, so the preload and the real request are
+    one fetch. This artwork is the entire landing view, so it must not queue
+    behind the stylesheets.
+  -->
+  <link rel="preload" as="image" href="assets/summer-photos/phone-bg.png" media="(max-width: 767px)" fetchpriority="high">
+  <link rel="preload" as="image" href="assets/summer-photos/laptop-bg.png" media="(min-width: 768px)" fetchpriority="high">
+
+  <!--
+    Fonts. --font-heading/--font-body (styles/base.css) still resolve to a
+    single OS-native sans-serif stack for the rest of the site; the Google
+    Fonts link below is a separate, page-scoped addition.
+
+    Only TWO families now, down from three:
+      Cinzel            the CTA button's engraved Roman capitals
+                        (styles/castleOrnate.css's --castle-font-caps)
+      Playfair Display  the small gilt flourish glyphs flanking that label
+                        (--castle-font-serif)
+
+    "Great Vibes" was DROPPED this pass. It only ever set the hero
+    headline's calligraphy and the fairytale badge, both of which are now
+    lettering inside the artwork - so it was ~30KB fetched to render
+    nothing. details.html still loads Cinzel + Playfair for its own headings
+    and niche labels, so the two pages remain one house style.
+  -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Playfair+Display:wght@400;600&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="styles/reset.css">
+  <link rel="stylesheet" href="styles/base.css">
+  <!-- Shared castle ornament vocabulary. On THIS page it supplies exactly
+       one thing: `.castle-button`, the CTA's entire appearance. Its
+       `.gilded-frame` half is now used only by the gallery on details.html,
+       which is fine - it was always a shared vocabulary rather than a
+       hero-specific file. Must come AFTER base.css so `.castle-button` wins
+       the single-class cascade tie against `.cta-button`. -->
+  <link rel="stylesheet" href="styles/castleOrnate.css">
+  <!-- Hero layout (this page ONLY): makes #hero full-bleed, fits the
+       artwork inside it WITHOUT ever cropping the lettering, and places the
+       button. Loaded LAST so it can override base.css's `#hero` rule, which
+       was written for a long-gone flat-copy hero. details.html and rsvp.html
+       do not load this file. -->
+  <link rel="stylesheet" href="styles/heroOrnate.css">
+</head>
+<body>
+
+  <!--
+    No parallax backdrop layers on this page anymore.
+
+    They used to sit here (#parallax-bg/#parallax-mid/#parallax-fg, drifting
+    at different fractions of window.scrollY). They are removed because this
+    page no longer scrolls at all - it is one viewport-height image and a
+    button - so three layers whose entire purpose is scroll-linked movement
+    had nothing left to do. main.js needs no change for this:
+    collectParallaxLayers() already filters out layer elements it cannot
+    find, and resolves to an empty array here.
+
+    details.html still declares all three and still uses them.
+
+    The ambient particle canvas (#sparkle-bg, scripts/sparkleBackground.js)
+    is likewise not declared here - that module creates it itself at runtime.
+    It renders behind the artwork, which is now fully opaque and covers the
+    viewport, so it is effectively invisible on this page. Left alone rather
+    than special-cased: it costs one idle canvas and it is still wanted on
+    details.html, which loads the same main.js.
+  -->
+
+  <main id="app">
+    <!--
+      The whole landing page. heroSection.js's render() fills this with
+      three things and nothing else: a blurred fill layer, the invitation
+      artwork as a real <img> (with config-driven alt text, since the
+      invitation's words are pixels in that file and would otherwise be
+      invisible to a screen reader), and the CTA link.
+
+      The CTA still reads "BEGIN THE STORY" and still points at
+      details.html, unchanged per the user's earlier explicit confirmation -
+      not "RSVP NOW"/rsvp.html despite the artwork. rsvp.html is reached
+      from the end of details.html.
+    -->
+    <section id="hero" aria-label="Invitation"></section>
+  </main>
+
+  <script type="module" src="scripts/main.js"></script>
+</body>
+</html>
