@@ -76,11 +76,16 @@
 /*
   Centres the card's contents for this scene only.
 
-  `.glass-card__body` (styles/glass.css) is a stretch-aligned flex column,
-  shared with any other future card, so it is not changed. Scoping the
-  override to `#countdown` keeps it local — and `#countdown` is in fact the
-  only remaining `.glass-card` user, since Party Details dropped its card
-  during the castle pass.
+  Reverted from the previous pass's ROW layout (cameo beside the numbers). The
+  cameo moved back OUT of the card and above it (countdownSection.js), so the
+  body is once again just a centred column: heading above the number grid, both
+  centred. The `.countdown__text` wrapper, the `order` shuffle and the phone
+  stack override that the row needed are all gone with it.
+
+  `.glass-card__body` (styles/glass.css) is a stretch-aligned flex column shared
+  with any future card, so it is not changed there; this override, scoped to
+  `#countdown` (the only remaining `.glass-card` user), only re-centres the
+  cross axis.
 */
 #countdown .glass-card__body {
   align-items: center;
@@ -123,18 +128,17 @@
 }
 
 /*
-  Four-number grid (Days/Hours/Minutes/Seconds). Uses a fluid
-  auto-fit/minmax grid rather than a fixed 4-column layout, so at very
-  narrow widths (320px) the units can wrap to two columns instead of
-  squeezing four fixed-width columns into the viewport and forcing
-  overflow.
+  The four units (Days/Hours/Minutes/Seconds) in a horizontal ROW - reverted
+  from the single vertical column back to the layout it had before.
+
+  A fluid auto-fit/minmax grid rather than a fixed 4-column track, so at very
+  narrow widths (320px) the units wrap to two rows of two instead of squeezing
+  four fixed columns into the viewport and forcing overflow. The 3.5rem column
+  floor and tight gap let all four sit on one row on a normal phone (375px+);
+  at 320px they wrap, which is the right outcome there rather than squeezing.
 */
 .countdown__grid {
   display: grid;
-  /* Column floor lowered from 4.5rem alongside the smaller phone label
-     below, and the gap tightened, so all four units fit one row on a normal
-     phone (375px+) instead of wrapping to 2x2. At 320px it still wraps,
-     which is the right outcome there rather than squeezing. */
   grid-template-columns: repeat(auto-fit, minmax(3.5rem, 1fr));
   gap: 0.5rem;
   width: 100%;
@@ -206,6 +210,8 @@
 
 @media (min-width: 768px) {
   .countdown__grid {
+    /* Desktop: a roomier four-across row - wider column floor and a bigger gap
+       than the phone baseline, so the four units sit comfortably on one line. */
     grid-template-columns: repeat(auto-fit, minmax(4.5rem, 1fr));
     gap: 1.5rem;
   }

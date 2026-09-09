@@ -197,9 +197,13 @@ export function renderEntourage(config) {
   const content = document.createElement('div');
   content.className = 'entourage__content';
 
-  // Gilt oval cameo of Summer, heading this scene. Decorative - see
-  // scripts/sceneCameo.js for why it carries empty alt text.
-  content.appendChild(buildCameo({ src: 'assets/summer-photos/370dc895-7f9a-4e9b-bbc8-e7e1c0606de6.jpg' }));
+  // Gilt oval cameo of Summer, heading this scene, at the larger 'large' size
+  // (the user asked the entourage and event-details cameos to be bigger).
+  // Decorative - see scripts/sceneCameo.js for why it carries empty alt text.
+  content.appendChild(buildCameo({
+    src: 'assets/summer-photos/370dc895-7f9a-4e9b-bbc8-e7e1c0606de6.jpg',
+    variant: 'large',
+  }));
 
   // Redesign pass: quiet numbered section label ("02"), matching the
   // portfolio-style reference's editorial numbered-section pattern. See

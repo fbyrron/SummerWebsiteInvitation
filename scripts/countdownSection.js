@@ -395,13 +395,22 @@ export function render(config) {
   // Clear any existing content before re-rendering.
   section.textContent = '';
 
-  const { card, body } = buildGlassCard({ ariaLabel: 'Countdown to the celebration' });
+  // Gilt cameo of Summer, ABOVE the glass card at the section level - not inside
+  // it. `variant: 'large'` gives it the same oval locket the event-details and
+  // entourage scenes use, so all three scenes head with a matching frame.
+  //
+  // Reverted from the previous pass, which had put a rounded-rectangle cameo
+  // INSIDE the card in a two-column row beside the numbers. That row layout and
+  // its `.countdown__text` wrapper are gone; the heading and grid go straight
+  // back into the card body as before, and the card is once again just the
+  // frosted countdown panel with a cameo sitting over it - the same shape as
+  // every other scene. Decorative - see scripts/sceneCameo.js for the empty alt.
+  section.appendChild(buildCameo({
+    src: 'assets/summer-photos/4ab9af4f-7d64-4941-80b9-cf1b07278b27.jpg',
+    variant: 'large',
+  }));
 
-  // Gilt oval cameo of Summer, heading this scene. Decorative - see
-  // scripts/sceneCameo.js for why it carries empty alt text. Appended to the
-  // card BODY rather than the section, so it sits inside the frosted card with
-  // the heading and the numbers rather than floating above it.
-  body.appendChild(buildCameo({ src: 'assets/summer-photos/4ab9af4f-7d64-4941-80b9-cf1b07278b27.jpg' }));
+  const { card, body } = buildGlassCard({ ariaLabel: 'Countdown to the celebration' });
 
   const heading = document.createElement('h2');
   heading.className = 'countdown__heading';

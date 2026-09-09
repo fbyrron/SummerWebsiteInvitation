@@ -125,12 +125,13 @@ html.landing body {
   grid-template-areas: "stack";
   place-items: center;
   width: 100%;
-  /* Fixed height on the same dvh ladder as #hero (see that rule), NOT
-     min-height: the scene must exactly fill the viewport and never grow past
-     it, since growing past it is what would let the page scroll. */
-  height: 100vh;
-  height: 100svh;
-  height: 100dvh;
+  /* Height flows from ONE source. #hero sets the real viewport height (the
+     100vh/svh/dvh ladder); this simply fills its parent. Restating the ladder
+     here was redundant and gave two places to keep in sync - if the definitive
+     height ever changes, it changes on #hero alone now. `height: 100%` resolves
+     against #hero's definite height, so the scene is still exactly the viewport
+     tall and still cannot grow past it. */
+  height: 100%;
   overflow: hidden;
 }
 
@@ -145,8 +146,9 @@ html.landing body {
   serves a portrait or landscape source to match the viewport shape; see this
   file's header.
 
-  `object-position: center` keeps the crop centred, where the lettering is in
-  both artworks.
+  `object-position` is set to the artwork's FOCAL POINT (the lettering, just
+  above centre) rather than the geometric middle - see `.hero-invitation__img`
+  below for the exact values and why.
 
   `max-width: none` overrides reset.css's generic `img { max-width: 100% }` so
   the image can fill a box wider than its own intrinsic width if ever needed;
@@ -157,11 +159,30 @@ html.landing body {
   grid-area: stack;
   align-self: stretch;
   justify-self: stretch;
+  /*
+    THE FIX for the off-centre desktop background.
+
+    A <picture> is `display: inline` by default. An inline box IGNORES
+    `height: 100%` (percentage heights only resolve on block/flex/grid boxes),
+    so the picture was only as tall as its own content, NOT the full grid cell.
+    The <img> inside it then took 100% of that too-short height, so
+    `object-fit: cover` was fitting the artwork into a box of the wrong height
+    and the whole thing top-aligned in the cell. That is why `object-position:
+    50% 50%` was set correctly yet the result still looked anchored to the top -
+    the property was right, the BOX it acted on was wrong.
+
+    `display: block` makes the picture a block box, so `height: 100%` now
+    resolves against the grid cell (which is the full 100dvh viewport) and the
+    picture genuinely fills it. Inline baseline descender space disappears too.
+
+    `min-height: 0` lets this grid item shrink to the cell rather than to its
+    content's intrinsic height - belt-and-braces against a grid item's default
+    `min-height: auto` ever letting the image push the cell taller.
+  */
+  display: block;
   width: 100%;
-  /* Fills the grid cell, which is already the full viewport height (the scene
-     is fixed to 100dvh). No min-height here - it would only be able to push the
-     cell TALLER than the viewport, reintroducing scroll. */
   height: 100%;
+  min-height: 0;
 }
 
 .hero-invitation__img {
@@ -171,19 +192,75 @@ html.landing body {
   max-width: none;
   object-fit: cover;
   /*
-    CROP ORIGIN = the middle of the picture, on BOTH axes. This is the user's
-    "x=0, y=0 should be center": when `cover` has to trim the image to fit the
-    viewport's aspect ratio, `object-position: center center` anchors the visible
-    part to the picture's centre and trims equally from all sides — so the
-    lettering and the castle, which sit in the middle of both the portrait and
-    landscape artworks, always stay in frame. The alternative anchors (top / a
-    corner) would keep an edge and crop the centre away, pushing the words out of
-    view on the shape the image was not drawn for.
+    FOCAL POINT, not geometric centre.
 
-    Written as two explicit keywords rather than the single `center` shorthand so
-    both the horizontal and vertical origin are unmistakable.
+    `cover` fills the box and crops whatever does not fit the viewport's aspect
+    ratio. WHICH part it keeps is `object-position`'s job, and the right answer
+    here is the focal point of these artworks - the lettering ("YOU ARE
+    INVITED" / "Summer's" / "7th Birthday") - which sits a little ABOVE the
+    vertical centre in both the portrait and landscape versions; the garden
+    fills the lower third and is the expendable part.
+
+    So:
+      x = 50%  (centre): both artworks are horizontally symmetric, so the
+               horizontal crop should come off both sides equally.
+      y = 42%  (just above centre): when a wide-but-short window forces a
+               vertical crop, anchoring slightly high keeps the words fully in
+               frame and trims the extra off the bottom garden instead of
+               clipping "7th Birthday". At tall/portrait ratios where little or
+               no vertical cropping happens, 42% vs 50% is imperceptible, so
+               this costs nothing there.
+
+    Both axes are written explicitly so the focal choice is unmistakable, and so
+    a future change to one axis does not silently reset the other to its default.
+
+    This 42% is the PHONE value and is left unchanged, per the user's
+    instruction. Desktop overrides the vertical axis to a true centre below -
+    see the `@media (min-width: 768px)` block.
   */
-  object-position: center center;
+  object-position: 50% 42%;
+}
+
+/*
+  ==========================================================================
+  DESKTOP: true centre cropping (Flutter BoxFit.cover + Alignment.center)
+  ==========================================================================
+  Phone stays exactly as above (50% 42%, an above-centre focal point). This
+  block changes ONLY desktop, and ONLY the vertical crop origin.
+
+  Why desktop was anchoring toward the top:
+    The base rule sets `object-position: 50% 42%`. 42% is ABOVE centre, so when
+    `cover` has to trim vertically it keeps more of the top and cuts more off
+    the bottom - which reads as "not vertically centred, stuck to the top". That
+    was deliberate for the phone (protect the lettering), but wrong for desktop.
+
+  Why the vertical axis is the one that gets cropped on desktop:
+    The desktop source is laptop-bg.png, 1536x1024 (ratio 1.5:1). A typical
+    desktop window is WIDER than that - e.g. 1920x1080 is 1.78:1, 2560x1440 is
+    also 1.78:1. When the viewport is wider than the image, `cover` scales the
+    image to fill the WIDTH, and the overflow is vertical: top and bottom get
+    trimmed. So the VERTICAL object-position is exactly what decides whether the
+    crop is centred, and 50% is the value that trims top and bottom EQUALLY -
+    the literal meaning of Alignment.center.
+
+  Only the block axis is overridden; horizontal stays 50% (the artwork is
+  symmetric, so it is already centred left-to-right). `object-fit: cover` and
+  the full width/height that make it fill the viewport are inherited from the
+  base rule and are not restated.
+
+  NOTE ON VERIFICATION: `object-position: center center` being SET is not proof
+  the result LOOKS centred - a taller-than-image element, a stray transform, or
+  the wrong `<picture>` source could each defeat it. Here it does hold, because:
+  the box (`.hero-scene`) is exactly the viewport (100dvh, no growth), the image
+  fills it at 100%/100% with no transform, and at >=768px the `<picture>`'s
+  `<source media="(min-width: 768px)">` guarantees the 1.5:1 laptop art is the
+  one being positioned. With those three true, `50% 50%` trims top and bottom by
+  the same amount by construction.
+*/
+@media (min-width: 768px) {
+  .hero-invitation__img {
+    object-position: 50% 50%;
+  }
 }
 
 /*

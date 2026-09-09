@@ -44,7 +44,8 @@
 
 import { observe } from './scrollRevealController.js';
 import { setDensity } from './sparkleBackground.js';
-import { build as buildCameo } from './sceneCameo.js';
+// sceneCameo is no longer imported here: the closing scene's cameo was removed
+// at the user's request (see renderClosing()).
 
 /**
  * Builds the first closing line, e.g. "Thank you for being part of
@@ -192,11 +193,10 @@ export function renderClosing(config) {
   const content = document.createElement('div');
   content.className = 'closing__content';
 
-  // Gilt oval cameo of Summer, at the head of the scroll - a portrait pinned to
-  // the parchment above the farewell, which is exactly where a locket belongs on
-  // a letter. Decorative; see scripts/sceneCameo.js for why it has empty alt
-  // text.
-  content.appendChild(buildCameo({ src: 'assets/summer-photos/7840819e-4325-49ff-95ce-3a6c4d6bb26c.jpg' }));
+  // No cameo here: removed at the user's request. The other three scenes head
+  // with a gilt cameo of Summer, but the closing scroll already ends with her
+  // name in large script and a wax seal below it, so a portrait at the top too
+  // was one likeness too many for one short panel.
 
   // Quiet numbered section label, matching the editorial numbered-section
   // convention already established in eventDetailsSection.js ("01") and

@@ -383,7 +383,9 @@
   position: relative;
   align-self: center;
   flex: 0 0 auto;
-  width: 5.5rem;
+  /* Phone size. Bumped from 5.5rem - the cameos read too small on a phone. The
+     768px block below scales them up further for desktop. */
+  width: 7.5rem;
   aspect-ratio: 4 / 5;
   /* Generous top margin clears the hanging loop above. */
   margin: 0.9rem auto 1.1rem;
@@ -459,6 +461,42 @@
     top: -0.75rem;
     width: 1.05rem;
     height: 1.05rem;
+  }
+}
+
+/*
+  ==========================================================================
+  .scene-cameo--large — the entourage, event-details and countdown cameos, bigger
+  ==========================================================================
+  Same gilt oval locket as the base, scaled up. Used by the entourage,
+  event-details and (since the countdown row layout was reverted) the countdown
+  scenes, so all three head with a matching larger oval. Only the wrapper width
+  and the hanging loop grow; the ring gradient, bezel and crop all inherit from
+  `.scene-cameo`, so the two sizes stay visually identical apart from scale.
+
+  The loop is nudged up in step with the larger ring so it still tucks behind
+  the top edge rather than floating away from it.
+*/
+.scene-cameo--large {
+  /* Phone size, bumped from 8rem - noticeably bigger than the base cameo. */
+  width: 10.5rem;
+}
+
+.scene-cameo--large::before {
+  top: -0.9rem;
+  width: 1.3rem;
+  height: 1.3rem;
+}
+
+@media (min-width: 768px) {
+  .scene-cameo--large {
+    width: 11rem;
+  }
+
+  .scene-cameo--large::before {
+    top: -1rem;
+    width: 1.4rem;
+    height: 1.4rem;
   }
 }
 

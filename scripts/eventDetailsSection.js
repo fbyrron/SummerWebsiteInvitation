@@ -591,11 +591,15 @@ export function renderDetails(config) {
   const content = document.createElement('div');
   content.className = 'event-details__content';
 
-  // Gilt oval cameo of Summer, heading this scene. Decorative - see
-  // scripts/sceneCameo.js for why it carries empty alt text. The photo is a
-  // static asset reference, not config data, matching gallerySection.js's
-  // treatment of its own portraits.
-  content.appendChild(buildCameo({ src: 'assets/summer-photos/04a7fc0e-e895-4d6d-a7d7-6adc9c6dfcc3.jpg' }));
+  // Gilt oval cameo of Summer, heading this scene, at the larger 'large' size
+  // (the user asked the event-details and entourage cameos to be bigger).
+  // Decorative - see scripts/sceneCameo.js for why it carries empty alt text.
+  // The photo is a static asset reference, not config data, matching
+  // gallerySection.js's treatment of its own portraits.
+  content.appendChild(buildCameo({
+    src: 'assets/summer-photos/04a7fc0e-e895-4d6d-a7d7-6adc9c6dfcc3.jpg',
+    variant: 'large',
+  }));
 
   // Quiet numbered chapter marker ("01"), matching the editorial
   // numbered-section convention shared with entourageSection.js ("02") and
