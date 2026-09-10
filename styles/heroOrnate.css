@@ -327,6 +327,10 @@ html.landing body {
   Reduced-motion guard, matching this project's existing convention (base.css,
   reset.css, castleOrnate.css). Nothing in this file animates by default, so
   this is a defensive guard for future edits.
+
+  (The cross-page fairy transition lives in styles/base.css now - it uses the
+  browser's View Transitions API rather than an injected overlay, so there is
+  nothing hero-specific to guard here.)
 */
 @media (prefers-reduced-motion: reduce) {
   .hero-cta-button--ornate {

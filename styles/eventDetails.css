@@ -192,6 +192,79 @@
     inset 0 0 0 4px rgba(216, 178, 92, 0.3),
     inset 0 1.25rem 2rem rgba(160, 140, 115, 0.16),
     0 0.5rem 1.25rem rgba(139, 105, 20, 0.14);
+
+  /*
+    A brief sway on arrival, as if each niche hangs from the gilt crest at its
+    head and was just set swinging.
+
+    `transform-origin: top center` is the whole idea: the pivot is the top-
+    centre point, exactly where the crest (the "hook") sits, so the niche swings
+    FROM the hook like something hung on a nail - not spinning around its own
+    middle, which would read as a wobble rather than a hang.
+
+    PLAYS ON VIEW, THEN STOPS. Two changes from the first version (which looped
+    forever at 6s), both from the user's ask for "a bit faster, and stop after
+    ~2 seconds of viewing":
+
+      1. It is gated on `.is-in-view`, a class scripts/revealOnce.js adds the
+         first time the niche scrolls into view. So the sway STARTS when you
+         reach it (not on page load, when it would finish unseen for a scene
+         this far down), and the niche sits perfectly still until then.
+
+      2. It runs a FIXED number of iterations, not `infinite`, so it stops on
+         its own. ~0.9s per full swing x 2 = ~1.8s, then rest - the requested
+         "stop after ~2s". `animation-fill-mode: both` holds the final upright
+         frame so it does not snap back at the end.
+
+    The rotation stays tiny (+/- 1deg, see keyframes): a grid neighbour is only
+    ~1.75rem away and a bigger swing would clip. `transform` never affects
+    layout, so this cannot shift the grid or force scroll.
+
+    Switched off entirely under prefers-reduced-motion at the end of this file.
+  */
+  transform-origin: top center;
+}
+
+.event-details__item.is-in-view {
+  animation: event-details-sway 0.9s ease-in-out 2 both;
+}
+
+/*
+  The sway itself. +/- 1deg, eased so it slows at each extreme like a pendulum.
+  Ends at 0deg (upright) so the finite run settles straight rather than tilted.
+*/
+@keyframes event-details-sway {
+  0% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(-1deg);
+  }
+  75% {
+    transform: rotate(1deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
+/*
+  Stagger the niches so they do not start swaying in perfect lockstep. Small
+  positive delays (not the old negative ones - those were for a looping
+  animation and would have skipped part of a finite run) offset each niche's
+  start by a fraction of a second, so the wall of windows sets swinging like
+  several separately-hung objects rather than one rigid board tilting at once.
+*/
+.event-details__item:nth-child(2).is-in-view {
+  animation-delay: 0.15s;
+}
+
+.event-details__item:nth-child(3).is-in-view {
+  animation-delay: 0.3s;
+}
+
+.event-details__item--wide.is-in-view {
+  animation-delay: 0.22s;
 }
 
 /*
@@ -425,6 +498,34 @@
     inset 0 0 0 1px rgba(216, 178, 92, 0.55),
     inset 0 0 2rem rgba(170, 130, 75, 0.1),
     0 0.4rem 1rem rgba(139, 105, 20, 0.16);
+
+  /*
+    UNFURL on view - the same rolled-shut-then-opens motion as the closing
+    scene's scroll (styles/entourage.css), per the user's "do same scroll
+    animation for event-details__gift-scroll".
+
+    CLOSED (default): clipped to a thin band with `overflow: hidden`, so only a
+    rolled sliver shows and the note is hidden. When scripts/eventDetailsSection.js
+    hands this element to revealOnce(), `.is-in-view` is added the first time it
+    scrolls into frame - the rule below then opens `max-height` to a generous
+    ceiling and the sheet lands at its own natural height.
+
+    `max-height` (not `height`) because you cannot transition to `height: auto`;
+    the ceiling (30rem) is comfortably taller than this short note ever is, so it
+    never clips the copy. Timing is deliberately slow to match the closing scroll.
+  */
+  max-height: 1.4rem;
+  overflow: hidden;
+  transition: max-height 2200ms ease-out;
+}
+
+.event-details__gift-scroll.is-in-view {
+  /* Ceiling kept close to the note's real open height (a short note is ~4-8rem):
+     max-height transitions tween across the whole value range, so a ceiling far
+     above the real height would make the visible open finish in the first slice
+     of the duration and look fast. 12rem is comfortably taller than the note yet
+     near enough that most of the 2200ms is spent actually opening. */
+  max-height: 12rem;
 }
 
 .event-details__gift-scroll::before,
@@ -464,6 +565,15 @@
   overflow-wrap: break-word;
   word-break: break-word;
   max-width: 100%;
+  /* Hidden while the scroll is rolled shut; fades in just behind the unfurl
+     (delay > 0) so the writing appears on the parchment as it opens, matching
+     the closing scene's note. */
+  opacity: 0;
+  transition: opacity 800ms ease-out 1100ms;
+}
+
+.event-details__gift-scroll.is-in-view .event-details__gift-note {
+  opacity: 1;
 }
 
 @media (min-width: 768px) {
@@ -519,5 +629,30 @@
 
   .event-details__item {
     padding: 2.75rem 1.5rem 1.75rem;
+  }
+}
+
+/*
+  Reduced motion: no sway for anyone who has asked their system for less
+  movement. `animation: none` rather than a zeroed duration, since the sway has
+  no meaningful resting frame to snap to - stopping it leaves the niche upright,
+  which is exactly its 0%/100% state anyway. reset.css already forces a near-zero
+  duration globally under this query; this is the explicit, intentional version
+  for these niches.
+*/
+@media (prefers-reduced-motion: reduce) {
+  .event-details__item {
+    animation: none;
+  }
+
+  /* The gift scroll sits open with the note visible - no unfurl, no fade. */
+  .event-details__gift-scroll {
+    max-height: 12rem;
+    transition: none;
+  }
+
+  .event-details__gift-note {
+    opacity: 1;
+    transition: none;
   }
 }

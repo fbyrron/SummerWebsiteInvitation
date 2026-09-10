@@ -9,7 +9,36 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>You're Invited! A Fairy Birthday Celebration</title>
-  <meta name="description" content="A magical fairy-themed birthday invitation.">
+  <meta name="description" content="A magical fairy-themed birthday invitation for Summer's 7th Birthday.">
+
+  <!--
+    Open Graph + Twitter Card tags: the link preview (the thumbnail, title and
+    blurb) shown when this URL is pasted into Messenger, Facebook, iMessage,
+    WhatsApp, Twitter/X, Discord, etc. Those apps fetch the page and read these
+    <meta> tags to build the card - without them a shared link shows as bare
+    text with no picture.
+
+    Requirements that make the image actually appear:
+      - og:image MUST be an ABSOLUTE https URL (a crawler on the public internet
+        fetches it; a relative path or localhost is unreachable to it),
+      - the site MUST be deployed and public at og:url (Vercel here),
+      - ~1200x630 is the recommended card size.
+
+    NOTE: Facebook/Messenger cache previews hard. After deploying (or changing
+    the thumbnail), re-scrape at https://developers.facebook.com/tools/debug/
+    ("Scrape Again") or the card may keep showing an old/empty preview.
+  -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Summer's 7th Birthday">
+  <meta property="og:title" content="You're Invited! Summer's 7th Birthday">
+  <meta property="og:description" content="Join us for a magical fairy-themed celebration. Tap to view the details and RSVP.">
+  <meta property="og:url" content="https://summer-website-invitation.vercel.app/">
+  <meta property="og:image" content="https://summer-website-invitation.vercel.app/assets/summer-photos/thumbnail.jpg">
+  <meta property="og:image:alt" content="A fairytale garden invitation for Summer's 7th Birthday.">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="You're Invited! Summer's 7th Birthday">
+  <meta name="twitter:description" content="Join us for a magical fairy-themed celebration. Tap to view the details and RSVP.">
+  <meta name="twitter:image" content="https://summer-website-invitation.vercel.app/assets/summer-photos/thumbnail.jpg">
 
   <!--
     Landing page = the artwork filling the whole screen, with one button

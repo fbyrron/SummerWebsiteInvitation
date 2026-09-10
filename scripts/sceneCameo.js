@@ -61,6 +61,8 @@
 //
 // Uses createElement and attribute assignment only, never innerHTML.
 
+import { revealOnce } from './revealOnce.js';
+
 /** Marker class applied to every cameo wrapper. */
 const CAMEO_CLASS = 'scene-cameo';
 
@@ -103,6 +105,14 @@ export function build({ src, variant = 'oval' }) {
   img.decoding = 'async';
 
   cameo.appendChild(img);
+
+  // Sway on view. revealOnce() adds `.is-in-view` the first time the cameo
+  // scrolls into frame; styles/castleOrnate.css gates a brief finite sway on
+  // that class, so the locket swings from its hanging loop when you reach it and
+  // then rests. Registering here (rather than at each of the three call sites)
+  // keeps the behaviour in one place - every cameo the builder makes gets it.
+  revealOnce([cameo]);
+
   return cameo;
 }
 

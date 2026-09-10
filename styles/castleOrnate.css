@@ -404,6 +404,40 @@
     0 0 0 1px rgba(107, 78, 12, 0.6),
     0 0.6rem 1.25rem rgba(96, 64, 28, 0.3),
     0 0 2rem rgba(255, 223, 150, 0.5);
+  /*
+    Pivot for the sway (below): the top-centre point, where the hanging loop is,
+    so the locket swings FROM its loop like something on a chain rather than
+    spinning about its middle.
+  */
+  transform-origin: top center;
+}
+
+/*
+  A brief sway on arrival, matching the event-details niches. scripts/
+  sceneCameo.js registers each cameo with revealOnce(), which adds `.is-in-view`
+  the first time it scrolls into frame; this finite animation is gated on that
+  class, so the locket swings a few times when you reach it and then rests. Fast
+  (~0.9s per swing) and only 2 iterations (~1.8s total), per the "a bit faster,
+  stop after ~2s" ask. `both` holds the upright final frame. Switched off under
+  prefers-reduced-motion at the end of this file.
+*/
+.scene-cameo.is-in-view {
+  animation: scene-cameo-sway 0.9s ease-in-out 2 both;
+}
+
+@keyframes scene-cameo-sway {
+  0% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(-2deg);
+  }
+  75% {
+    transform: rotate(2deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
 }
 
 /*
@@ -504,16 +538,15 @@
   ==========================================================================
   Reduced motion
   ==========================================================================
-  Almost nothing in this file animates anymore. Every looping and scroll-driven
-  animation belonged to the deleted CSS divider and footer, and went with them —
-  the floral divider is a static image, which is one of its advantages.
-
-  What remains is the button's hover and active states, which change instantly
-  with no `transition` declared. This guard is therefore defensive, matching the
-  convention used in base.css and reset.css, rather than a fix for present
-  behaviour.
+  The one real animation here is the cameo sway (`.scene-cameo.is-in-view`) - it
+  is switched off below. The button's hover/active states change instantly with
+  no `transition`, so that line is defensive, matching base.css/reset.css.
 */
 @media (prefers-reduced-motion: reduce) {
+  .scene-cameo.is-in-view {
+    animation: none;
+  }
+
   .castle-button {
     transition: none;
   }

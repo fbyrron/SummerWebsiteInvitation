@@ -44,7 +44,7 @@ export const EventConfig = {
   age: 7,
   eventDate: '2026-10-03',
   eventTime: '3:00 PM',
-  venueName: 'Villa Crisostomo Resort',
+  venueName: 'Crisostomo Villa Resort',
   venueAddress: 'Mangga, Candaba, Pampanga',
   mapLink: 'https://www.google.com/maps/search/?api=1&query=Villa+Crisostomo+Resort+Mangga+Candaba+Pampanga',
   rsvpContact: 'Text Aunt Mia at (555) 012-3456 by Aug 1',
@@ -58,9 +58,9 @@ export const EventConfig = {
     { role: '7 Roses', members: ['Lolo Ernesto Flores', 'Lolo Marlon Buco', 'Uncle Byrron Flores', 'Uncle Borrys Flores', 'Tito James Baltazar', 'Tito Aeron Buco', 'Daddy JM Buco'] },
     { role: '7 Candles', members: ['Mama Merry Flores', 'Lola Michelle Baltazar', 'Lola Elizabeth Buco', 'Lola Marissa Manzano', 'Lola Marian Mallari', 'Auntie Jane Desiree Adarme', 'Mommy Lala Buco'] },
     { role: '7 Blind Box', members: ['Atheia Mindy Manabat', 'Duchess Helena Mariano', 'Ate Elisha Kaleigh Ase', 'Ate Athena Cruz', 'Kara Sofia Tapang', 'Keilee Lerica Antonio', 'Malory Khane Roque'] },
-    { role: '7 Shoes', members: ['Madison Khane Roque', 'Xenobia Capulong', 'Regina Claire Ibe', 'Bella Sophie Buco', 'Addyson Sagum', 'Zoe Aaliyah Maglanque', 'Kelly Adeline'] },
+    { role: '7 Shoes', members: ['Madison Khane Roque', 'Xenobia Capulong', 'Regina Claire Ibe', 'Bella Sophie Buco', 'Addyson Sagum', 'Zoe Aaliyah Maglanque', 'Mariya Kwentrith Pacto'] },
     { role: '7 Wishes', members: ['Ninang Karina Ase', 'Ninang Bea Mallari', 'Ninang Danica Gail Sebastian', 'Ninang Jamaica Maglanque', 'Ninang Jhona Flores', 'Ninang Ma Angelica Bautista', 'Ninang Precious Emocling'] },
-    { role: '7 Pajamas', members: ['Ninang Mykah Gayle Dela Cruz', 'Ninang Princess Maniaul', 'Ninang Lyka Manalili', 'Ninang Veronica Santiago', 'Tita Hazel Anne Cruz', 'Tita Joey Manzano', 'Tita Charlly Mae Manzano'] },
+    { role: '7 Pajamas', members: ['Ninang Mykah Gayle Dela Cruz', 'Ninang Princess Maniaul', 'Ninang Lyka Manalili', 'Ninang Veronica Santiago', 'Tita Donna Mae Cao', 'Tita Joey Manzano', 'Tita Charlly Mae Manzano'] },
   ],
 };
 

@@ -65,6 +65,7 @@
 // Requirements: 3.1, 3.2, 3.5, 3.6, 3.7, 3.9
 
 import { build as buildCameo } from './sceneCameo.js';
+import { revealOnce } from './revealOnce.js';
 
 /**
  * The detail niches, in render order. THREE now, down from five.
@@ -619,11 +620,20 @@ export function renderDetails(config) {
   const list = document.createElement('dl');
   list.className = 'event-details__niches';
 
-  DETAIL_NICHES.forEach((niche) => {
-    list.appendChild(buildNiche(niche, config));
+  const niches = DETAIL_NICHES.map((niche) => {
+    const item = buildNiche(niche, config);
+    list.appendChild(item);
+    return item;
   });
 
   content.appendChild(list);
+
+  // Sway on view: revealOnce() adds `.is-in-view` to each niche the first time
+  // it scrolls into frame, and styles/eventDetails.css gates the finite sway
+  // animation on that class - so each niche swings briefly from its crest when
+  // you reach it, then rests. See scripts/revealOnce.js for why this is a
+  // separate, narrower helper than scrollRevealController.js.
+  revealOnce(niches);
 
   // The real RSVP action, where the removed RSVP niche used to be.
   content.appendChild(buildRsvpAction());
@@ -636,7 +646,13 @@ export function renderDetails(config) {
   // 3.7 (no placeholder/blank content).
   const giftNote = config ? config.giftNote : undefined;
   if (isPresent(giftNote)) {
-    content.appendChild(buildGiftNoteElement(giftNote.trim()));
+    const giftScroll = buildGiftNoteElement(giftNote.trim());
+    content.appendChild(giftScroll);
+    // Unfurl on view: same one-time trigger as the niches above. revealOnce()
+    // adds `.is-in-view` the first time the scroll enters frame, and
+    // styles/eventDetails.css opens it from a rolled-shut band to full height
+    // and fades the note in - mirroring the closing scene's scroll.
+    revealOnce([giftScroll]);
   }
 
   section.appendChild(content);

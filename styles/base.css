@@ -655,3 +655,100 @@ select {
   if in-page back-navigation is wanted again, `.castle-button`
   (styles/castleOrnate.css) is the treatment that matches this site.
 */
+
+/*
+  ==========================================================================
+  CROSS-PAGE FAIRY TRANSITION (View Transitions API)
+  ==========================================================================
+  Loaded by all three pages, so the opt-in below applies to every navigation
+  between them. This REPLACES the old injected-overlay approach, which flashed
+  on the outgoing page, hard-cut to the new one, and - worst - could be left
+  frozen on screen when the browser restored a page from bfcache mid-flash.
+
+  How it works now: `@view-transition { navigation: auto }` tells a supporting
+  browser to snapshot the OUTGOING page, load the new page, and animate one into
+  the other as a single continuous motion the BROWSER owns. No element is left
+  in anyone's DOM, so nothing can get stuck. scripts/fairyTransition.js does not
+  drive this; it only tags <html data-vt-ready> so the ANIMATION styling below
+  applies exactly where it will work and is wanted (support present, motion not
+  reduced). On browsers without the API the pages just cut over normally.
+
+  The at-rule itself is intentionally UNGATED (a browser that doesn't understand
+  @view-transition ignores it harmlessly), while every ::view-transition rule is
+  gated on html[data-vt-ready] so the fairy styling is only ever painted where
+  JS confirmed real support.
+*/
+@view-transition {
+  navigation: auto;
+}
+
+/*
+  The default cross-fade the browser gives the whole-page snapshots is fine as a
+  base; we lengthen it and ease it so the change reads as a soft, glamorous
+  dissolve rather than a quick swap. `::view-transition-old/new(root)` are the
+  outgoing and incoming full-page images.
+*/
+html[data-vt-ready]::view-transition-old(root),
+html[data-vt-ready]::view-transition-new(root) {
+  animation-duration: 700ms;
+  animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/*
+  Outgoing page: fade away while lifting and brightening slightly - as if the
+  invitation dissolves into light.
+*/
+html[data-vt-ready]::view-transition-old(root) {
+  animation-name: fairy-page-out;
+}
+
+/*
+  Incoming page: bloom up from a soft champagne glow into place.
+*/
+html[data-vt-ready]::view-transition-new(root) {
+  animation-name: fairy-page-in;
+}
+
+@keyframes fairy-page-out {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+    filter: brightness(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.06);
+    filter: brightness(1.6);
+  }
+}
+
+@keyframes fairy-page-in {
+  0% {
+    opacity: 0;
+    transform: scale(0.965);
+    filter: brightness(1.5) saturate(1.15);
+  }
+  60% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+    filter: brightness(1) saturate(1);
+  }
+}
+
+/*
+  Belt-and-suspenders reduced-motion guard. fairyTransition.js already withholds
+  `data-vt-ready` under prefers-reduced-motion (so these rules don't match and
+  the browser falls back to an instant cut), and it also skips tagging entirely
+  where the API is absent. This block additionally neutralises the animations if
+  the attribute is ever present while the user prefers reduced motion, so motion
+  is removed at the styling layer too - matching this project's convention.
+*/
+@media (prefers-reduced-motion: reduce) {
+  html[data-vt-ready]::view-transition-old(root),
+  html[data-vt-ready]::view-transition-new(root) {
+    animation: none;
+  }
+}
