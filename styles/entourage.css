@@ -403,6 +403,42 @@
     inset 0 0 0 1px rgba(216, 178, 92, 0.4),
     /* the sheet lifted off the page */
     0 0.75rem 1.75rem rgba(139, 105, 20, 0.18);
+
+  /*
+    UNROLL like a real scroll: CLOSED by default (rolled shut to a thin band
+    just below the top rod), then unrolls DOWNWARD to full height when it
+    scrolls into view. The scene already tags this element
+    `data-reveal-direction="fade-up"`, so ScrollRevealController adds
+    `.reveal--visible` on arrival - that class is the trigger for the open rule
+    below.
+
+    Clipped with `overflow: hidden` so while closed only the rolled top shows
+    and the copy inside is hidden. `max-height` (not `height`) is used because
+    the sheet has no fixed height and you cannot transition to `height: auto`;
+    max-height transitions fine.
+
+    The duration is deliberately LONG (2600ms) so the unroll is slow and
+    readable - a scroll being drawn open, not a panel snapping. The open ceiling
+    (34rem) is kept CLOSE to the sheet's real height so almost the whole
+    duration is spent actually moving; an oversized ceiling would make the
+    visible motion finish in the first slice of the time and look quick.
+  */
+  max-height: 2.75rem;
+  overflow: hidden;
+  transition: max-height 3200ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/*
+  The open state, added by ScrollRevealController when the scroll enters view:
+  unroll to full height. See the closed-state note above for why the ceiling is
+  kept near the real content height.
+*/
+.closing__scroll.reveal--visible {
+  /* Generous ceiling so the FULL content (heading, message, divider, sign-off,
+     name, seal, RSVP button) is never clipped by `overflow: hidden` at any
+     phone size - clipping the button is worse than the unroll finishing a touch
+     early. Comfortably taller than the real content, which lands well under it. */
+  max-height: 48rem;
 }
 
 /*
@@ -458,6 +494,16 @@
   width: 100%;
   max-width: 100%;
   text-align: center;
+  /* Hidden while the scroll is rolled shut; fades in behind the unroll (delay
+     so it appears once the sheet has opened enough to hold it, not while it is
+     still a thin band). The writing then seems to "appear on the parchment" as
+     it unrolls. */
+  opacity: 0;
+  transition: opacity 900ms ease-out 1200ms;
+}
+
+.closing__scroll.reveal--visible .closing__content {
+  opacity: 1;
 }
 
 .closing__heading {
@@ -702,6 +748,17 @@
     margin: 2.5rem auto;
   }
 
+  /* Slightly taller closed band and open ceiling on desktop, matching the
+     larger padding/rods and the taller copy at desktop font sizes so the
+     rolled-shut state still reads as a scroll and the open state never clips. */
+  .closing__scroll:not(.reveal--visible) {
+    max-height: 3.25rem;
+  }
+
+  .closing__scroll.reveal--visible {
+    max-height: 52rem;
+  }
+
   .closing__scroll::before,
   .closing__scroll::after {
     left: -1.25rem;
@@ -720,6 +777,26 @@
 
   .closing__signoff {
     font-size: 1.25rem;
+  }
+}
+
+/*
+  Reduced motion: no unroll. The scroll sits fully open with the copy shown -
+  no clipped-closed state, no timed transition. `.reveal--visible` is still
+  added synchronously by the controller in reduced-motion mode, but these
+  explicit open values also guard against the scroll ever being left rolled
+  shut for a reduced-motion visitor.
+*/
+@media (prefers-reduced-motion: reduce) {
+  .closing__scroll,
+  .closing__scroll:not(.reveal--visible) {
+    max-height: 52rem;
+    transition: none;
+  }
+
+  .closing__content {
+    opacity: 1;
+    transition: none;
   }
 }
 

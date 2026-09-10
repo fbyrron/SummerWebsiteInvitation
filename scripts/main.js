@@ -121,7 +121,6 @@ import { renderClosing } from './closingSection.js';
 import { initSparkleBackground } from './sparkleBackground.js';
 import { init as initParallax } from './parallaxController.js';
 import { ensureFontsOrFallback } from './fontLoader.js';
-import { initFairyTransition } from './fairyTransition.js';
 
 /**
  * Speed fractions for the three static parallax backdrop layers declared
@@ -207,16 +206,6 @@ async function main() {
     // ensureDecorativeFontOrFallback() call, so a slow/failed font load
     // never delays the rest of this function.
     ensureFontsOrFallback();
-
-    // Fairy cross-page transition. On browsers that support cross-document
-    // View Transitions, tags <html data-vt-ready> so the soft champagne
-    // dissolve declared in base.css plays as the browser navigates between
-    // pages (the browser owns the whole motion, so nothing can be left frozen
-    // on a bfcache back-restore - the bug the old overlay had). Also registers
-    // a pageshow/bfcache backstop. A no-op where the API is absent or motion is
-    // reduced (pages just cut over). Safe to call on every page - see
-    // fairyTransition.js's own docstring.
-    initFairyTransition();
 
     // ScrollRevealController.observe() is intentionally NOT called here -
     // see the "Documented divergence" note at the top of this file: every
