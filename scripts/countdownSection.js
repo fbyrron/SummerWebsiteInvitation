@@ -20,8 +20,9 @@
 //     decorative sparkle glyphs.
 //   - The "event day" alternate state (task 15.4, design.md Error
 //     Scenario 5): IF the target has already passed at initial render()
-//     time, the four-number grid is never built - a short "Today!"
-//     message is rendered inside the GlassCard instead, and no tick loop
+//     time, the four-number grid is never built - a short celebratory
+//     "The magic has happened!" message is rendered inside the GlassCard
+//     instead, and no tick loop
 //     is started (nothing left to tick for a fixed targetDate whose
 //     isPast can never revert to false). IF the target passes WHILE the
 //     tick loop is already running (a "not past" -> "past" transition
@@ -209,8 +210,9 @@ function buildUnitElement(field, value) {
  * four-number grid once `isPast` is true, rather than showing `00:00:00:00`
  * indefinitely or negative numbers.
  *
- * Kept deliberately short ("Today!") per design.md's own framing of the
- * exact wording as "an implementation detail, not a new requirement" -
+ * Kept short and celebratory ("The magic has happened! ✨") per
+ * design.md's framing of the exact wording as "an implementation detail,
+ * not a new requirement" -
  * this reads correctly both the moment the event starts and for as long
  * afterward as a guest might still open the link.
  *
@@ -223,7 +225,7 @@ function buildUnitElement(field, value) {
 function buildEventDayMessage() {
   const message = document.createElement('p');
   message.className = 'countdown__today';
-  message.textContent = 'Today!';
+  message.textContent = 'The magic has happened! \u2728';
   return message;
 }
 
@@ -366,14 +368,14 @@ function startTick(targetDate, numberEls, initialSeconds, bodyEl, gridEl) {
  * `isPast`:
  *   - IF already past at initial render time (a guest opening the link on
  *     or after the event), the four-number grid is never built at all -
- *     `buildEventDayMessage()`'s short "Today!" state is rendered in the
+ *     `buildEventDayMessage()`'s short "The magic has happened!" state is rendered in the
  *     GlassCard instead, and `startTick()` is never called (there is
  *     nothing to count down to, and `isPast` can only ever be true from
  *     this point forward for this fixed `targetDate`).
  *   - IF not yet past, the four-number grid renders as before (tasks
  *     15.1-15.3, unchanged), and the live-tick requestAnimationFrame loop
  *     (startTick() above) is started to keep it current - including
- *     performing this same "Today!" swap itself, exactly once, if/when the
+ *     performing this same "event is over" swap itself, exactly once, if/when the
  *     target passes later while the guest still has the page open.
  *
  * Clears and rebuilds #countdown's content on every call, matching the

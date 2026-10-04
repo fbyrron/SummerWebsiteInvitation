@@ -243,7 +243,7 @@ image-processing/ML dependency should be added by any task below.
   - [x] 12.3 Verify no horizontal overflow at 320px width and above
     - _Requirements: 2.5, 9.1_
 
-- [~] 13. Rewrite EventDetailsSection as a floating GlassCard
+- [ ] 13. Rewrite EventDetailsSection as a floating GlassCard
   - [x] 13.1 Implement `renderDetails(config)` rendering DATE, TIME, VENUE,
     ADDRESS, DRESS CODE (`config.themeNote`, rendered verbatim), and RSVP
     (`config.rsvpContact`, rendered verbatim) inside a `GlassCard`, each

@@ -1,0 +1,315 @@
+/*
+  photoShare.css
+  Styles for PhotoShareSection ("Share Your Moments").
+
+  A guest picks photos/videos, previews them (not shared yet), then taps
+  "Share Moments". This file styles: the pick button, the "N selected"
+  count, the preview grid of thumbnail tiles (each with a remove ✕), the
+  Share Moments button and its loading spinner, a prominent in-page loading
+  banner, and the in-page success/error status message shown after sharing.
+
+  Loads AFTER styles/castleOrnate.css so `.cta-button.castle-button` (used
+  by the pick + share buttons) keeps that shared gilt treatment; this file
+  only adds layout the buttons don't get from those classes.
+
+  Mobile-first: one preview column at 320px, more across on wider screens.
+  16px minimum font size throughout; long file names carry the same
+  overflow-wrap/word-break guard used elsewhere in this codebase.
+
+  #photo-share carries class="section" in details.html, so base.css's
+  .section padding applies; content sits in a centered column like the
+  other details scenes.
+*/
+
+.photo-share__content {
+  max-width: 60rem;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.photo-share__heading {
+  margin: 0 0 0.5rem;
+  color: var(--color-text);
+}
+
+.photo-share__intro {
+  margin: 0 auto 1.5rem;
+  max-width: 34rem;
+  color: var(--color-text);
+  line-height: 1.5;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+/* The native file input is triggered by its <label>; kept out of the
+   normal flow but still reachable by assistive tech / keyboard. */
+.photo-share__input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* The pick label and the share button both reuse .cta-button.castle-button;
+   these only handle spacing and the label acting as a button. */
+.photo-share__pick {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.photo-share__count {
+  margin: 1rem 0 0.5rem;
+  color: var(--color-text);
+  opacity: 0.8;
+  font-size: var(--font-size-body);
+}
+
+/* Preview grid: auto-fill so it grows from one column on a phone to
+   several across on wider screens without a media query. */
+.photo-share__preview {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(9rem, 1fr));
+  gap: 0.75rem;
+  margin: 0.5rem 0 1.5rem;
+}
+
+.photo-share__preview:empty {
+  margin: 0;
+}
+
+/* One preview tile: thumbnail + name/size + remove button. */
+.photo-share__tile {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  background: var(--color-card-bg);
+  border: 1px solid var(--color-border);
+  border-radius: 0.75rem;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(31, 41, 55, 0.08);
+  text-align: left;
+}
+
+.photo-share__thumb {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  background: #eef1f6;
+  overflow: hidden;
+}
+
+.photo-share__media {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* "▶ Video" badge over a video thumbnail. */
+.photo-share__badge {
+  position: absolute;
+  left: 0.4rem;
+  bottom: 0.4rem;
+  padding: 0.15rem 0.5rem;
+  border-radius: 999px;
+  background: rgba(31, 41, 55, 0.72);
+  color: #fff;
+  font-size: 0.8rem;
+  letter-spacing: 0.02em;
+}
+
+.photo-share__meta {
+  padding: 0.5rem 0.6rem 0.6rem;
+  min-width: 0;
+}
+
+.photo-share__name {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--color-text);
+  overflow-wrap: break-word;
+  word-break: break-word;
+  /* Keep tiles tidy: at most two lines of file name. */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.photo-share__size {
+  margin: 0.15rem 0 0;
+  font-size: 0.78rem;
+  color: var(--color-text);
+  opacity: 0.65;
+}
+
+/* Remove ✕ in the tile's top-right corner. */
+.photo-share__remove {
+  position: absolute;
+  top: 0.35rem;
+  right: 0.35rem;
+  width: 1.75rem;
+  height: 1.75rem;
+  padding: 0;
+  border: none;
+  border-radius: 999px;
+  background: rgba(31, 41, 55, 0.7);
+  color: #fff;
+  font-size: 0.95rem;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.15s ease, transform 0.15s ease;
+}
+
+.photo-share__remove:hover {
+  background: rgba(220, 38, 38, 0.85);
+  transform: scale(1.05);
+}
+
+.photo-share__remove:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+.photo-share__submit {
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+/* The Share Moments button is toggled via the `hidden` attribute in JS when
+   nothing is selected. But `.castle-button` sets `display: inline-flex`,
+   and a `display` rule overrides the plain `hidden` attribute — so the
+   button stayed visible. This rule restores `hidden` by forcing the button
+   to not render when the attribute is present. `!important` is used
+   because it must beat `.castle-button`'s own `display`. */
+.photo-share__submit[hidden] {
+  display: none !important;
+}
+
+.photo-share__submit[disabled] {
+  opacity: 0.6;
+  cursor: default;
+}
+
+/* Loading spinner inside the Share Moments button. */
+.photo-share__spinner {
+  width: 1rem;
+  height: 1rem;
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  border-top-color: #fff;
+  border-radius: 999px;
+  animation: photo-share-spin 0.7s linear infinite;
+}
+
+@keyframes photo-share-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* While uploading, dim the pick label so it reads as unavailable. */
+.photo-share--loading .photo-share__pick {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+/*
+  Loading banner: a prominent, full-width bar shown in-page while an upload
+  is running. This is the main loading indicator (the button's own inline
+  spinner is secondary), so it's deliberately large and high-contrast — a
+  plum-to-rose fill with a big spinner and clear text, hard to miss on a
+  phone. Hidden via the `hidden` attribute when not uploading.
+*/
+.photo-share__loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  margin: 1rem auto 0;
+  max-width: 32rem;
+  padding: 1rem 1.25rem;
+  border-radius: 0.85rem;
+  background: linear-gradient(135deg, #6d2748 0%, #8e3a5f 55%, #a34a70 100%);
+  border: 1px solid rgba(216, 178, 92, 0.85);
+  color: #fdeff6;
+  font-size: 1.05rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  box-shadow: 0 6px 20px rgba(109, 39, 72, 0.35);
+}
+
+.photo-share__loading[hidden] {
+  display: none;
+}
+
+/* Big spinner for the loading banner. */
+.photo-share__loading-spinner {
+  width: 1.4rem;
+  height: 1.4rem;
+  border: 3px solid rgba(253, 239, 246, 0.35);
+  border-top-color: #fdeff6;
+  border-radius: 999px;
+  animation: photo-share-spin 0.7s linear infinite;
+  flex: none;
+}
+
+/*
+  In-page status message (success / error), replacing the old snackbar. It
+  sits in the normal page flow under the button and stays until the next
+  action, so the guest reads it at their own pace. Color is theme-matched
+  with a clear success/error distinction via the modifier classes.
+*/
+.photo-share__status {
+  margin: 1rem auto 0;
+  max-width: 34rem;
+  padding: 0.85rem 1.25rem;
+  border-radius: 0.85rem;
+  font-size: var(--font-size-body);
+  line-height: 1.4;
+  text-align: center;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+.photo-share__status[hidden] {
+  display: none;
+}
+
+/* Success: soft green wash with a green border and deep-green text, plus a
+   gilt hint so it still reads as part of the fairy theme. */
+.photo-share__status--success {
+  background: #eaf7ec;
+  border: 1px solid #4CAF50;
+  color: #1e5b2a;
+}
+
+/* Error: warm rose wash rather than a harsh red box, on-theme but clearly
+   "something went wrong". */
+.photo-share__status--error {
+  background: #fdecef;
+  border: 1px solid #c0526e;
+  color: #7a1f38;
+}
+
+.photo-share__status--info {
+  background: #f3eefb;
+  border: 1px solid #b9a7e0;
+  color: #4a3a6b;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .photo-share__spinner,
+  .photo-share__loading-spinner {
+    animation-duration: 1.4s;
+  }
+}

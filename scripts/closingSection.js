@@ -306,6 +306,20 @@ export function renderClosing(config) {
   rsvpLink.textContent = 'RSVP';
   content.appendChild(rsvpLink);
 
+  // Second page-to-page link: the "Share Your Moments" page (share.html),
+  // where guests upload the photos/videos they took at the party. Same
+  // cta-button + castle-button treatment as the RSVP link above so the two
+  // read as one pair of primary actions at the end of the details page.
+  // No extra class needed for spacing: styles/entourage.css's
+  // `.closing__content > .castle-button` rule already centers every such
+  // child and gives it a top margin, so this second button stacks neatly
+  // under the RSVP one.
+  const shareLink = document.createElement('a');
+  shareLink.className = 'cta-button castle-button';
+  shareLink.href = 'share.html';
+  shareLink.textContent = 'Share Your Moments';
+  content.appendChild(shareLink);
+
   scroll.appendChild(content);
   section.appendChild(scroll);
 

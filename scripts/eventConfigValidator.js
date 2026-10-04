@@ -77,20 +77,6 @@ function validateOptionalString(value, maxLength) {
 }
 
 /**
- * Resolves the UTC calendar-day components (year, month, day) representing
- * "today" at validation time - i.e. the build date, per design.md's
- * "on or after the build date" rule. UTC is used consistently here and in
- * parseEventDateAsUtcDay() below so that a plain "YYYY-MM-DD" eventDate
- * string (which JS parses as UTC midnight) is compared on equal terms,
- * regardless of the machine's local timezone offset.
- * @returns {number} milliseconds since epoch for today's UTC midnight.
- */
-function todayAsUtcMidnightMs() {
-  const now = new Date();
-  return Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate());
-}
-
-/**
  * Parses a "YYYY-MM-DD" eventDate string (or a Date instance) into UTC
  * midnight milliseconds, validating that it is a real calendar date
  * (rejects rollover values like "2025-02-30").
@@ -209,13 +195,18 @@ export function validateEventConfig(config) {
     if (message) addError('rsvpLink', message);
   }
 
-  // eventDate: valid calendar date, on or after the build date (today, at validation time)
+  // eventDate: valid calendar date. Past dates are intentionally ALLOWED
+  // (Option A): the prior "must be on or after the build date" rule took
+  // the entire live site down the day after the event (the config-error
+  // path blanks every page), which is worse than the build-time typo it
+  // was meant to catch - a wildly wrong year is obvious on the page
+  // anyway. Only the format check remains; once the event has passed, the
+  // countdown and RSVP scenes show their own "event is over" states
+  // instead of the site failing to render.
   {
     const eventDayMs = parseEventDateAsUtcDay(config.eventDate);
     if (eventDayMs === null) {
       addError('eventDate', 'must be a valid calendar date (YYYY-MM-DD)');
-    } else if (eventDayMs < todayAsUtcMidnightMs()) {
-      addError('eventDate', 'must be on or after the build date');
     }
   }
 

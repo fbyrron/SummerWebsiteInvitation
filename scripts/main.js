@@ -117,6 +117,7 @@ import { renderDetails } from './eventDetailsSection.js';
 import { renderEntourage } from './entourageSection.js';
 import { render as renderCountdown } from './countdownSection.js';
 import { render as renderRsvp } from './rsvpSection.js';
+import { render as renderPhotoShare } from './photoShareSection.js';
 import { renderClosing } from './closingSection.js';
 import { initSparkleBackground } from './sparkleBackground.js';
 import { init as initParallax } from './parallaxController.js';
@@ -193,6 +194,7 @@ async function main() {
     renderEntourage(config);
     renderCountdown(config);
     renderRsvp(config);
+    renderPhotoShare(config);
     renderClosing(config);
 
     // ParallaxController: collectParallaxLayers() only finds the three

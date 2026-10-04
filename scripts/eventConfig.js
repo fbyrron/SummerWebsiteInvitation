@@ -38,6 +38,17 @@
  *                               "7 Roses", "7 Candles"), each with its member
  *                               names, shown in the Entourage section. Omit
  *                               when there is no entourage to display.
+ * photoUploadEndpoint {String}  Optional HTTPS endpoint that accepts guest
+ *                               photo/video uploads and saves them to our
+ *                               storage (a Google Apps Script web-app URL —
+ *                               see scripts/photoShareSection.js for the exact
+ *                               script + deploy steps). When empty, the "Share
+ *                               Your Moments" section still renders and lets
+ *                               guests pick and preview files, but tapping
+ *                               "Share Moments" shows a friendly
+ *                               "sharing isn't set up yet" message instead of
+ *                               uploading. Never expose the raw storage folder
+ *                               link in the UI — only this write endpoint.
  */
 export const EventConfig = {
   childName: 'Summer',
@@ -52,6 +63,22 @@ export const EventConfig = {
   giftNote: 'If you\'d like to bring a gift, monetary gifts are welcome, or anything pink — it\'s Summer\'s favorite color! 🎁💗',
   rsvpLink: '',
   rsvpEmbedUrl: 'https://luma.com/embed/event/evt-LPGF6QXWH6FAvjd/simple',
+  // Paste your deployed Google Apps Script web-app URL here to turn on
+  // guest photo/video sharing. See scripts/photoShareSection.js's header
+  // for the ~20-line script and the exact deploy steps. Leaving this empty
+  // is safe: the section renders and previews files, and "Share Moments"
+  // just tells guests sharing isn't ready yet instead of failing.
+  photoUploadEndpoint: 'https://script.google.com/macros/s/AKfycbybO8KemJBt-DyNi_xYQl76vF85qYwXOjw1NOnrJRWkgEGU5oAJmxxyPHCbgStklvXD/exec',
+  // Shared secret sent with every upload so only THIS site can write to the
+  // Drive folder. Pick any hard-to-guess phrase and set the SAME value in
+  // the Apps Script's UPLOAD_SECRET constant (see photoShareSection.js's
+  // header). The script rejects any upload whose secret doesn't match, so a
+  // stranger who finds the /exec URL still can't dump files in the folder.
+  // Note: this is a static site, so the secret ships in the page and is not
+  // truly private — it stops casual/accidental writes, not a determined
+  // attacker. Leave empty to send no secret (only do that if the Apps
+  // Script also has an empty UPLOAD_SECRET).
+  uploadSecret: 'summer-fairy-21b9b2a65f30c96e37faca4d',
   message: 'Thank you for helping us celebrate Summer. See you in the enchanted garden!',
   themeColors: ['#FFDCE8', '#DCCBFF', '#FCEEF4', '#FFFDFB', '#D4AF37'],
   entourage: [

@@ -37,6 +37,37 @@
 }
 
 /*
+  "Event is over" state (rsvpSection.js's hasEventPassed()): once the
+  event has passed, the iframe is replaced by a single farewell message.
+  Center it both axes in the full-height page so it reads as an
+  intentional closing note rather than stray text at the top.
+*/
+.rsvp__content--over {
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1.5rem;
+  text-align: center;
+}
+
+.rsvp__over-message {
+  margin: 0;
+  max-width: 32rem;
+  font-size: 1.25rem;
+  line-height: 1.6;
+  color: var(--color-text);
+  /* Same wrap guard used throughout this codebase so the message never
+     forces horizontal overflow at a 320px viewport. */
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+@media (min-width: 768px) {
+  .rsvp__over-message {
+    font-size: 1.5rem;
+  }
+}
+
+/*
   Luma RSVP iframe embed. Multi-page split: previously capped at
   `max-width: 37.5rem` with a `4/3` aspect-ratio so it read as a centered
   card within a larger scrolling page - now that this page has nothing
